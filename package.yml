@@ -1,0 +1,21 @@
+package: buchungskalender
+version: dev
+author: Wolfgang Bund
+supportpage: https://github.com/redaxo/redaxo
+
+page:
+    title: 'Buchungskalender'
+    perm: buchungskalender
+    pjax: false
+    icon: rex-icon fa-calendar
+    subpages:
+        calendar: { title: 'translate:buchungskalender_calendar' }
+        settings: { title: 'translate:buchungskalender_subpage_config' }
+        help:  
+             { title: 'translate:buchungskalender_help',  icon: rex-icon fa-question-circle, itemclass: pull-right,  subPath: README.md} 
+
+
+requires:
+    php:
+        version: '>=7.3'
+    redaxo: ^5.12.0
