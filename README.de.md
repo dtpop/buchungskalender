@@ -2,7 +2,7 @@
 
 Backend- und Frontend-Buchungskalender für REDAXO CMS
 
-![Screenshot](/assets/addons/buchungskalender/img/buchungskalender-screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-screenshot.png)
 
 Backend- und Frontend-Schnellnavigation für REDAXO CMS
 
@@ -22,11 +22,11 @@ Man kann entscheiden, dass man die Buchungen komplett von Hand vornimmt, man kan
 
 So. Jetzt aber ans eingemachte. Den Kalenderscreenshot seht ihr ja schon oben. Dort kann man im Backend direkt auf grüne zukünftige Felder klicken. - Achja, das habe ich noch vergessen. Für Buchungszeiträume lassen sich Mindestbuchungsdauern hinterlegen. Für uns hat es keinen Sinn gemacht nur für zwei Nächste zu vermieten. Daher vermieten wir nur ab drei Nächten. In der Saison nur wochenweise von Samstag bis Samstag. Auch das packt der Buchungskalender.
 
-![Screenshot](/assets/addons/buchungskalender/img/buchungskalender-screenshot-2.png)
+![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-screenshot-2.png)
 
 Hier wurde im Backend für die kleine Ferienwohnung der Termin vom 21. bis zum 28. August markiert. Nach einem Klick auf den Button "Weiter" wird die Buchungsmaske angezeigt.
 
-![Screenshot](/assets/addons/buchungskalender/img/buchungskalender-screenshot-3.png)
+![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-screenshot-3.png)
 
 Hier können alle relevanten Buchungsdaten eingegeben werden. Wenn dieses Formular abgeschickt wird, so wird die Buchung sogleich auf "gebucht" gestellt.
 
@@ -37,7 +37,7 @@ Alle Tabellen des Buchungskalenders basieren auf YForm Tabellen und können nach
 
 Die Objektverwaltung ist recht schlicht gehalten. Für die Bearbeitung ist kein Informatikstudium notwendig.
 
-![Screenshot](/assets/addons/buchungskalender/img/buchungskalender-objektverwaltung.png)
+![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-objektverwaltung.png)
 
 Hier kann der Name des Objektes festgelegt werden und der Grundpreis. Außerdem kann man festlegen, ob es sich um ein Kombinationsangebot handelt - das wurde ja oben bereits ausführlich beschrieben. Als Ergänzung sei hier beschrieben, dass für Kombinationsobjekte durchaus eigene Buchungsdatensätze angelegt werden. Es werden also keine doppelten Buchungsdatensätze für die kleine und die große Wohnung angelegt. Daher ist zum Beispiel eine Umbuchung sehr einfach möglich. Es soll hier alles so intuitiv und einfach wie möglich sein.
 
@@ -45,13 +45,13 @@ Hier kann der Name des Objektes festgelegt werden und der Grundpreis. Außerdem 
 
 Damit die Administration auch schön einfach und komfortabel ist, werden die Saisonzeiten unabhängig von den Preisen verwaltet. Ich habe es so eingerichtet, dass der Basispreis der Saisonpreis ist und die Nebensaison mit Terminen verwaltet wird. Für Insider: das be-table Element wurde hier um eine Drag and Drop Funktion ergänzt. Damit kann man die Sortierung der Zeiten komfortabel anpassen. Auch die Erweitung um den Datepicker sind ein paar Zeilen Javascript, also keine Hexerei.
 
-![Screenshot](/assets/addons/buchungskalender/img/buchungskalender-saisondetail.png)
+![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-saisondetail.png)
 
 ## Preisverwaltung
 
 Für die Preisverwaltung ist eine eigene Tabelle zuständig. Hier kann man für die unterschiedlichen Buchungszeiträume unterschiedliche Preise eintragen. Auch für unterschiedliche Mietzeiten lassen sich unterschiedliche Preise eintragen.
 
-![Screenshot](/assets/addons/buchungskalender/img/buchungskalender-preisverwaltung.png)
+![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-preisverwaltung.png)
 
 
 
