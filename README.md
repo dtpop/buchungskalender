@@ -4,8 +4,6 @@ Backend- und Frontend-Buchungskalender für REDAXO CMS
 
 ![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-screenshot.png)
 
-Backend- und Frontend-Schnellnavigation für REDAXO CMS
-
 Der Buchungskalender wurde entwickelt für die Entwicklung von Ferienobjekten (Ferienwohnungen, Ferienhäusern, Wohnmobilen usw.), die "über Nacht" vermietet werden. Daher wird bei diesem Buchungskalender das Startdatum und das Enddatum auch entsprechend gekennzeichnet, z.B. als Anreisetag und Abreisetag. Entsprechende Tools für die Anzeige im Backend werden vom AddOn mitgeliefert und können auch für das Frontend verwendet werden.
 
 Der Buchungskalender kann mehrere Objekte verwalten. Damit können auch mehrere Ferienwohnungen oder Objekte verwaltet werden. Zusätzlich ist der Buchungskalender mit einem speziellen Feature ausgestattet, das Kombinationsobjekte ermöglicht.
