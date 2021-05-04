@@ -38,6 +38,21 @@ if (rex::isBackend() && rex::getUser()) {
     }
 }
 
+if (rex::isFrontend()) {    
+    rex_extension::register('PACKAGES_INCLUDED', function() {
+        if (rex::getConfig('buka','ical_interval')) {
+            buka_ical::check_ical_data();
+        }
+
+        if (rex_request('action','string') == 'get_ical_data' && rex_request('object_id','int')) {
+            echo buka_ical::send_ical_data_for_obj(rex_request('object_id','int'));
+            exit;
+        }
+
+    });
+}
+
+
 
 
 

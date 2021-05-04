@@ -51,6 +51,8 @@ Für die Preisverwaltung ist eine eigene Tabelle zuständig. Hier kann man für 
 
 ![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-preisverwaltung.png)
 
+## ical Funktionen
 
+Der Buchungskalender kann ical. Und zwar rein und raus, Import und Export. Bislang ist das für airbnb(r) gut getestet, für andere Plattformen noch nicht. Man muss nur ein paar Einstellungen vornehmen, dann geht das quasi von selber. Zunächst muss beim jeweiligen Objekt die Url für die zu importierenden Ical Daten eingetragen werden. Außerdem muss in den Settings das Interval eingegeben werden, in dem die ical Daten gecached werden sollen. Das könnten beispielsweise 900 Sekunden sein. Dann schaut der Buchungskalender 900 Sekunden lang nicht nach, ob neue Buchungsdaten vorliegen. Wenn seit der letzten Aktualisierung mehr als 900 Sekunden (das ist eine Viertelstunde) vergangen ist, werden die Daten neu gelesen. Beim Einlesen der Daten wird in den vorhandenen Buchungsdaten geguckt, ob für diesen Zeitraum schon eine Buchung eingetragen ist. Wenn da schon eine bestätigte Buchung drin ist, wird natürlich nicht nochmal eine Buchung eingetragen. Wenn nicht, dann schon. Wenn jetzt der Ical Server mal eine Pause macht, dann ist das nicht schlimm. Für 24 Stunden werden dann einfach weiterhin die gecachten Daten verwendet. Der Export ist auch relativ trivial. Hierfür muss nur die Url `https://example.com/?action=get_ical_data&object_id=2` für die Ical Daten des Objektes mit der Id 2 aufgerufen werden. Es werden nur Ical Daten für Buchungen herausgegeben, die in der Zukunft liegen. In den ical Daten werden natürlich auch keinerlei persönliche Daten übertragen. Da steht nur das Buchungsdatum drin.
 
-
+Kombinationsangebote werden beim Export korrekt berücksichtigt.

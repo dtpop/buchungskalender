@@ -30,6 +30,14 @@ $field = $form->addTextAreaField('message_min_booking_days');
 $field->setLabel('Meldung Mindestbuchungszeit');
 $field->setNotice('Die Nachricht wird angezeigt, wenn die Mindestbuchungszeit nicht erreicht ist.');
 
+$field = $form->addTextField('ical_interval');
+$field->setLabel('Ical Cachedauer in Sekunden');
+$field->setNotice('Leer lassen, wenn keine ical Synchronisation verwendet wird. Sinnvoller Eintrag: <code>900</code> für 15 Minuten.');
+
+$field = $form->addTextField('ical_uid');
+$field->setLabel('Ical Uid');
+$field->setNotice('Leer lassen, wenn keine ical Synchronisation verwendet wird. Sinnvoller Eintrag: <code>ical@ferien-am-tressower-see.de</code>.');
+
 
 $content = $form->get();
 

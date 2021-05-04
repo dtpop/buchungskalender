@@ -23,6 +23,7 @@ class buka_cal
         $this->weekdays = explode(',', rex_config::get('buchungskalender', 'weekdays_' . rex_clang::getCurrentId()));
         $this->months = explode(',', rex_config::get('buchungskalender', 'months_' . rex_clang::getCurrentId()));
         $this->seasons = buka_season::get_seasons();
+        $this->objectId = rex_request('object_id','int');
 
         if (rex_config::get('buchungskalender','max_booking_time')) {
             $this->maxBookingTime = 1;
@@ -242,9 +243,9 @@ class buka_cal
 
         $backlink = '';
         if ($navType == 'long') {
-            $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . ($this->year - 1) . '&month=' . $this->month . '&objectid=' . $this->objectId . '">&lt;&lt; ' . $this->months[$this->month - 1] . ' ' . ($this->year - 1) . '</a>&nbsp;|&nbsp;';
+            $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . ($this->year - 1) . '&month=' . $this->month . '&object_id=' . $this->objectId . '">&lt;&lt; ' . $this->months[$this->month - 1] . ' ' . ($this->year - 1) . '</a>&nbsp;|&nbsp;';
         }
-        $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $prevYear . '&month=' . $prevMonth . '&objectid=' . $this->objectId . '">&lt; ' . $this->months[$prevMonth - 1] . ' ' . $prevYear . '</a>';
+        $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $prevYear . '&month=' . $prevMonth . '&object_id=' . $this->objectId . '">&lt; ' . $this->months[$prevMonth - 1] . ' ' . $prevYear . '</a>';
 
         if (rex::isFrontend() && ($this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT)) <= date('Y-m')) {
             $backlink = '';
@@ -252,9 +253,9 @@ class buka_cal
 
 
         $nextlink = '';
-        $nextlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $nextYear . '&month=' . $nextMonth . '&objectid=' . $this->objectId . '">' . $this->months[($nextMonth + $nextShift) % 12] . ' ' . ($this->year + $yearShift) . ' &gt;</a>';
+        $nextlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $nextYear . '&month=' . $nextMonth . '&object_id=' . $this->objectId . '">' . $this->months[($nextMonth + $nextShift) % 12] . ' ' . ($this->year + $yearShift) . ' &gt;</a>';
         if ($navType == 'long') {
-            $nextlink .= '&nbsp;|&nbsp;<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . ($this->year + 1) . '&month=' . $this->month . '&objectid=' . $this->objectId . '">' . $this->months[($this->month + 10) % 12] . ' ' . ($this->year + $yearShift2) . ' &gt;&gt;</a>';
+            $nextlink .= '&nbsp;|&nbsp;<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . ($this->year + 1) . '&month=' . $this->month . '&object_id=' . $this->objectId . '">' . $this->months[($this->month + 10) % 12] . ' ' . ($this->year + $yearShift2) . ' &gt;&gt;</a>';
         }
 
         if (rex::isFrontend() && ($this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT)) >= ($this->maxBookingYear . '-' . $this->maxBookingMonth)) {
