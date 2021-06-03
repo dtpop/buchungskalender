@@ -2,23 +2,28 @@
 
 $objects = buka_objects::get_query()->find();
 
+
+if (!count($objects)) {
+    echo rex_view::error('Es wurde noch kein Objekt angelegt.');
+    return;
+}
+
 $start_year = min([buka_booking::get_min_year(), date('Y') - 2]);
 $end_year = max([buka_booking::get_max_year(), date('Y') + 2]);
-// dump($start_year);
-// dump($end_year);
 
-$cal = new buka_cal();
+$object_id = rex_request("object_id", 'int',$objects[0]->id);
+
+if (!$object_id) {
+    echo rex_view::info('Es muss ein Objekt ausgewählt werden.');
+    return;
+}
+
+
+$cal = new buka_cal($object_id);
 
 $cal->set_start_date();
 $cal->set_bookings();
 
-// $cal->set_show_form();
-
-
-// $cal->set_month_count(3);
-
-
-// echo $cal->getMonth();
 
 $row_start_6 = '<div class="row"><div class="col-md-6">';
 $row_start_3 = '<div class="row"><div class="col-md-3">';
@@ -32,15 +37,10 @@ $hidden_start = '<div style="display: none">';
 
 $yform = new rex_yform();
 $yform->setObjectparams('form_action', rex_url::currentBackendPage());
-// $yform->setObjectparams('form_showformafterupdate',1);
-
-// $yform->setObjectparams('debug',true);
-
-
 
 $yform->setValueField('hidden', ['bookingdate', date('Y-m-d H:i:s')]);
 $yform->setValueField('hidden', ['status', 'confirmed']);
-$yform->setValueField('hidden', ['object_id', rex_request('object_id','int'),'REQUEST']);
+$yform->setValueField('hidden', ['object_id', $object_id, 'REQUEST']);
 
 $yform->setValueField('html', ['', $hidden_start]);
 $yform->setValueField('text', ['datestart', '', '', '', ['type' => 'hidden', 'id' => 'datestart']]);
@@ -112,7 +112,7 @@ $yform->setActionField('redirect', [rex_url::currentBackendPage()]);
                 <input type="hidden" name="page" value="buchungskalender/calendar">
                 <select name="object_id" class="form-control selectpicker" onchange="this.form.submit()">
                     <?php foreach ($objects as $obj) : ?>
-                        <option value="<?= $obj->id ?>" <?= $obj->id == rex_request("object_id", 'int') ? ' selected="selected"' : '' ?>><?= $obj->name ?></option>
+                        <option value="<?= $obj->id ?>" <?= $obj->id == $object_id ? ' selected="selected"' : '' ?>><?= $obj->name ?></option>
                     <?php endforeach ?>
                 </select>
             </form>
@@ -127,15 +127,3 @@ $yform->setActionField('redirect', [rex_url::currentBackendPage()]);
     const min_booking_days = <?= rex_config::get('buchungskalender', 'min_booking_days') ?>;
 </script>
 
-
-
-<?php /* for ($y = $start_year; $y <= $end_year; $y++) : ?>
-    <div class="y-wrapper">
-        <div class="y-title"><?= $y ?></div>
-        <?php for ($m = 1; $m <= 12; $m++) : ?>
-            <div class="m-wrapper">
-                <?= $m ?>
-            </div>
-        <?php endfor ?>
-    </div>    
-<?php endfor */ ?>
