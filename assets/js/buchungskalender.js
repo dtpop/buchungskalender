@@ -1,5 +1,28 @@
 $(function () {
     let StartDate;
+
+
+
+    $(document).on("click", '.buka-cal-wrapper .bk-day.fix-booked', function(e) { 
+        var DateClicked = $(this);
+        
+        if (e.shiftKey) {
+            if (DateClicked.data('bookingid')) {
+//                console.log('click clicked');
+                editBooking(DateClicked.data('bookingid'));
+            }
+            return;
+        } 
+    });
+
+    // Backend
+    function editBooking (bookingid) {
+        window.location.href = 'index.php?page=yform/manager/data_edit&table_name=rex_buka_bookings&rex_yform_manager_popup=0&func=edit&data_id='+bookingid;
+    }
+
+        
+
+
     $(".buka-cal-wrapper").on("click", ".bookable", function () {
         if ($(".buka-cal-wrapper").hasClass("booking-complete")) {
             clear_booking();

@@ -71,10 +71,11 @@ $color_booked: #bf0000;
 
 .bk-day {
     border: 1px solid white;
+    box-sizing: border-box;
     position: relative;
     color: white;
     font-weight: bold;
-    pointer-events: none;
+//    pointer-events: none;
     &.bookable {
         cursor: pointer;
         pointer-events: all;

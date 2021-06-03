@@ -38,6 +38,19 @@ $field = $form->addTextField('ical_uid');
 $field->setLabel('Ical Uid');
 $field->setNotice('Leer lassen, wenn keine ical Synchronisation verwendet wird. Sinnvoller Eintrag: <code>ical@ferien-am-tressower-see.de</code>.');
 
+$field = $form->addLinkmapField('summary_page');
+$field->setLabel('Buchung Zusammenfassung');
+$field->setNotice('<code>rex_config::get(\'buchungskalender\',\'summary_page\')</code>.');
+
+$field = $form->addLinkmapField('confirmation_page');
+$field->setLabel('E-Mail-Link Bestätigungsseite');
+$field->setNotice('<code>rex_config::get(\'buchungskalender\',\'confirmation_page\')</code>.');
+
+$field = $form->addTextField('email_me');
+$field->setLabel('E-Mail Adressen des Betreibers');
+$field->setNotice('<code>rex_config::get(\'buchungskalender\',\'email_me\')</code>. Mehrere Adressen durch Komma trennen. An diese E-Mail Adressen werden die Reservierungsmails geschickt.');
+
+
 
 $content = $form->get();
 

@@ -6,6 +6,8 @@ rex_yform_manager_dataset::setModelClass('rex_buka_bookings', buka_booking::clas
 rex_yform_manager_dataset::setModelClass('rex_buka_season', buka_season::class);
 rex_yform_manager_dataset::setModelClass('rex_buka_objects', buka_objects::class);
 
+rex_yform::addTemplatePath($addon->getPath('ytemplates'));
+
 if (rex::isBackend() && isset($_REQUEST['page'])) {
     rex_view::addCssFile(rex_addon::get('buchungskalender')->getAssetsUrl('css/buchungskalender.css'));
     rex_view::addJsFile(rex_addon::get('buchungskalender')->getAssetsUrl('js/buchungskalender.js'));
@@ -35,18 +37,37 @@ if (rex::isBackend() && rex::getUser()) {
         } elseif (filemtime($this->getPath('assets/js/buchungskalender.js')) > filemtime($this->getAssetsPath('js/buchungskalender.js'))) {
             $copy_js = true;
         }
+        if ($copy_js) {
+            rex_file::copy($this->getPath('assets/js/buchungskalender.js'), $this->getAssetsPath('js/buchungskalender.js'));
+        }
     }
 }
 
 if (rex::isFrontend()) {    
     rex_extension::register('PACKAGES_INCLUDED', function() {
-        if (rex::getConfig('buka','ical_interval')) {
+        rex_login::startSession();
+        if (rex_config::get('buchungskalender','ical_interval')) {
             buka_ical::check_ical_data();
         }
 
         if (rex_request('action','string') == 'get_ical_data' && rex_request('object_id','int')) {
             echo buka_ical::send_ical_data_for_obj(rex_request('object_id','int'));
             exit;
+        }
+        if (rex_request::isXmlHttpRequest() && rex_request('minicalendar','int') == 1) {
+            echo buka_cal::get_mini_calendar(rex_request('object_id','int'));
+            exit;
+        }
+
+        // Buchungsbestätigungslink aktiviert
+        if (rex_request('action') == 'booking_confirm' && rex_request('email') && rex_request('hash')) {
+            if (buka_booking::confirm_booking()) {
+                rex_redirect(rex_config::get('buchungskalender','confirmation_page'),'',['success'=>1]);
+            } else {
+                rex_redirect(rex_config::get('buchungskalender','confirmation_page'),'',['success'=>0]);
+            }
+
+
         }
 
     });

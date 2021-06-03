@@ -6,13 +6,23 @@ Backend- und Frontend-Buchungskalender für REDAXO CMS
 
 Der Buchungskalender wurde entwickelt für die Entwicklung von Ferienobjekten (Ferienwohnungen, Ferienhäusern, Wohnmobilen usw.), die "über Nacht" vermietet werden. Daher wird bei diesem Buchungskalender das Startdatum und das Enddatum auch entsprechend gekennzeichnet, z.B. als Anreisetag und Abreisetag. Entsprechende Tools für die Anzeige im Backend werden vom AddOn mitgeliefert und können auch für das Frontend verwendet werden.
 
+## Mehrere Objekte und Kombinationsangebote
+
 Der Buchungskalender kann mehrere Objekte verwalten. Damit können auch mehrere Ferienwohnungen oder Objekte verwaltet werden. Zusätzlich ist der Buchungskalender mit einem speziellen Feature ausgestattet, das Kombinationsobjekte ermöglicht.
 
 Das muss ich an einem Beispiel erklären.
 
 Wir vermieten zwei Ferienwohnungen. Bevorzugt vermieten wir die Wohnungen aber zusammen, also im Doppelpack. Wenn nun eine Wohnung einzeln vermietet ist, dann ist eine Doppelvermietung nicht mehr möglich. Wenn die Wohnungen als Doppelpack vermietet sind, ist logischerweise eine Einzelvermietung nicht mehr möglich. Das ist ein sehr sehr spezielles, aber eben auch sehr praktisches Feature, welches man in anderen Buchungstools sehr lange und zumeist vergeblich sucht. Die Doppelpack (oder Kombinationsvermietung) hat natürlich auch eine eigene Preisgestaltung usw. - das muss ja sehr einfach möglich sein, sonst macht das keinen Sinn und keinen Spaß.
 
+## Preisverwaltung
+
 Apropos Preisgestaltung. Auch hier ist der Buchungskalender sehr gut ausgestattet. In der Grundausstattung kann er einen Fixpreis pro Objekt, also z.B. Reinigungskosten und einen Preis pro Nacht und Objekt - natürlich ganz individuell für jedes Objekt pflegbar. Aber noch viel toller: der Buchungskalender kann Saisonpreise. Man kann also für verschiedene Zeiträume verschiedene Preise vergeben.
+
+Für die Preisverwaltung ist eine eigene Tabelle zuständig. Hier kann man für die unterschiedlichen Buchungszeiträume unterschiedliche Preise eintragen. Auch für unterschiedliche Mietzeiten lassen sich unterschiedliche Preise eintragen.
+
+![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-preisverwaltung.png)
+
+## Weitere Features
 
 Die Idee des Buchungskalenders ist dabei, die Verwaltung von Ferienimmobilien vollkommen eigenständig zu übernehmen, also die Portale wie booking.com, airbnb, novasol und wie sie alle heißen und hohe Provisionen fordern, außen vor zu lassen. Das ist ein immenser Vorteil für den Gast. Nicht nur kostenmäßig, sondern auch vertragsmäßig ist es natürlich viel schlauer den Vertrag direkt mit dem Gast zu machen. - Aber das kann letzten Endes auch jeder selbst entscheiden. Der Buchungskalender kommt nämlich zusätzlich mit einer ical Schnittstelle, mit der Buchungsdaten z.B. von Airbnb übernommen werden können.
 
@@ -45,12 +55,75 @@ Damit die Administration auch schön einfach und komfortabel ist, werden die Sai
 
 ![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-saisondetail.png)
 
-## Preisverwaltung
-
-Für die Preisverwaltung ist eine eigene Tabelle zuständig. Hier kann man für die unterschiedlichen Buchungszeiträume unterschiedliche Preise eintragen. Auch für unterschiedliche Mietzeiten lassen sich unterschiedliche Preise eintragen.
-
-![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-preisverwaltung.png)
 
 ## ical Funktionen
 
-Der Buchungskalender kann ical. Und zwar rein und raus, Import und Export. Bislang ist das für airbnb(r) gut getestet, für andere Plattformen noch nicht. Man muss nur ein paar Einstellungen vornehmen, dann geht das quasi von selber. Zunächst muss beim jeweiligen Objekt die Url für die zu importierenden Ical Daten eingetragen werden. Außerdem muss in den Settings das Interval eingegeben werden, in dem die ical Daten gecached werden sollen. Das könnten beispielsweise 900 Sekunden sein. Dann schaut der Buchungskalender 900 Sekunden lang nicht nach, ob neue Buchungsdaten vorliegen. Wenn seit der letzten Aktualisierung mehr als 900 Sekunden (das ist eine Viertelstunde) vergangen ist, werden die Daten neu gelesen. Beim Einlesen der Daten wird in den vorhandenen Buchungsdaten geguckt, ob für diesen Zeitraum schon eine Buchung eingetragen ist. Wenn da schon eine bestätigte Buchung drin ist, wird natürlich nicht nochmal eine Buchung eingetragen. Wenn nicht, dann schon. Wenn jetzt der Ical Server mal eine Pause macht, dann ist das nicht schlimm. Für 24 Stunden werden dann einfach weiterhin die gecachten Daten verwendet. Der Export ist auch relativ trivial. Hierfür muss nur die Url `https://example.com/?action=get_ical_data&object_id=2` für die Ical Daten des Objektes mit der Id 2 aufgerufen werden. Es werden nur Ical Daten für Buchungen herausgegeben, die in der Zukunft liegen. In den ical Daten werden natürlich auch keinerlei persönliche Daten übertragen. Da steht nur das Buchungsdatum drin.
+Der Buchungskalender kann ical. Und zwar rein und raus, Import und Export. Bislang ist das für airbnb(r) gut getestet, für andere Plattformen noch nicht. Man muss nur ein paar Einstellungen vornehmen, dann geht das quasi von selber. Zunächst muss beim jeweiligen Objekt die Url für die zu importierenden Ical Daten eingetragen werden. Außerdem muss in den Settings das Interval eingegeben werden, in dem die ical Daten gecached werden sollen. Das könnten beispielsweise 900 Sekunden sein. Dann schaut der Buchungskalender 900 Sekunden lang nicht nach, ob neue Buchungsdaten vorliegen. Wenn seit der letzten Aktualisierung mehr als 900 Sekunden (das ist eine Viertelstunde) vergangen ist, werden die Daten neu gelesen. Beim Einlesen der Daten wird in den vorhandenen Buchungsdaten geguckt, ob für diesen Zeitraum schon eine Buchung eingetragen ist. Wenn da schon eine bestätigte Buchung drin ist, wird natürlich nicht nochmal eine Buchung eingetragen. Wenn nicht, dann schon. Wenn jetzt der Ical Server mal eine Pause macht, dann ist das nicht schlimm. Für 24 Stunden werden dann einfach weiterhin die gecachten Daten verwendet. Der Export ist auch relativ trivial. Hierfür muss nur die Url `https://example.com/?action=get_ical_data&object_id=2` für die Ical Daten des Objektes mit der Id 2 aufgerufen werden. Es werden nur Ical Daten für Buchungen herausgegeben, die in der Zukunft liegen. In den ical Daten werden natürlich auch keinerlei persönliche Daten übertragen. Da steht nur das Buchungsdatum drin. Kombinationsangebote werden beim ical Export korrekt berücksichtigt.
+
+## Demo
+
+Dieses AddOn bringt eine komplette Demo mit. Diese Demo ist dazu gedacht, die Funktionen des AddOns zu zeigen. Man muss eine Ferienwohnungsseite nicht auf der Demo aufbauen. Man kann das AddOn auch verwenden ohne die Demo zu installieren. Da die Dokumentation aber auch nicht zu 100% perfekt ist, empfiehlt es sich durchaus mal in die Demo rein zu schauen. Die Demo kann aber auch als Grundlage für eine komplette Seite verwendet werden. Die Module in der Demo sind für TinyMCE 4 als Editor ausgelegt. Wenn ein anderer Editor verwendet wird, müssen nur die Klassen an der entsprechenden Stelle umbenannt werden. Wir gehen Schritt für Schritt vor.
+
+Basis für die Demo ist eine Grundinstallation eines aktuellen REDAXO. Im Moment ist dies 5.12.0.
+
+Dann müssen nur noch die AddOn yform und mform installiert werden.
+
+Optional, aber empfehlenswert sind: yrewrite, theme, tinymce, tinymce4 und natürlich eure anderen Lieblingsaddons.
+
+Dann wird das AddOn Buchungskalender installiert und aktiviert.
+
+Anschließend kann die Demo aus dem Verzeichnis /src/redaxo/addons/buchungskalender/install/demo über das Backup AddOn installiert werden.
+
+## Zusatzfunktionen
+
+Es gibt ein paar Zusatzfunktionen, die ich für unsere eigene Ferienwohnungsverwaltung programmiert habe. Dazu gehört zum Beispiel, dass man angeben kann, ob in einem bestimmten Zeitraum nur wochenweise von Samstag bis Samstag gebucht werden kann.
+
+Man kann außerdem angeben, wie viele Tage eine Buchung in der Zukunft liegen muss. Damit kann verhindert werden, dass Gäste vor der Türe stehen und sagen "wir haben doch gerade gebucht!". Wie erlauben eine Buchung über die Webseite ab drei Tagen in der Zukunft.
+
+## E-Mail Templates
+
+Momentan sind drei E-Mail Templates am Start.
+
+booking_confirm - bekommt der Besucher als Bestätigung, wenn er eine Anfrage oder Buchung vorgenommen hat. Das Template ist für beide Arten der Reservierung programmiert.
+
+booking_message - bekommt der Betreiber der Website, wenn eine Buchung oder Anfrage vorgenommen wurde
+
+confirmation_info - bekommt der Betreiber, wenn der Besucher den Bestätigungslink aktiviert hat.
+
+Diese Templates sind in der Programmierung fest verdrahtet, können also derzeit nicht frei gewählt werden. Die Inhalte können allerdings jederzeit angepasst werden, die mitgelieferten Templates dienen nur als Muster, wie alles in dieser Demo.
+
+## Einstellungen
+
+In den Einstellungen des AddOns können Konfigurationen für den E-Mail Versand und die Buchung vorgenommen werden.
+
+## Module
+
+Das AddOn bringt die wichtigsten Module mit, die für den Betrieb einer Website mit Buchungsmöglichkeit sinnvoll sind.
+
+den Buchungskalender für das Frontend
+
+einen Minikalender für die Anzeige der Belegung
+
+einen Saisonkalender
+
+das Buchungsformular
+
+Auflistung der Preise
+
+die Ausgabe der ical Daten für die Synchronisation
+ 
+## Anpassungen
+
+Eine Besonderheit ist im Buchungskalender AddOn eingebaut. Wenn die scss Datei im AddOn geändert wird, so wird bei aktivem Debug Mode eine neue css Datei erstellt und gleich ins Assets Verzeichnis kopiert. Das gleiche gilt für eine Anpassung der js Datei. Diese wird auch direkt im Assets Verzeichnis aktualisiert, wenn der Debug Mode eingeschaltet ist.
+
+
+## Danke
+
+Ein großer Dank geht an die Entwickler von REDAXO, dieses großartige System, welches die Grundlage bietet solche AddOns zu entwickeln.
+Ein großer Dank geht an alle AddOn Entwickler, die zu diesem großartigen System beitragen.
+
+## Lizenz
+
+Das AddOn steht unter der MIT Lizenz und kann sowohl für private als auch für gewerbliche Zwecke frei verwendet werden.
+
+(c) 2021 - Wolfgang Bund - wb@dtp-net.de - https://agile-websites.de

@@ -1,5 +1,5 @@
 package: buchungskalender
-version: dev
+version: 0.9.0.beta
 author: Wolfgang Bund
 supportpage: https://github.com/redaxo/redaxo
 
@@ -11,6 +11,7 @@ page:
     subpages:
         calendar: { title: 'translate:buchungskalender_calendar' }
         settings: { title: 'translate:buchungskalender_subpage_config' }
+        setup: { title: 'translate:buchungskalender_subpage_setup' }
         help:  
              { title: 'translate:buchungskalender_help',  icon: rex-icon fa-question-circle, itemclass: pull-right,  subPath: README.md} 
 

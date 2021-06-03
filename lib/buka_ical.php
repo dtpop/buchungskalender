@@ -2,6 +2,10 @@
 
 class buka_ical {
 
+    /**
+     * prüft, ob ein ical Datum schon gebucht ist. Wenn nicht, wird der Datensatz eingefügt
+     */
+
     public static function CheckIcalSource($source, $objectid = 0) {
         $dates = self::ics_string_to_dates($source);
 
@@ -74,8 +78,8 @@ class buka_ical {
     }
 
 
-    public static function send_ical_data_for_obj () {
-        $query = buka_booking::get_query();
+    public static function send_ical_data_for_obj ($object_id = 0) {
+        $query = buka_booking::get_query($object_id);
         // nur Daten aus der Zukunft ausliefern
         $query->whereRaw('(datestart > :today OR dateend > :today)',['today'=>date('Y-m-d')]);
 
