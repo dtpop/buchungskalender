@@ -11,8 +11,8 @@ $object = buka_objects::get_object_for_id($booking['object_id']);
 <p>Abreise: <?= date('d.m.Y', strtotime($booking['dateend'])) ?></p>
 <p>Übernachtungen: <?= count($price['period'])  ?></p>
 <p>
-    <?php if ($booking['vorname'] . $booking['vorname']) : ?>
-        <?= $booking['vorname'] . ' ' . $booking['vorname'] ?><br>
+    <?php if ($booking['vorname'] . $booking['nachname']) : ?>
+        <?= $booking['vorname'] . ' ' . $booking['nachname'] ?><br>
     <?php endif ?>
     <?php if ($booking['anschrift']) : ?>
         <?= $booking['anschrift'] ?><br>
