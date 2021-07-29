@@ -17,6 +17,9 @@ $cal = new buka_cal();
 $cal->maxBookingYear = date('Y', buka_booking::get_end_time());
 $cal->maxBookingMonth = date('m', buka_booking::get_end_time());
 $cal->objectId = $var1['object_id'];
+$cal->monthcount = 4;
+$cal->mobile_month_count = [2=>'uk-visible@m',3=>'uk-visible@l',4=>'uk-visible@xl'];
+
 
 $cal->set_start_date();
 $cal->set_bookings();

@@ -1,0 +1,7 @@
+name: booking_confirm
+mail_from: webserver@example.com
+mail_from_name: 'Ferienwohnung Alpenblick'
+mail_reply_to: info@example.com
+mail_reply_to_name: 'Ferienwohnung Alpenblick'
+subject: 'Ihre REX_YFORM_DATA[field="booking_type"] der Ferienwohnung Alpenblick'
+attachments: ''

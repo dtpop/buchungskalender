@@ -1,0 +1,7 @@
+name: confirmation_info
+mail_from: webserver@example.com
+mail_from_name: 'REX_YFORM_DATA[field="vorname"] REX_YFORM_DATA[field="nachname"]'
+mail_reply_to: 'REX_YFORM_DATA[field="email"]'
+mail_reply_to_name: ''
+subject: 'Buchung wurde bestätigt - REX_YFORM_DATA[field="object_name"] - REX_YFORM_DATA[field="date_start"] - REX_YFORM_DATA[field="date_end"]'
+attachments: ''

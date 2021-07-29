@@ -2,7 +2,6 @@
 
 $objects = buka_objects::get_query()->find();
 
-
 if (!count($objects)) {
     echo rex_view::error('Es wurde noch kein Objekt angelegt.');
     return;
@@ -19,11 +18,21 @@ if (!$object_id) {
 }
 
 
+// dump($start_year);
+// dump($end_year);
+
 $cal = new buka_cal($object_id);
 
 $cal->set_start_date();
 $cal->set_bookings();
 
+// $cal->set_show_form();
+
+
+// $cal->set_month_count(3);
+
+
+// echo $cal->getMonth();
 
 $row_start_6 = '<div class="row"><div class="col-md-6">';
 $row_start_3 = '<div class="row"><div class="col-md-3">';
@@ -91,6 +100,7 @@ $yform->setValueField('html', ['', '</div>']);
 
 $yform->setValueField('html', ['', '<div id="bookingform-step1">']);
 $yform->setValueField('html', ['', $cal->getCalendar()]);
+$yform->setValueField('html', ['', '<p class="help-block">Eine Buchung kann mit <code>Shift+Click</code> angezeigt und bearbeitet werden.</p>']);
 $yform->setValueField('html', ['', '<button type="button" id="to-step-2" disabled="disabled" class="btn btn-primary">Weiter ...</button>']);
 $yform->setValueField('html', ['', '</div>']);
 
@@ -112,7 +122,7 @@ $yform->setActionField('redirect', [rex_url::currentBackendPage()]);
                 <input type="hidden" name="page" value="buchungskalender/calendar">
                 <select name="object_id" class="form-control selectpicker" onchange="this.form.submit()">
                     <?php foreach ($objects as $obj) : ?>
-                        <option value="<?= $obj->id ?>" <?= $obj->id == $object_id ? ' selected="selected"' : '' ?>><?= $obj->name ?></option>
+                        <option value="<?= $obj->id ?>" <?= $obj->id == rex_request("object_id", 'int') ? ' selected="selected"' : '' ?>><?= $obj->name ?></option>
                     <?php endforeach ?>
                 </select>
             </form>
@@ -127,3 +137,15 @@ $yform->setActionField('redirect', [rex_url::currentBackendPage()]);
     const min_booking_days = <?= rex_config::get('buchungskalender', 'min_booking_days') ?>;
 </script>
 
+
+
+<?php /* for ($y = $start_year; $y <= $end_year; $y++) : ?>
+    <div class="y-wrapper">
+        <div class="y-title"><?= $y ?></div>
+        <?php for ($m = 1; $m <= 12; $m++) : ?>
+            <div class="m-wrapper">
+                <?= $m ?>
+            </div>
+        <?php endfor ?>
+    </div>    
+<?php endfor */ ?>

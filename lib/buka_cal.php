@@ -23,6 +23,7 @@ class buka_cal
     var $cal_wrapper_class = 'buka-cal-wrapper';
     var $season_calendar = false; // bei true wird nur der Saisonkalender zurückgegeben - keine Buchungsdaten.
     var $with_related = true;
+    var $mobile_month_count = [];
 
 
 
@@ -104,7 +105,7 @@ class buka_cal
                  OR (dateend <= :start AND datestart >= :end)
                  OR (datestart >= :start AND datestart <= :end))
                  
-            ) OR (status = "asked" AND bookingdate > :bookingdate))',['start'=>$start,'end'=>$end,'bookingdate'=>date('Y-m-d H:i:s',strtotime('-1hour'))])
+            ) OR (status = "asked" AND bookingdate > :bookingdate))',['start'=>$start,'end'=>$end,'bookingdate'=>date('Y-m-d H:i:s',strtotime('-10minutes'))])
         ;
         $this->bookings = $query->find();
     }
@@ -120,7 +121,7 @@ class buka_cal
 
 
 
-    public function getMonth($year = 0, $month = 0) {
+    public function getMonth($year = 0, $month = 0, $nth_month = 0) {
         if (!$year) {
             $year = date('Y');
         }
@@ -131,8 +132,15 @@ class buka_cal
         $dt = new DateTime();
         $dt->setDate($year, $month, 1);
 
+        $class = '';
 
-        $out = '<ul class="y-wrapper">';
+        foreach ($this->mobile_month_count as $k=>$mclass) {
+            if ($nth_month > $k) {
+                $class = $mclass;
+            }
+        }
+
+        $out = '<ul class="y-wrapper '.$class.'">';
         $out .= '<li class="bk_month_title">' . $this->months[$month - 1] . ' ' . $year . '</li>';
         foreach ($this->weekdays as $wd) {
             $out .= '<li class="bk-weekday">' . $wd . '</li>';
@@ -267,7 +275,7 @@ class buka_cal
 
         $n = 1;
         while ($n <= $this->monthcount) {
-            $out .= $this->getMonth($year, $month);
+            $out .= $this->getMonth($year, $month, $n);
             $month ++;
             if ($month > 12) {
                 $month = 1;

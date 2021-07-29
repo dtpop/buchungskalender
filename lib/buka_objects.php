@@ -35,5 +35,15 @@ class buka_objects extends rex_yform_manager_dataset {
         return $objects;
     }
 
+    public static function get_name_by_id ($params) {
+        if (isset($params['value']) && $params['value']) {
+            $object_id = $params['value'];
+            return self::get_object_for_id($object_id)->name;
+        }
+        return '--';        
+
+    }
+
+
 
 }

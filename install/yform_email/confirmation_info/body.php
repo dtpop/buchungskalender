@@ -1,0 +1,1 @@
+Die Buchung wurde soeben bestätigt.
