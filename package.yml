@@ -29,3 +29,5 @@ requires:
     php:
         version: '>=7.3'
     redaxo: ^5.12.0
+    packages:
+        yform: '^3.2'

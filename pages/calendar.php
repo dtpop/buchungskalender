@@ -100,7 +100,7 @@ $yform->setValueField('html', ['', '</div>']);
 
 $yform->setValueField('html', ['', '<div id="bookingform-step1">']);
 $yform->setValueField('html', ['', $cal->getCalendar()]);
-$yform->setValueField('html', ['', '<p class="help-block">Eine Buchung kann mit <code>Shift+Click</code> angezeigt und bearbeitet werden.</p>']);
+$yform->setValueField('html', ['', '<p class="help-block">Eine Buchung kann mit <code>Shift+Click</code> angezeigt und bearbeitet werden. Per <code>Click</code> auf ein grünes Datumsfeld ein Anreisedatum (muss in der Zukunft liegen) wählen.</p>']);
 $yform->setValueField('html', ['', '<button type="button" id="to-step-2" disabled="disabled" class="btn btn-primary">Weiter ...</button>']);
 $yform->setValueField('html', ['', '</div>']);
 

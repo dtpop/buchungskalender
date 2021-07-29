@@ -14,6 +14,7 @@ Viele schicke Verbesserungen. Das Update ist uneingeschränkt kompatibel zur Vor
 * Blätterbugfix im Kalender beseitigt
 * Standardwerte für Konfiguration
 * Settings und Setup nur für Admin
+* Abhängigkeit yform hinzugefügt
 
 
 Version 0.9.0 . 26.04.2021
