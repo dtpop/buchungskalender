@@ -25,6 +25,17 @@ page:
             itemclass: pull-right
             subPath: README.md
 
+pages:
+    bukabookingsprint:
+        title: translate:bookings_print
+        main: true
+#        block: system
+        popup: true
+        hidden: true
+        perm: buchungskalender_print[]
+#        pjax: true
+
+
 requires:
     php:
         version: '>=7.3'
