@@ -82,6 +82,7 @@ class buka_ical {
         $query = buka_booking::get_query($object_id);
         // nur Daten aus der Zukunft ausliefern
         $query->whereRaw('(datestart > :today OR dateend > :today)',['today'=>date('Y-m-d')]);
+        $query->where('status','confirmed');
 
         $out = 'BEGIN:VCALENDAR
 VERSION:2.0
