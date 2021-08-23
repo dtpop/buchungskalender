@@ -102,10 +102,16 @@ if ($func == 'edit' && $id) {
 
 } else {
 
-    echo '<p>
-        <a href="/redaxo'.rex_getUrl('','',['page'=>$params['page']]).'">Alle</a> | 
-        <a href="/redaxo'.rex_getUrl('','',array_merge($params,['filter'=>'next_arrival'])).'">Nächste Anreisen</a>
-    </p>';
+/*
+    <nav class="navbar navbar-default"><ul class="nav navbar-nav"><li class="active "><a href="index.php?page=install/packages/update">Vorhandene aktualisieren</a></li><li><a href="index.php?page=install/packages/add">Neue herunterladen</a></li><li><a href="index.php?page=install/packages/upload">Eigene hochladen</a></li></ul></nav>
+    $navbar = rex_n
+    */
+
+    echo '<nav class="navbar navbar-default"><ul class="nav navbar-nav">
+        <li><a href="/redaxo'.rex_getUrl('','',['page'=>$params['page']]).'">Alle</a></li>
+        <li><a href="/redaxo'.rex_getUrl('','',array_merge($params,['filter'=>'next_arrival'])).'">Nächste Anreisen</a></li>
+        <li><a href="/redaxo'.rex_getUrl('','',array_merge($params,['page'=>'bukabookingsprint','filter'=>'next_arrival'])).'" target="_blank">Nächste Anreisen (Druckansicht)</a></li>
+    </ul></nav>';
 
     $list = rex_list::factory($qry);
     $list->removeColumn('hashval');
