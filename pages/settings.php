@@ -68,6 +68,19 @@ $field = $form->addTextField('email_me');
 $field->setLabel('E-Mail Adressen des Betreibers');
 $field->setNotice('<code>rex_config::get(\'buchungskalender\',\'email_me\')</code>. Mehrere Adressen durch Komma trennen. An diese E-Mail Adressen werden die Reservierungsmails geschickt.');
 
+$form->addFieldset('Terminbuchung - Einstellungen');
+
+$field = $form->addLinkmapField('summary_datebooking_page');
+$field->setLabel('Buchung Zusammenfassung');
+$field->setNotice('<code>rex_config::get(\'buchungskalender\',\'summary_datebooking_page\')</code>.');
+
+$field = $form->addLinkmapField('confirmation_datebooking_page');
+$field->setLabel('E-Mail-Link Bestätigungsseite');
+$field->setNotice('<code>rex_config::get(\'buchungskalender\',\'confirmation_datebooking_page\')</code>.');
+
+
+
+
 
 
 $content = $form->get();

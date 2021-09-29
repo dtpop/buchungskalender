@@ -2,8 +2,8 @@
 class buka_cal
 {
 
-    var $months = array('Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember');
-    var $weekdays = array('Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So');
+    var $months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+    var $weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
     var $maxBookingTime = 365 * 1.25 * 24 * 60 * 60;
     var $baselink;
     var $objectId = 0;
@@ -29,6 +29,7 @@ class buka_cal
 
     function __construct($object_id = null, $date = null, $year = null, $month = null)
     {
+//        dump('huhu buka_cal');
         $this->year = $year ?: date('Y');
         $this->month = $month ?: date('m');
         $this->datestart = rex_request('datestart','string');
@@ -110,6 +111,7 @@ class buka_cal
         $this->bookings = $query->find();
     }
 
+
     public function set_month_count ($monthcount) {
         $this->monthcount = $monthcount;
     }
@@ -168,7 +170,7 @@ class buka_cal
         return $query->find();
     }
 
-    private function get_season($date) {
+    public function get_season($date) {
         foreach ($this->seasons as $season) {
             foreach ($season->season_dates as $sd) {
                 if ($date >= $sd['from'] && $date <= $sd['to']) {
@@ -199,6 +201,8 @@ class buka_cal
             }
         }
         foreach ($this->bookings as $b) {
+            $b->datestart = $b->datestart ?? '';
+            $b->dateend = $b->dateend ?? '';
             if ($b->datestart < $date && $b->dateend > $date) {
                 $bd['class'][] = 'fix-booked';
                 $bd['booking_id'] = $b->id;
@@ -302,7 +306,7 @@ class buka_cal
     }
 
 
-    private function getNavigation($navType = 'long') {
+    public function getNavigation($navType = 'long') {
 
         $nextShift = ($navType == 'long') ? 10 : 1;
 
@@ -345,9 +349,9 @@ class buka_cal
 
 
         $nextlink = '';
-        $nextlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $nextYear . '&month=' . $nextMonth . '&object_id=' . $this->objectId . '">' . $this->months[($nextMonth + $nextShift) % 12] . ' ' . ($this->year + $yearShift) . ' &gt;</a>';
+        $nextlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $nextYear . '&month=' . $nextMonth . '&object_id=' . $this->objectId . '">' . $this->months[$nextMonth - 1] . ' ' . $nextYear . ' &gt;</a>';
         if ($navType == 'long') {
-            $nextlink .= '&nbsp;|&nbsp;<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . ($this->year + 1) . '&month=' . $this->month . '&object_id=' . $this->objectId . '">' . $this->months[($this->month + 10) % 12] . ' ' . ($this->year + $yearShift2) . ' &gt;&gt;</a>';
+            $nextlink .= '&nbsp;|&nbsp;<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . ($this->year + 1) . '&month=' . $this->month . '&object_id=' . $this->objectId . '">' . $this->months[($this->month + 10) % 12] . ' ' . ($this->year + 1) . ' &gt;&gt;</a>';
         }
 
         if (rex::isFrontend() && ($this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT)) >= ($this->maxBookingYear . '-' . $this->maxBookingMonth)) {
@@ -378,6 +382,10 @@ class buka_cal
 
 
         $bookingVars = rex_session('buka_booking');
+
+        if (!isset($bookingVars['datestart']) || !isset($bookingVars['dateend']) || !$bookingVars['datestart'] || !$bookingVars['dateend']) {
+            return false;
+        }
         
         $dateFrom = new DateTime($bookingVars['datestart']);
         $dateTo = new DateTime($bookingVars['dateend']);

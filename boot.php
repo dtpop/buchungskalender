@@ -59,6 +59,41 @@ if (rex::isFrontend()) {
             exit;
         }
 
+        // Buchungskalender
+
+        if (rex_request::isXmlHttpRequest() && rex_request('bukacal','int') == 1) {
+            $art = new rex_article_content();
+            $art->setArticleId(rex_article::getCurrentId());
+            $dom = new DOMDocument('1.0', 'UTF-8');
+            libxml_use_internal_errors(true);
+            $dom->preserveWhiteSpace = false;
+            $dom->formatOutput       = true;
+            $dom->loadHTML('<?xml encoding="UTF-8"><html><body>'.$art->getArticle().'</body></html>');
+            libxml_clear_errors();
+            $node = $dom->getElementById('bookingform-step1');
+            echo $dom->saveHTML($node);
+            exit;
+        }
+
+        // Termine Kalender
+
+//        if (rex_request::isXmlHttpRequest() && rex_request('bukadate','int') == 1) {
+        if (rex_request('bukadate','int') == 1) {
+            $art = new rex_article_content();
+            $art->setArticleId(rex_article::getCurrentId());
+            $dom = new DOMDocument('1.0', 'UTF-8');
+            libxml_use_internal_errors(true);
+            $dom->preserveWhiteSpace = false;
+            $dom->formatOutput       = true;
+            $dom->loadHTML('<?xml encoding="UTF-8"><html><body>'.$art->getArticle().'</body></html>');
+            libxml_clear_errors();
+            $node = $dom->getElementById('datebookingform-step1');
+            echo $dom->saveHTML($node);
+            exit;
+        }
+
+
+
         // Buchungsbestätigungslink aktiviert
         if (rex_request('action') == 'booking_confirm' && rex_request('email') && rex_request('hash')) {
             if (buka_booking::confirm_booking()) {
@@ -66,9 +101,17 @@ if (rex::isFrontend()) {
             } else {
                 rex_redirect(rex_config::get('buchungskalender','confirmation_page'),'',['success'=>0]);
             }
-
-
         }
+        // Terminbestätigungslink aktiviert
+        if (rex_request('action') == 'date_booking_confirm' && rex_request('email') && rex_request('hash')) {
+            if (buka_booking::confirm_date_booking()) {
+                rex_redirect(rex_config::get('buchungskalender','confirmation_page'),'',['success'=>1]);
+            } else {
+                rex_redirect(rex_config::get('buchungskalender','confirmation_page'),'',['success'=>0]);
+            }
+        }
+
+
 
     });
 }

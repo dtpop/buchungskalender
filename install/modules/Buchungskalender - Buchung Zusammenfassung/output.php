@@ -54,6 +54,11 @@ if (count($booking) > 5) {
 
     $yform->setValueField('html', ['', '<a href="' . rex_getUrl($booking['last_art_id']) . '" class="uk-button uk-button-default uk-margin-right">Zurück</a>']);
 
+    if (rex_addon::get('yform_spam_protection')->isAvailable()) {
+        $yform->setValueField('spam_protection', array("honeypot","Bitte nicht ausfüllen.","Ihre Anfrage wurde als Spam erkannt und gelöscht. Bitte versuchen Sie es in einigen Minuten erneut oder wenden Sie sich persönlich an uns.", 0));
+    }
+    
+
     $yform->setValueField('submit', ['Submit', 'Absenden', 'no_db', '', '', 'uk-active']);
 
     $yform->setActionField('callback', ['buka_booking::save_in_db']);
@@ -72,8 +77,8 @@ if (count($booking) > 5) {
 ?>
 
 
-<section class="uk-section">
-    <div class="uk-container uk-container-small">
+<section class="uk-section container clearfix">
+    <div class="uk-container uk-container-small row">
         <?php if (count($booking) > 5) : ?>
             <?= $yform->getForm() ?>
         <?php else : ?>

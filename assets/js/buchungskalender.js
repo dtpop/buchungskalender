@@ -23,9 +23,7 @@ $(function () {
 
     }
 
-
-
-    $(".buka-cal-wrapper").on("click", ".bookable", function () {
+    $(document).on("click", ".buka-cal-wrapper .bookable", function () {
         if ($(".buka-cal-wrapper").hasClass("booking-complete")) {
             clear_booking();
         }
@@ -35,10 +33,18 @@ $(function () {
 
         if ($(".bk-day.reserve-start").length) {
             find_end($(this));
-
         } else {
             find_start($(this));
         }
+    });
+
+    // Kalender blättern
+    $(document).on('click','#bookingform-step1 .buka_pager_nav a',function(e) {
+        console.log('asdfasdf');
+        e.preventDefault();
+        let href = $(this).attr('href')+"&bukacal=1";
+        $("#bookingform-step1").parent().load(href);
+        return false;
     });
 
     $(document).on("click", "#to-step-2", function () {
@@ -183,6 +189,8 @@ $(function () {
 
     }    
 
-
 });
 
+$(document).on('rex:ready',function() {
+    $('.sortable_table table tbody').sortable();
+})

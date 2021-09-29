@@ -127,6 +127,42 @@ class buka_booking extends rex_yform_manager_dataset {
         rex_set_session('buka_booking',[]);
     }
 
+    public static function save_date_in_db ($params) {        
+		$value_pool = $params->params['value_pool']['email'];
+        $booking = json_decode($value_pool['booking_json'],true);
+        $error = false;
+        $query = rex_yform_manager_table::get(rex::getTable('buka_date_bookings'));
+        $fields = $query->getValueFields();
+        foreach (['object_id','slotvalue','email'] as $fn) {
+            if (!isset($booking[$fn]) || !$booking[$fn]) {
+                $error = true;
+                break;
+            }
+        }
+
+        
+        /*
+        if (self::is_booked($booking['datestart'],$booking['dateend'],$booking['object_id'])) {
+            $error = true;
+        }
+        */
+
+        if ($error) {
+            echo '<p class="uk-form-danger">Es ist ein Fehler aufgetreten!</p>';
+            exit;
+        }
+        $record = rex_yform_manager_dataset::create(rex::getTable('buka_date_bookings'));
+
+        foreach ($booking as $fn=>$val) {
+            if (isset($fields[$fn])) {
+                $record->{$fn} = $val;
+            }
+        }
+        $record->status = 'asked';
+        $record->save();
+        rex_set_session('buka_booking',[]);
+    }
+
 
     public static function confirm_booking() {
         $email_md5 = rex_request('email');
@@ -161,6 +197,50 @@ class buka_booking extends rex_yform_manager_dataset {
         
         foreach (explode(',', rex_config::get('buchungskalender', 'email_me')) as $email) {
             $yform->setActionField('tpl2email', ['confirmation_info', $email]);
+        }
+        $yform->getForm();
+        $yform->setObjectparams('send',1);
+        $yform->executeActions();    
+
+
+        return true;
+    }
+
+    public static function confirm_date_booking() {
+        $email_md5 = rex_request('email');
+        $hash = rex_request('hash');
+
+//        $query = self::get_query();
+        $query = rex_yform_manager_table::get(rex::getTable('buka_date_bookings'))->query();
+
+        $query->where('hashval',$hash);
+        $query->where('status','asked');
+        $rows = $query->count();
+        if ($rows != 1) {
+            rex_set_session('buka_message','Die Buchung ist nicht vorhanden oder wurde bereits bestätigt.');
+            return true;
+        }
+        $data = $query->findOne();
+        if (md5($data->email) != $email_md5) {
+            rex_set_session('buka_message','Es ist ein Fehler aufgetreten.');
+            return true;
+        }
+        $data->status = 'confirmed';
+        $data->save();
+        rex_set_session('buka_message','Die Buchung ist nun erfolgreich besätigt.');
+
+        $object = buka_objects::get_object_for_id($data->object_id);
+
+        $yform = new rex_yform();        
+        $yform->setObjectparams('csrf_protection',false);
+        $yform->setValueField('hidden', ['vorname', $data->vorname]);
+        $yform->setValueField('hidden', ['nachname', $data->nachname]);
+        $yform->setValueField('hidden', ['slot_value', buka_date_cal::format_slot_date($data->slotvalue)]);
+        $yform->setValueField('hidden', ['object_name', $object->name]);
+        $yform->setValueField('hidden', ['email', $data->email]);
+        
+        foreach (explode(',', rex_config::get('buchungskalender', 'email_me')) as $email) {
+            $yform->setActionField('tpl2email', ['confirmation_date_info', $email]);
         }
         $yform->getForm();
         $yform->setObjectparams('send',1);

@@ -110,14 +110,14 @@ $yform->setValueField('submit', ['Submit', 'weiter ...', 'no_db','','','uk-activ
 
 $yform->setValueField('html', ['', '</div>']);
 
-$yform->setValueField('html', ['', '<div id="bookingform-step1">']);
+$yform->setValueField('html', ['', '<div><div id="bookingform-step1">']);
 $yform->setValueField('html', ['', $cal->getCalendar()]);
 if (rex_request('FORM','array') || $booking) {
     $yform->setValueField('html', ['', '<button type="button" id="to-step-2" class="uk-button uk-button-default uk-active">Weiter ...</button>']);
 } else {
     $yform->setValueField('html', ['', '<button type="button" id="to-step-2" disabled="disabled" class="uk-button uk-button-default uk-active">Weiter ...</button>']);
 }
-$yform->setValueField('html', ['', '</div>']);
+$yform->setValueField('html', ['', '</div></div>']);
 
 // $yform->setValidateField('customfunction',['datestart','buka_booking::save_form1_in_session',['datestart','dateend']]);
 $yform->setValidateField('type',['email','email','Bitte geben Sie eine gültige E-Mail Adresse an.']);
@@ -134,8 +134,8 @@ $yform->setActionField('redirect', [rex_getUrl(rex_config::get('buchungskalender
 ?>
 
 <section class="uk-section">
-    <div class="uk-container">
-        <div class="mind_booking_message">
+    <div class="uk-container container clearfix">
+        <div class="mind_booking_message row">
             <p><?= rex_config::get('buchungskalender', 'message_min_booking_days'); ?></p>            
         </div>
         <h1><?= $object->name .' ' . ($object->reservation == 'book' ? 'buchen' : 'anfragen') ?></h1>
