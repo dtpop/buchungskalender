@@ -7,14 +7,20 @@ class buka_booking extends rex_yform_manager_dataset {
         ->selectRaw("YEAR(dateend)",'endyear')
         ;
 
-        if ($object_id = rex_request('object_id','int',$object_id)) {
-            
+        if (!$object_id) {
+            $object_id = rex_request('object_id','int',0);
+        }
+
+        if ($object_id) {
             $related = self::find_related($object_id);
             if (count($related) && $with_related) {
                 $related_ids = [$object_id=>$object_id];
                 foreach ($related as $o) {
                     $related_ids[$o->id] = $o->id;
                 }
+
+                rex_logger::factory()->log('info',implode(',',$related_ids),[],__FILE__,__LINE__);
+
                 $query->whereRaw('FIND_IN_SET(object_id,:ids)',['ids'=>implode(',',$related_ids)]);
             } else {
                 $query->where('object_id',$object_id);

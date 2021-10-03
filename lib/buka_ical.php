@@ -22,8 +22,6 @@ class buka_ical {
 
             $booked = buka_booking::is_booked($strAnreise, $strAbreise, $objectid);
 
-//            dump($booked);
-
             // wenn die Periode noch frei ist, eintragen ....
             if (!$booked && $strAnreise && $strAbreise) {
 
@@ -138,7 +136,7 @@ END:VEVENT
         if (file_exists($icalfile)) {
             // Wenn Datei erst 15 Minuten alt, dann ok
             if (filemtime($icalfile) > time() - intval(rex_config::get('buchungskalender','ical_interval'))) {
-//                return true;
+                return true;
             }
         }
 
@@ -148,7 +146,6 @@ END:VEVENT
         curl_close($ch);
         
         if (strlen($content) > 5) {
-//            dump($content);
             rex_file::put($icalfile,$content);
             self::CheckIcalSource($content,$object->id);
             return true;
