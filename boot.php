@@ -31,6 +31,8 @@ if (rex::isBackend() && rex::getUser()) {
             $compiler->compile();
             rex_file::copy($this->getPath('assets/css/buchungskalender.css'), $this->getAssetsPath('css/buchungskalender.css'));
         }
+
+        // Backend JS
         $copy_js = false;
         if (!file_exists($this->getAssetsPath('js/buchungskalender.js'))) {
             $copy_js = true;
@@ -40,13 +42,24 @@ if (rex::isBackend() && rex::getUser()) {
         if ($copy_js) {
             rex_file::copy($this->getPath('assets/js/buchungskalender.js'), $this->getAssetsPath('js/buchungskalender.js'));
         }
+
+        // Frontend JS
+        $copy_js = false;
+        if (!file_exists($this->getAssetsPath('frontend/js/buchungskalender.js'))) {
+            $copy_js = true;
+        } elseif (filemtime($this->getPath('assets/frontend/js/buchungskalender.js')) > filemtime($this->getAssetsPath('frontend/js/buchungskalender.js'))) {
+            $copy_js = true;
+        }
+        if ($copy_js) {
+            rex_file::copy($this->getPath('assets/frontend/js/buchungskalender.js'), $this->getAssetsPath('frontend/js/buchungskalender.js'));
+        }
     }
 }
 
 if (rex::isFrontend()) {    
     rex_extension::register('PACKAGES_INCLUDED', function() {
         rex_login::startSession();
-        if (rex_config::get('buchungskalender','ical_interval')) {
+        if (rex_config::get('buchungskalender','ical_interval') && !rex_request::isXmlHttpRequest()) {
             buka_ical::check_ical_data();
         }
 

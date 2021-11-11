@@ -68,6 +68,17 @@ class buka_booking extends rex_yform_manager_dataset {
         return $query->exists();
     }
 
+    public static function reset_booking () {
+        $booking = rex_session('buka_booking','array');
+        $booking['object_id'] = 0;
+        $booking['datestart'] = '';
+        $booking['dateend'] = '';
+        $booking['date_start'] = '';
+        $booking['date_end'] = '';
+        $booking['price'] = 0;
+		rex_set_session('buka_booking', $booking);
+
+    }
 
     public static function save_in_session ($params) {        
 		$value_pool = $params->params['value_pool']['email'];

@@ -123,14 +123,17 @@ END:VEVENT
         ->find();
 
         foreach ($objects as $object) {
-            self::fetch_ical_data($object);
+            $ical_urls = preg_split('/\R/',$object->ical_sync_link);
+            foreach ($ical_urls as $ical_url) {
+                self::fetch_ical_data($object,$ical_url);
+            }
         }       
         
     }
 
-    public static function fetch_ical_data ($object) {
-
-        $icalfile = rex_path::cache('buka/' . md5($object->name).'.ics');
+    public static function fetch_ical_data ($object,$ical_url) {
+        $ical_url = trim($ical_url);
+        $icalfile = rex_path::cache('buka/' . md5($object->name.$ical_url).'.ics');
 
         // Alter prüfen
         if (file_exists($icalfile)) {
@@ -140,7 +143,7 @@ END:VEVENT
             }
         }
 
-        $ch = curl_init($object->ical_sync_link);
+        $ch = curl_init($ical_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $content = curl_exec($ch);
         curl_close($ch);
