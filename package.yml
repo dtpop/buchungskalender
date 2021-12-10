@@ -39,6 +39,6 @@ pages:
 requires:
     php:
         version: '>=7.3'
-    redaxo: ^5.12.0
+    redaxo: ">=5.8.0"
     packages:
-        yform: '^3.2'
+        yform: '>=3.2'

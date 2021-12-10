@@ -133,7 +133,11 @@ END:VEVENT
 
     public static function fetch_ical_data ($object,$ical_url) {
         $ical_url = trim($ical_url);
-        $icalfile = rex_path::cache('buka/' . md5($object->name.$ical_url).'.ics');
+//        $icalfile = rex_path::cache('buchungskalender/' . md5($object->name.$ical_url).'.ics');
+        $icalfile = rex_path::addonCache('buchungskalender', md5($object->name.$ical_url).'.ics');
+
+
+//        dump($icalfile);
 
         // Alter prüfen
         if (file_exists($icalfile)) {
@@ -144,12 +148,21 @@ END:VEVENT
         }
 
         $ch = curl_init($ical_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // als String zurückgeben
+        curl_setopt($ch, CURLOPT_HEADER, false);
         $content = curl_exec($ch);
         curl_close($ch);
+
+        if (!$content) {
+            $content = file_get_contents($ical_url);
+        }
+
+//        dump($content);
+
         
         if (strlen($content) > 5) {
-            rex_file::put($icalfile,$content);
+            rex_file::putCache($icalfile,$content);
+//            rex_file::put($icalfile,$content);
             self::CheckIcalSource($content,$object->id);
             return true;
         }

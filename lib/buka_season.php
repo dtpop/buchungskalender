@@ -21,13 +21,20 @@ class buka_season extends rex_yform_manager_dataset {
         foreach ($dates as $date) {
             if (count($date) == 3) {
                 $season_dates[] = [
-                    'from'=>$date[1],
-                    'to'=>$date[2]
+                    'from'=>self::chk_date_format($date[1]),
+                    'to'=>self::chk_date_format($date[2])
                 ];
             }
         }
         $this->season_dates = $season_dates;
         return $this;
+    }
+
+    public static function chk_date_format($string) {
+        if (strpos($string,'.')) {
+            $string = implode('-',array_reverse(explode('.',$string)));
+        }
+        return $string;
     }
 
 

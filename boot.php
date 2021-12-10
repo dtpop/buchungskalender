@@ -64,6 +64,7 @@ if (rex::isFrontend()) {
         }
 
         if (rex_request('action','string') == 'get_ical_data' && rex_request('object_id','int')) {
+            rex_logger::factory()->log('info',(string) $_SERVER['HTTP_REFERER'],[],__FILE__,__LINE__);
             echo buka_ical::send_ical_data_for_obj(rex_request('object_id','int'));
             exit;
         }

@@ -57,6 +57,11 @@ class aw_helper {
         return $url;
     }
 
+    public static function get_short_date($date) {
+        return implode('.',array_reverse(explode('-',$date)));
+    }
+
+
 
 
 }
