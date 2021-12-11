@@ -22,6 +22,13 @@ class buka_ical {
 
             $booked = buka_booking::is_booked($strAnreise, $strAbreise, $objectid);
 
+            // geblockte Daten von Airbnb nicht übernehmen.
+            if (strpos($date['UID'],'airbnb')) {
+                if (strpos($date['SUMMARY'],'Not available')) {
+                    continue;
+                }
+            }
+
             // wenn die Periode noch frei ist, eintragen ....
             if (!$booked && $strAnreise && $strAbreise) {
 
