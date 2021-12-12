@@ -56,6 +56,11 @@ $field = $form->addTextField('ical_uid');
 $field->setLabel('Ical Uid');
 $field->setNotice('Leer lassen, wenn keine ical Synchronisation verwendet wird. Sinnvoller Eintrag: <code>ical@ferien-am-tressower-see.de</code>.');
 
+$field = $form->addCheckboxField('ignore_airbnb_blocked');
+$field->setLabel('Geblockte Airbnb Termine ignorieren');
+$field->addOption('Geblockte Airbnb Termine ignorieren', "1");
+$field->setNotice('Wenn ical Synchronisation mit airbnb verwendet wird, werden standardmäßig in airbnb geblockte Termine auch synchronisiert. Dies kann durch anklicken dieser Checkbox verhindert werden. Es können dann in airbnb Termine blockiert werden, ohne dass diese dann automatisch im Buchungskalender blockiert werden. <code>rex_config::get(\'buchungskalender\',\'ignore_airbnb_blocked\')</code>.');
+
 $field = $form->addLinkmapField('summary_page');
 $field->setLabel('Buchung Zusammenfassung');
 $field->setNotice('<code>rex_config::get(\'buchungskalender\',\'summary_page\')</code>.');

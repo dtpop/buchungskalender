@@ -22,10 +22,14 @@ class buka_ical {
 
             $booked = buka_booking::is_booked($strAnreise, $strAbreise, $objectid);
 
+
+            dump(trim(rex_config::get('buchungskalender','ignore_airbnb_blocked'),'|'));
             // geblockte Daten von Airbnb nicht übernehmen.
-            if (strpos($date['UID'],'airbnb')) {
-                if (strpos($date['SUMMARY'],'Not available')) {
-                    continue;
+            if (trim(rex_config::get('buchungskalender','ignore_airbnb_blocked'),'|')) {
+                if (strpos($date['UID'],'airbnb')) {
+                    if (strpos($date['SUMMARY'],'Not available')) {
+                        continue;
+                    }
                 }
             }
 
