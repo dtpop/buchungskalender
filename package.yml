@@ -1,14 +1,16 @@
 package: buchungskalender
-version: 1.0.0
+version: 1.1.0
 author: Wolfgang Bund
 supportpage: https://github.com/redaxo/redaxo
 
 page:
     title: 'Buchungskalender'
     perm: buchungskalender
-    pjax: false
+    pjax: true
     icon: rex-icon fa-calendar
     subpages:
+        overview:
+            title: 'translate:buchungskalender_overview'
         calendar:
             title: 'translate:buchungskalender_calendar'
         bookings:

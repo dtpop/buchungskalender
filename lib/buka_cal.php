@@ -100,14 +100,26 @@ class buka_cal
 
         $start = $dt1->format('Y-m-d');
         $end = $dt2->format('Y-m-t');
-        $query = buka_booking::get_query($this->objectId, $this->with_related)
-            ->whereRaw('((
+        $query = buka_booking::get_query($this->objectId, $this->with_related);
+
+        if (rex_config::get('buchungskalender','asked_offset')) {
+            $query->whereRaw('((
                 status = "confirmed" AND ((dateend >= :start AND datestart <= :end)
                  OR (dateend <= :start AND datestart >= :end)
                  OR (datestart >= :start AND datestart <= :end))
-                 
-            ) OR (status = "asked" AND bookingdate > :bookingdate))',['start'=>$start,'end'=>$end,'bookingdate'=>date('Y-m-d H:i:s',strtotime('-10minutes'))])
-        ;
+             
+                ) OR (status = "asked" AND bookingdate > :bookingdate))',['start'=>$start,'end'=>$end,'bookingdate'=>date('Y-m-d H:i:s',strtotime('-'.rex_config::get('buchungskalender','asked_offset')))])
+            ;
+        } else {
+            $query->whereRaw('((
+                status = "confirmed" AND ((dateend >= :start AND datestart <= :end)
+                 OR (dateend <= :start AND datestart >= :end)
+                 OR (datestart >= :start AND datestart <= :end))
+             
+                ))',['start'=>$start,'end'=>$end])
+            ;
+
+        }
         $this->bookings = $query->find();
     }
 

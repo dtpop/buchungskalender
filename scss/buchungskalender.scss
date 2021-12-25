@@ -75,7 +75,7 @@ $color_booked: #bf0000;
     position: relative;
     color: white;
     font-weight: bold;
-//    pointer-events: none;
+    //    pointer-events: none;
     &.bookable {
         cursor: pointer;
         pointer-events: all;
@@ -154,4 +154,130 @@ $color_booked: #bf0000;
 
 button#to-step-1 {
     margin-left: 20px;
+}
+
+// Balken-Kalender
+
+.buka_bar_cal {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    text-align: center;
+
+    .bar_cal_month_title {
+        background-color: #888;
+        color: #fff;
+        font-weight: bold;
+        padding: 4px;
+        width: 100%;
+    }
+    .bar_cal_month {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        overflow: hidden;
+        width: calc(50% - 20px);
+    }
+    .bar_cal_day {
+        background-color: #ffffff;
+        border-right: 1px solid #888;
+        padding: 4px 0;
+        width: (100 / 7) * 1%;
+    }
+    .cal_date {
+        color: #fff;
+        background-color: #888;
+        margin-left: 2px;
+        width: calc(100% - 4px);
+    }
+    .obj {
+        color: #ffffff;
+        height: 22px;
+        white-space: nowrap;
+        margin: 4px 0;
+        position: relative;
+        //        border-bottom: 1px solid #eee;
+        .is_start {
+            width: calc(50% - 1px);
+            margin-left: calc(50% + 2px);
+            &:before {
+                border-radius: 6px 0 0 6px;
+            }
+        }
+        .is_end {
+            width: calc(50% - 2px);
+            &:before {
+                border-radius: 0 6px 6px 0;
+            }
+        }
+        .obj_booking {
+            cursor: pointer;
+            position: relative;
+            &:before {
+                content: "";
+                left: 0;
+                position: absolute;
+                width: 100%;
+                height: 22px;
+            }
+            &.status_asked {
+                color: black;
+                &:before {
+                    opacity: 0.5;
+                }
+            }
+            &.buka_combi {
+                &:before {
+                    background-color: #aaa;
+                }
+                .lbl {
+                    display: none;
+                }
+            }
+        }
+        .lbl {
+            left: 4px;
+            position: absolute;
+            z-index: 1;
+        }
+    }
+}
+
+@media screen and (max-width: 991px), (min-width: 1440px) {
+    #table-rex_buka_bookings {
+        .yform-be-relation-wrapper {
+            > div {
+                padding-top: 40px;
+                padding-left: 15px;
+            }
+        }
+        .yform-be-relation-inline-form {
+            label {
+                width: 120px;
+            }
+            input[type="text"] {
+                display: inline-block;
+                width: calc(100% - 124px);
+            }
+
+            .form-inline {
+                width: calc(100% - 130px);
+                display: inline-block;
+                white-space: nowrap;
+                select:nth-child(4) {
+                    margin-left: 10px;
+                }
+                select:nth-child(6) {
+                    display: none; // Sekunden ausblenden
+                }
+            }
+        }
+        .zugeklappt {
+            display: none;
+        }
+        .aufklapper {
+            margin-top: -25px;
+        }
+    }
 }

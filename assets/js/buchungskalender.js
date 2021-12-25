@@ -2,25 +2,33 @@ $(function () {
 
     let StartDate;
 
+    // Im yform Buchungsformular Teilnehmer auf- und zuklappen
+    $(document).on('click','.aufklappen',function(e) {
+        e.preventDefault();
+        $(this).closest('.yform').find('.zugeklappt').toggle();
+    });
+
     $(document).on("click", '.buka-cal-wrapper .bk-day.fix-booked', function(e) { 
-        var DateClicked = $(this);
-        
+        var DateClicked = $(this);        
         if (e.shiftKey) {
             if (DateClicked.data('bookingid')) {
-//                console.log('click clicked');
                 editBooking(DateClicked.data('bookingid'));
             }
             return;
         } 
     });
 
+
+    $(document).on('click','.buka_bar_cal .obj_booking', function(e) {
+        var DateClicked = $(this);
+        if (DateClicked.data('bookingid')) {
+            window.location.href = 'index.php?page=buchungskalender/bookings&func=edit&id='+DateClicked.data('bookingid');
+        }
+    });
+
     // Backend
     function editBooking (bookingid) {
-//        window.location.href = 'index.php?page=yform/manager/data_edit&table_name=rex_buka_bookings&rex_yform_manager_popup=0&func=edit&data_id='+bookingid;
         window.location.href = 'index.php?src=calendar&page=buchungskalender/bookings&func=edit&id='+bookingid;
-
-//        http://buchungskalender.localhost/redaxo/index.php?page=buchungskalender/bookings&func=edit&id=434&start=&list=89b0b572
-
     }
 
     $(document).on("click", ".buka-cal-wrapper .bookable", function () {
@@ -40,7 +48,6 @@ $(function () {
 
     // Kalender blättern
     $(document).on('click','#bookingform-step1 .buka_pager_nav a',function(e) {
-        console.log('asdfasdf');
         e.preventDefault();
         let href = $(this).attr('href')+"&bukacal=1";
         $("#bookingform-step1").parent().load(href);
@@ -59,7 +66,6 @@ $(function () {
     if ($('.uk-form-danger').length) {
         $("#bookingform-step1").hide();
         $("#bookingform-step2").show();
-
     }
 
     function clear_booking() {
@@ -187,7 +193,10 @@ $(function () {
             });
         }
 
-    }    
+    }
+
+
+
 
 });
 

@@ -18,7 +18,7 @@ if (rex_request('filter','string') == 'next_arrival') {
     $qry->orderBy('datestart');
 }
 
-
+// dump(rex_session('returnto'));
 // dump($qry->getQuery());
 
 if ($func == 'edit' && $id) {
@@ -86,9 +86,14 @@ if ($func == 'edit' && $id) {
     $yform->setValueField('text', ['price','Preis']);
     $yform->setValueField('html',['',$row_end]);
 
+    $yform->setValueField('be_manager_relation', ['participants','Teilnehmer','rex_buka_participants','booking_id','5','0']);
+
     $yform->setActionField('db',[rex::getTable('buka_bookings'),'main_where']);
+
     if (rex_request('src','string') == 'calendar') {
         $yform->setActionField('redirect',['index.php?page=buchungskalender/calendar']);
+    } elseif (rex_session('returnto')) {
+        $yform->setActionField('redirect',[str_replace('&amp;','&',rex_session('returnto'))]);
     } else {
         $yform->setActionField('redirect',['index.php?page=buchungskalender/bookings']);
     }

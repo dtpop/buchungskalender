@@ -40,7 +40,6 @@ $(function () {
 
     // Kalender blättern
     $(document).on('click','#bookingform-step1 .buka_pager_nav a',function(e) {
-        console.log('asdfasdf');
         e.preventDefault();
         let href = $(this).attr('href')+"&bukacal=1";
         $("#bookingform-step1").parent().load(href);

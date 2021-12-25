@@ -134,7 +134,7 @@ $yform->setActionField('redirect', [rex_url::currentBackendPage()]);
 <?= $yform->getForm(); ?>
 
 <script type="text/javascript">
-    const min_booking_days = <?= rex_config::get('buchungskalender', 'min_booking_days') ?>;
+    var min_booking_days = <?= rex_config::get('buchungskalender', 'min_booking_days') ?>;
 </script>
 
 

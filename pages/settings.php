@@ -73,6 +73,14 @@ $field = $form->addTextField('email_me');
 $field->setLabel('E-Mail Adressen des Betreibers');
 $field->setNotice('<code>rex_config::get(\'buchungskalender\',\'email_me\')</code>. Mehrere Adressen durch Komma trennen. An diese E-Mail Adressen werden die Reservierungsmails geschickt.');
 
+$field = $form->addTextField('asked_offset');
+$field->setLabel('Reservierungsdauer');
+$field->setNotice('<code>rex_config::get(\'buchungskalender\',\'asked_offset\')</code>. Wenn das Feld ausgefüllt wird, werden reservierte Termine im Kalender als belegt gekennzeichnet.
+Leer lassen für keine Reservierungsdauer. Mögliche Werte (Beispiele): <code>10 minutes</code>, <code>2 hours</code>, <code>7 days</code>.');
+
+
+
+/*
 $form->addFieldset('Terminbuchung - Einstellungen');
 
 $field = $form->addLinkmapField('summary_datebooking_page');
@@ -82,7 +90,7 @@ $field->setNotice('<code>rex_config::get(\'buchungskalender\',\'summary_datebook
 $field = $form->addLinkmapField('confirmation_datebooking_page');
 $field->setLabel('E-Mail-Link Bestätigungsseite');
 $field->setNotice('<code>rex_config::get(\'buchungskalender\',\'confirmation_datebooking_page\')</code>.');
-
+*/
 
 
 
