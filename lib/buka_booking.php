@@ -55,14 +55,42 @@ class buka_booking extends rex_yform_manager_dataset {
         return time()+$sek;
     }
 
-    public static function is_booked($anreise = '', $abreise = '', $object_id = 0) {
-        $query = self::get_query($object_id)
-                        ->where('status','confirmed')
-                        ->whereRaw('((dateend > :anreise AND dateend < :abreise) '
-                        . 'OR (datestart > :anreise AND datestart < :abreise) '
-                        . 'OR (datestart <= :anreise AND dateend >= :abreise))',['anreise'=>$anreise,'abreise'=>$abreise]);
-
+    /**
+     * 
+     * $data_id kann verwendet werden, um den aktuellen Datensatz von der Prüfung auszunehmen
+     * 
+     */
+    public static function is_booked($anreise = '', $abreise = '', $object_id = 0, $data_id = 0) {
+        $query = self::get_query($object_id);
+        if ($data_id) {
+            $query->whereNot('id',$data_id);
+        }
+        if (rex_config::get('buchungskalender','asked_offset')) {
+            $query->whereRaw('((
+                status = "confirmed" AND ((dateend >= :anreise AND datestart <= :abreise)
+                 OR (dateend <= :anreise AND datestart >= :abreise)
+                 OR (datestart >= :anreise AND datestart <= :abreise))
+             
+                ) OR (status = "asked" AND bookingdate > :bookingdate))',['anreise'=>$anreise,'abreise'=>$abreise,'bookingdate'=>date('Y-m-d H:i:s',strtotime('-'.rex_config::get('buchungskalender','asked_offset')))])
+            ;
+        } else {
+                $query->where('status','confirmed')
+                ->whereRaw('((dateend > :anreise AND dateend < :abreise) '
+                . 'OR (datestart > :anreise AND datestart < :abreise) '
+                . 'OR (datestart <= :anreise AND dateend >= :abreise))',['anreise'=>$anreise,'abreise'=>$abreise]);
+        }
         return $query->exists();
+    }
+
+
+    /**
+     * Kann im yform als Validate Funktion verwendet werden.
+     */
+    public static function unique_booking ($fields,$values) {
+        $data_id = rex_request('data_id','int');
+        if (buka_booking::is_booked($values['datestart'],$values['dateend'],$values['object_id'],$data_id)) {
+            return true;
+        }
     }
 
     public static function reset_booking () {

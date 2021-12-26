@@ -8,7 +8,7 @@ $row_end = '</div></div>';
 
 $params = $_REQUEST;
 $func = rex_request('func','string');
-$id = rex_request('id','int');
+$id = rex_request('data_id','int');
 
 $qry = buka_booking::get_query();
 
@@ -29,7 +29,7 @@ if ($func == 'edit' && $id) {
     $yform->setValueField('hidden',['page','buchungskalender/bookings','REQUEST','no_db']);
     $yform->setValueField('hidden',['func','edit','REQUEST','no_db']);
     $yform->setValueField('hidden',['src',rex_request('src','string'),'REQUEST','no_db']);
-    $yform->setValueField('hidden',['id',$id,'REQUEST']);
+    $yform->setValueField('hidden',['data_id',$id,'REQUEST','no_db']);
 //    $yform->setDebug(TRUE);
     $yform->setObjectparams('form_showformafterupdate', 0);
     $yform->setObjectparams('getdata', true);
@@ -86,6 +86,8 @@ if ($func == 'edit' && $id) {
     $yform->setValueField('text', ['price','Preis']);
     $yform->setValueField('html',['',$row_end]);
 
+    $yform->setValidateField('customfunction', ['datestart,dateend,object_id','buka_booking::unique_booking','','Dieses Buchungsdatum ist ungültig. Es gibt bereits eine Buchung für dieses Datum.','0']);
+
     $yform->setValueField('be_manager_relation', ['participants','Teilnehmer','rex_buka_participants','booking_id','5','0']);
 
     $yform->setActionField('db',[rex::getTable('buka_bookings'),'main_where']);
@@ -132,7 +134,7 @@ if ($func == 'edit' && $id) {
     // $th_icon = '<a href="'.$list->getUrl(['func' => 'add']).'" title="'.rex_i18n::msg('add').'"><i class="rex-icon rex-icon-add-action"></i></a>';
     $th_icon = '';
     $list->addColumn($th_icon, $td_icon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
-    $list->setColumnParams($th_icon, ['func' => 'edit', 'id' => '###id###', 'start' => rex_request('start', 'int', NULL)]);
+    $list->setColumnParams($th_icon, ['func' => 'edit', 'data_id' => '###id###', 'start' => rex_request('start', 'int', NULL)]);
 
 
     echo $list->get();

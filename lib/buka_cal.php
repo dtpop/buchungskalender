@@ -118,7 +118,6 @@ class buka_cal
              
                 ))',['start'=>$start,'end'=>$end])
             ;
-
         }
         $this->bookings = $query->find();
     }

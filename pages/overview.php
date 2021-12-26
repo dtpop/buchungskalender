@@ -49,9 +49,10 @@ $months = $bar_cal->get_months();
 
 <div class="buka_bar_cal">
     <?php foreach ($bar_cal->get_months() as $month) : ?>
+        <?php // dump($month[0]->date) ?>
         <div class="bar_cal_month">
             <div class="bar_cal_month_title">
-                <?= rex_formatter::intlDate($month[0]->date->getTimestamp(), 'LLLL Y') ?>
+                <?= rex_formatter::intlDate($month[3]->date->getTimestamp(), 'LLLL Y') ?>
             </div>
             <?php foreach (buka_barcal::$weekdays as $daystr) : ?>
                 <div class="bar_cal_day">

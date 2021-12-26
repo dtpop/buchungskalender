@@ -185,27 +185,45 @@ INSERT INTO `rex_article_slice` VALUES
 /*!40000 ALTER TABLE `rex_article_slice` ENABLE KEYS */;
 UNLOCK TABLES;
 
+DROP TABLE IF EXISTS `rex_buka_additionals`;
+CREATE TABLE `rex_buka_additionals` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name_1` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `multiselectable` tinyint(1) NOT NULL DEFAULT 0,
+  `maxselectable` int(11) DEFAULT NULL,
+  `perperson` tinyint(1) NOT NULL DEFAULT 0,
+  `perday` tinyint(1) NOT NULL DEFAULT 0,
+  `isstandard` tinyint(1) NOT NULL DEFAULT 0,
+  `objects` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `saison` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  `mindays` int(11) DEFAULT NULL,
+  `maxdays` int(11) DEFAULT NULL,
+  `pers_min` int(11) DEFAULT NULL,
+  `pers_max` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 DROP TABLE IF EXISTS `rex_buka_bookings`;
 CREATE TABLE `rex_buka_bookings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `datestart` date NOT NULL,
   `dateend` date NOT NULL,
   `object_id` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `vorname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nachname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `anschrift` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `plz` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ort` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `land` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `telefon` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `personen` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `anreisezeit` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `vorname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `nachname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `anschrift` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `plz` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `ort` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `land` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `telefon` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `personen` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `anreisezeit` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `nachricht` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `bookingdate` datetime NOT NULL,
-  `hashval` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `hashval` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `status` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=438 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -219,23 +237,47 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `rex_buka_objects`;
 CREATE TABLE `rex_buka_objects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `combination` tinyint(1) NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `combination` tinyint(1) NOT NULL DEFAULT 0,
   `object_ids` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `grundpreis` decimal(10,2) DEFAULT NULL,
-  `ical_sync_link` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ical_sync_link` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `reservation` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `colorcode` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 LOCK TABLES `rex_buka_objects` WRITE;
 /*!40000 ALTER TABLE `rex_buka_objects` DISABLE KEYS */;
 INSERT INTO `rex_buka_objects` VALUES 
-  (1,'Ferienwohnung Alpenblick',0,'',55.0000000000,'','1','book');
+  (1,'Ferienwohnung Alpenblick',0,'',55.0000000000,'','1','book','blue');
 /*!40000 ALTER TABLE `rex_buka_objects` ENABLE KEYS */;
 UNLOCK TABLES;
 
+DROP TABLE IF EXISTS `rex_buka_participants`;
+CREATE TABLE `rex_buka_participants` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `booking_id` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `firstname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `lastname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `birthdate` date NOT NULL,
+  `age` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `arrivaltime` datetime NOT NULL,
+  `arrivalpoint` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `departuretime` datetime NOT NULL,
+  `departurepoint` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `notice` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `part_status` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `rex_buka_participants_status`;
+CREATE TABLE `rex_buka_participants_status` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name_1` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `id_status` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 DROP TABLE IF EXISTS `rex_buka_price`;
 CREATE TABLE `rex_buka_price` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -262,12 +304,12 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `rex_buka_season`;
 CREATE TABLE `rex_buka_season` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `prio` int(11) NOT NULL,
   `minddays` int(11) DEFAULT NULL,
   `dates` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `full_week` tinyint(1) NOT NULL,
-  `color` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `full_week` tinyint(1) NOT NULL DEFAULT 0,
+  `color` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -326,22 +368,10 @@ INSERT INTO `rex_config` VALUES
   ('buchungskalender','months_1','\"Januar,Februar,M\\u00e4rz,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember\"'),
   ('buchungskalender','summary_page','\"4\"'),
   ('buchungskalender','weekdays_1','\"Mo,Di,Mi,Do,Fr,Sa,So\"'),
-  ('core','package-config','{\"adminer\":{\"install\":true,\"status\":true},\"backup\":{\"install\":true,\"status\":true},\"be_style\":{\"install\":true,\"status\":true,\"plugins\":{\"customizer\":{\"install\":true,\"status\":true},\"redaxo\":{\"install\":true,\"status\":true}}},\"buchungskalender\":{\"install\":true,\"status\":true},\"cronjob\":{\"install\":false,\"status\":false,\"plugins\":{\"article_status\":{\"install\":false,\"status\":false},\"optimize_tables\":{\"install\":false,\"status\":false}}},\"debug\":{\"install\":false,\"status\":false},\"developer\":{\"install\":true,\"status\":true},\"iconpicker\":{\"install\":true,\"status\":true},\"install\":{\"install\":true,\"status\":true},\"media_manager\":{\"install\":true,\"status\":true},\"mediapool\":{\"install\":true,\"status\":true},\"metainfo\":{\"install\":true,\"status\":true},\"mform\":{\"install\":true,\"status\":true,\"plugins\":{\"docs\":{\"install\":true,\"status\":true}}},\"phpmailer\":{\"install\":true,\"status\":true},\"project\":{\"install\":true,\"status\":true},\"quick_navigation\":{\"install\":true,\"status\":true},\"structure\":{\"install\":true,\"status\":true,\"plugins\":{\"content\":{\"install\":true,\"status\":true},\"history\":{\"install\":false,\"status\":false},\"version\":{\"install\":false,\"status\":false}}},\"theme\":{\"install\":true,\"status\":true},\"tinymce4\":{\"install\":true,\"status\":true},\"users\":{\"install\":true,\"status\":true},\"ycom\":{\"install\":false,\"status\":false,\"plugins\":{\"auth\":{\"install\":false,\"status\":false},\"docs\":{\"install\":false,\"status\":false},\"group\":{\"install\":false,\"status\":false},\"media_auth\":{\"install\":false,\"status\":false}}},\"yform\":{\"install\":true,\"status\":true,\"plugins\":{\"email\":{\"install\":true,\"status\":true},\"manager\":{\"install\":true,\"status\":true},\"rest\":{\"install\":false,\"status\":false},\"tools\":{\"install\":true,\"status\":true}}},\"yform_usability\":{\"install\":true,\"status\":true},\"yrewrite\":{\"install\":true,\"status\":true}}'),
-  ('core','package-order','[\"be_style\",\"be_style\\/customizer\",\"be_style\\/redaxo\",\"users\",\"adminer\",\"backup\",\"buchungskalender\",\"developer\",\"iconpicker\",\"install\",\"media_manager\",\"mediapool\",\"mform\",\"mform\\/docs\",\"phpmailer\",\"structure\",\"metainfo\",\"structure\\/content\",\"quick_navigation\",\"theme\",\"tinymce4\",\"yform\",\"yform\\/email\",\"yform\\/manager\",\"yform\\/tools\",\"yform_usability\",\"yrewrite\",\"project\"]'),
+  ('core','package-config','{\"backup\":{\"install\":true,\"status\":true},\"be_style\":{\"install\":true,\"status\":true,\"plugins\":{\"customizer\":{\"install\":true,\"status\":true},\"redaxo\":{\"install\":true,\"status\":true}}},\"buchungskalender\":{\"install\":true,\"status\":true},\"cronjob\":{\"install\":false,\"status\":false,\"plugins\":{\"article_status\":{\"install\":false,\"status\":false},\"optimize_tables\":{\"install\":false,\"status\":false}}},\"debug\":{\"install\":false,\"status\":false},\"install\":{\"install\":true,\"status\":true},\"media_manager\":{\"install\":true,\"status\":true},\"mediapool\":{\"install\":true,\"status\":true},\"metainfo\":{\"install\":true,\"status\":true},\"mform\":{\"install\":true,\"status\":true,\"plugins\":{\"docs\":{\"install\":true,\"status\":true}}},\"phpmailer\":{\"install\":true,\"status\":true},\"project\":{\"install\":true,\"status\":true},\"structure\":{\"install\":true,\"status\":true,\"plugins\":{\"content\":{\"install\":true,\"status\":true},\"history\":{\"install\":false,\"status\":false},\"version\":{\"install\":false,\"status\":false}}},\"theme\":{\"install\":true,\"status\":true},\"tinymce4\":{\"install\":true,\"status\":true},\"users\":{\"install\":true,\"status\":true},\"yform\":{\"install\":true,\"status\":true,\"plugins\":{\"email\":{\"install\":true,\"status\":true},\"manager\":{\"install\":true,\"status\":true},\"rest\":{\"install\":false,\"status\":false},\"tools\":{\"install\":true,\"status\":true}}},\"yrewrite\":{\"install\":true,\"status\":true}}'),
+  ('core','package-order','[\"be_style\",\"be_style\\/customizer\",\"be_style\\/redaxo\",\"users\",\"backup\",\"install\",\"media_manager\",\"mediapool\",\"mform\",\"mform\\/docs\",\"phpmailer\",\"structure\",\"metainfo\",\"structure\\/content\",\"theme\",\"tinymce4\",\"yform\",\"buchungskalender\",\"yform\\/email\",\"yform\\/manager\",\"yform\\/tools\",\"yrewrite\",\"project\"]'),
   ('core','utf8mb4','true'),
   ('core','version','\"5.12.0\"'),
-  ('developer','actions','true'),
-  ('developer','delete','true'),
-  ('developer','dir_suffix','true'),
-  ('developer','items','{\"templates\":{\"1\":1622701772,\"5\":1},\"theme\\/private\\/redaxo\\/templates\":{\"1\":1622182680,\"2\":1622182598},\"theme\\/private\\/redaxo\\/modules\":{\"1\":1621762752,\"2\":1621762609,\"3\":1622179669,\"4\":1622053731,\"5\":1622051738,\"6\":1622142835,\"7\":1622146678},\"theme\\/private\\/redaxo\\/yform_emails\":{\"1\":1621757156},\"modules\":{\"1\":1624267622,\"2\":1622700833,\"3\":1622700973,\"5\":1622700920,\"6\":1622700954,\"8\":1622700894,\"10\":1622700907},\"yform_email\":{\"12\":1627479006,\"13\":1622659874,\"14\":1622447765},\"actions\":[]}'),
-  ('developer','modules','true'),
-  ('developer','prefix','false'),
-  ('developer','rename','true'),
-  ('developer','sync_backend','true'),
-  ('developer','sync_frontend','true'),
-  ('developer','templates','true'),
-  ('developer','umlauts','false'),
-  ('developer','yform_email','true'),
   ('media_manager','interlace','[\"jpg\"]'),
   ('media_manager','jpg_quality','80'),
   ('media_manager','png_compression','5'),
@@ -369,7 +399,6 @@ INSERT INTO `rex_config` VALUES
   ('phpmailer','test_address','\"\"'),
   ('phpmailer','username','\"\"'),
   ('phpmailer','wordwrap','120'),
-  ('quick_navigation','quicknavi_favs1','[]'),
   ('structure','notfound_article_id','3'),
   ('structure','start_article_id','5'),
   ('structure/content','default_template_id','1'),
@@ -377,11 +406,8 @@ INSERT INTO `rex_config` VALUES
   ('theme','synchronize','true'),
   ('tinymce4','image_format','\"default\"'),
   ('tinymce4','media_format','\"default\"'),
-  ('tinymce4','profile_upd_date','1622193204'),
+  ('tinymce4','profile_upd_date','1640512373'),
   ('tinymce4','profiles','\"a:3:{i:0;a:3:{s:2:\\\"id\\\";i:1617963144;s:4:\\\"name\\\";s:7:\\\"default\\\";s:4:\\\"json\\\";s:583:\\\"{\\n            selector: \'textarea.tinyMCEEditor\',\\n            file_browser_callback: redaxo5FileBrowser,\\n            plugins: \'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table contextmenu paste code\',\\n            toolbar: \'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image\',\\n            convert_urls: false,\\n            content_css: \'..\\/assets\\/addons\\/tinymce4\\/bootstrap\\/css\\/bootstrap.min.css\'\\n            }\\\";}i:1;a:3:{s:2:\\\"id\\\";i:1621774713;s:4:\\\"name\\\";s:16:\\\"tinyMCE-headline\\\";s:4:\\\"json\\\";s:474:\\\"{\\r\\nselector: \'.tinyMCE-headline\',\\r\\nfile_browser_callback: redaxo5FileBrowser,\\r\\nconvert_urls: false,\\r\\ncontent_css: \'..\\/theme\\/public\\/assets\\/backend\\/tinymce.css\',\\r\\nplugins: \'advlist autolink link charmap preview code fullscreen paste code\',\\r\\ntoolbar: \'bold | charmap nonbreaking | pastetext undo redo | italic subscript superscript | link unlink\',\\r\\nmenubar: false,\\r\\nforced_root_block: false,\\r\\ninvalid_elements: \'p\',\\r\\npaste_as_text: true,\\r\\nheight: 50,\\r\\nentity_encoding: \\\"raw\\\"\\r\\n}\\\";}i:2;a:3:{s:2:\\\"id\\\";i:1621774797;s:4:\\\"name\\\";s:12:\\\"tinyMCE-text\\\";s:4:\\\"json\\\";s:809:\\\"{\\r\\n            selector: \'textarea.tinyMCE-text\',\\r\\n            style_formats_merge: true,\\r\\n            style_formats: [\\r\\n                {title: \'Text rot\', inline: \'span\', styles: {color: \'#ff0000\'}},\\r\\n            ],\\r\\n            file_browser_callback: redaxo5FileBrowser,\\r\\n            plugins: \'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table contextmenu paste code\',\\r\\n            toolbar: \'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image\',\\r\\n            convert_urls: false,\\r\\n            height: 500,\\r\\n            content_css: \'..\\/assets\\/addons\\/tinymce4\\/bootstrap\\/css\\/bootstrap.min.css\',\\r\\n            entity_encoding:  \\\"raw\\\"\\r\\n}\\\";}}\"'),
-  ('yform_usability','duplicate_tables','[\"all\"]'),
-  ('yform_usability','sorting_tables','[\"all\"]'),
-  ('yform_usability','status_tables','[\"rex_buka_objects\"]'),
   ('yrewrite','unicode_urls','false'),
   ('yrewrite','yrewrite_hide_url_block','false');
 /*!40000 ALTER TABLE `rex_config` ENABLE KEYS */;
@@ -726,48 +752,89 @@ CREATE TABLE `rex_yform_field` (
   `expanded` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `scope` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `googleapikey` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `choice_attributes` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `php` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 LOCK TABLES `rex_yform_field` WRITE;
 /*!40000 ALTER TABLE `rex_yform_field` DISABLE KEYS */;
 INSERT INTO `rex_yform_field` VALUES 
-  (3,'rex_buka_bookings',1,'value','date','date',0,1,'datestart','Startdatum','','2019','2050','DD.MM.YYYY','select','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (4,'rex_buka_bookings',2,'value','date','date',0,1,'dateend','Enddatum','','2019','2050','DD.MM.YYYY','select','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (5,'rex_buka_objects',1,'value','text','varchar(191)',0,1,'name','Name des Objekts','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (6,'rex_buka_bookings',3,'value','be_manager_relation','text',0,1,'object_id','Objekt','','','','','','rex_buka_objects','name','0','1','-- bitte Objekt auswählen --','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (7,'rex_buka_bookings',4,'value','text','varchar(191)',0,1,'vorname','Vorname','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (8,'rex_buka_bookings',5,'value','text','varchar(191)',0,1,'nachname','Nachname','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (9,'rex_buka_bookings',6,'value','text','varchar(191)',1,1,'anschrift','Anschrift','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (10,'rex_buka_bookings',7,'value','text','varchar(191)',0,1,'plz','PLZ','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (11,'rex_buka_bookings',8,'value','text','varchar(191)',0,1,'ort','Ort','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (12,'rex_buka_bookings',9,'value','text','varchar(191)',1,1,'land','Land','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (13,'rex_buka_bookings',10,'value','text','varchar(191)',0,1,'telefon','Telefon','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (14,'rex_buka_bookings',11,'value','text','varchar(191)',0,1,'email','E-Mail','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (15,'rex_buka_bookings',12,'value','text','varchar(191)',1,1,'personen','Personen','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (16,'rex_buka_bookings',13,'value','text','varchar(191)',1,1,'anreisezeit','Anreisezeit','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (17,'rex_buka_bookings',15,'value','datestamp','datetime',1,0,'bookingdate','Buchungsdatum','','','','Y-m-d H:i:s','','','','','','','1','1','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (18,'rex_buka_bookings',16,'value','text','varchar(191)',1,0,'hashval','','','','','','','','','','','','','','{\"type\":\"hidden\"}','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (19,'rex_buka_bookings',17,'value','choice','text',0,1,'status','Status','','','','','','','','','','','','','','Angefragt=asked,Bestätigt=confirmed,Storniert=storno','asked','-- bitte auswählen --','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (20,'rex_buka_bookings',14,'value','textarea','text',1,0,'nachricht','Nachricht','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (21,'rex_buka_bookings',18,'value','text','varchar(191)',1,0,'price','Preis','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (22,'rex_buka_season',1,'value','text','varchar(191)',0,1,'name','Name','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (23,'rex_buka_season',2,'value','prio','int',1,1,'prio','Priorität','','','','','','','','','','','','','','','1','','','name','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (24,'rex_buka_season',3,'value','integer','int',0,1,'minddays','Mindestbuchungsdauer','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (25,'rex_buka_season',4,'value','be_table','text',0,1,'dates','Termine','','','','','','','','','','','','','','','','','Name,Von,Bis','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (26,'rex_buka_season',5,'value','checkbox','tinyint(1)',0,1,'full_week','Ganze Wochen','','','','','','','','','','','','','','','0','','','','Ist diese Checkbox angehakt, ist die Buchung nur für ganze Wochen von Samstag bis Samstag möglich','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (27,'rex_buka_objects',2,'value','checkbox','tinyint(1)',0,1,'combination','Kombinationsobjekt','','','','','','','','','','','','','','','0','','','','Wenn die Checkbox angewählt ist, handelt es sich um die Kombination von mehreren Objekten.','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (28,'rex_buka_objects',3,'value','be_manager_relation','text',0,1,'object_ids','Objekte','','','','','','rex_buka_objects','name','1','1','','','','{\"class\":\"selectpicker\"}','','','','','','Kombinierte Objekte auswählen','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (29,'rex_buka_objects',4,'value','number','',0,0,'grundpreis','Grundpreis','','','','','','','','','','','','','','','','','','','Grundpreis für Reinigung, Bettwäsche usw.','10','2','€','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (30,'rex_buka_price',2,'value','be_manager_relation','text',0,1,'object_id','Objekt','','','','','','rex_buka_objects','name','0','0','Bitte auswählen.','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (31,'rex_buka_price',3,'value','be_manager_relation','text',0,1,'season_id','Saison','','','','','','rex_buka_season','name','0','0','Bitte auswählen.','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (32,'rex_buka_price',4,'value','integer','int',0,1,'nightscount','Anzahl Übernachtungen','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (33,'rex_buka_price',5,'value','number','',0,0,'price','Preis pro Übernachtung','','','','','','','','','','','','','','','','','','','','10','2','€','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (34,'rex_buka_price',1,'value','prio','int',1,1,'prio','Priorität','','','','','','','','','','','','','','','','','','object_id,season_id,nightscount','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (60,'rex_buka_objects',5,'value','text','varchar(191)',0,1,'ical_sync_link','Ical Synchronisationslink','','','','','','','','','','','','','','','','','','','z.B. <code>https://www.airbnb.de/calendar/ical/5515082.ics?s=165a12a0a08eb81c5f3923e83408a3e8</code> - um externe Buchungen einzulesen.','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (61,'rex_buka_objects',6,'value','choice','text',1,1,'status','Status','','','','','','','','','','','','','','online=1,offline=0','','','','','','','','','','0','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','0','',''),
-  (62,'rex_buka_season',6,'value','text','varchar(191)',0,1,'color','Farbe','','','','','','','','','','','','','','','','','','','Bitte den Farbwert als Hexwert <code>#aabbcc</code> oder Rgb(a) <code>rgba(0,255,255,.5)</code> eingeben.','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
-  (63,'rex_buka_objects',7,'value','choice','text',0,1,'reservation','Reservierungseinstellung','','','','','','','','','','','','','','Reservierung=reservation,Buchen=book','book','','','','Der Eintrag bestimmt, ob im Frontend direkt gebucht oder nur reserviert werden kann.','','','','','0','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','0','','');
+  (3,'rex_buka_bookings',3,'value','date','date',0,1,'datestart','Startdatum','','2019','2050','DD.MM.YYYY','select','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (4,'rex_buka_bookings',26,'value','date','date',0,1,'dateend','Enddatum','','2019','2050','DD.MM.YYYY','select','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (5,'rex_buka_objects',9,'value','text','varchar(191)',0,1,'name','Name des Objekts','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (6,'rex_buka_bookings',32,'value','be_manager_relation','text',0,1,'object_id','Objekt','','','','','','rex_buka_objects','name','0','1','-- bitte Objekt auswählen --','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (7,'rex_buka_bookings',37,'value','text','varchar(191)',0,1,'vorname','Vorname','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (8,'rex_buka_bookings',42,'value','text','varchar(191)',0,1,'nachname','Nachname','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (9,'rex_buka_bookings',47,'value','text','varchar(191)',1,1,'anschrift','Anschrift','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (10,'rex_buka_bookings',51,'value','text','varchar(191)',0,1,'plz','PLZ','','','','','','','','','','','','','','','','','','','','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (11,'rex_buka_bookings',54,'value','text','varchar(191)',0,1,'ort','Ort','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (12,'rex_buka_bookings',57,'value','text','varchar(191)',1,1,'land','Land','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (13,'rex_buka_bookings',59,'value','text','varchar(191)',0,1,'telefon','Telefon','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (14,'rex_buka_bookings',61,'value','text','varchar(191)',0,1,'email','E-Mail','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (15,'rex_buka_bookings',63,'value','text','varchar(191)',1,1,'personen','Personen','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (16,'rex_buka_bookings',65,'value','text','varchar(191)',1,1,'anreisezeit','Anreisezeit','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (17,'rex_buka_bookings',68,'value','datestamp','datetime',1,0,'bookingdate','Buchungsdatum','','','','Y-m-d H:i:s','','','','','','','1','1','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (18,'rex_buka_bookings',69,'value','text','varchar(191)',1,0,'hashval','','','','','','','','','','','','','','{\"type\":\"hidden\"}','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (19,'rex_buka_bookings',70,'value','choice','text',0,1,'status','Status','','','','','','','','','','','','','','Angefragt=asked,Bestätigt=confirmed,Storniert=storno','asked','-- bitte auswählen --','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (20,'rex_buka_bookings',67,'value','textarea','text',1,0,'nachricht','Nachricht','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (21,'rex_buka_bookings',71,'value','text','varchar(191)',1,0,'price','Preis','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (22,'rex_buka_season',15,'value','text','varchar(191)',0,1,'name','Name','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (23,'rex_buka_season',27,'value','prio','int',1,1,'prio','Priorität','','','','','','','','','','','','','','','1','','','name','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (24,'rex_buka_season',33,'value','integer','int',0,1,'minddays','Mindestbuchungsdauer','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (25,'rex_buka_season',38,'value','be_table','text',0,1,'dates','Termine','','','','','','','','','','','','','','','','','Name,Von,Bis','','Datum bitte in der Form <code>2022-08-30</code> eingeben.','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (26,'rex_buka_season',43,'value','checkbox','tinyint(1)',0,1,'full_week','Ganze Wochen','','','','','','','','','','','','','','','0','','','','Ist diese Checkbox angehakt, ist die Buchung nur für ganze Wochen von Samstag bis Samstag möglich','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (27,'rex_buka_objects',28,'value','checkbox','tinyint(1)',0,1,'combination','Kombinationsobjekt','','','','','','','','','','','','','','','0','','','','Wenn die Checkbox angewählt ist, handelt es sich um die Kombination von mehreren Objekten.','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (28,'rex_buka_objects',34,'value','be_manager_relation','text',0,1,'object_ids','Objekte','','','','','','rex_buka_objects','name','1','1','','','','{\"class\":\"selectpicker\"}','','','','','','Kombinierte Objekte auswählen','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (29,'rex_buka_objects',39,'value','number','',0,0,'grundpreis','Grundpreis','','','','','','','','','','','','','','','','','','','Grundpreis für Reinigung, Bettwäsche usw.','10','2','€','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (30,'rex_buka_price',29,'value','be_manager_relation','text',0,1,'object_id','Objekt','','','','','','rex_buka_objects','name','0','0','Bitte auswählen.','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (31,'rex_buka_price',35,'value','be_manager_relation','text',0,1,'season_id','Saison','','','','','','rex_buka_season','name','0','0','Bitte auswählen.','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (32,'rex_buka_price',40,'value','integer','int',0,1,'nightscount','Anzahl Übernachtungen','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (33,'rex_buka_price',44,'value','number','',0,0,'price','Preis pro Übernachtung','','','','','','','','','','','','','','','','','','','','10','2','€','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (34,'rex_buka_price',21,'value','prio','int',1,1,'prio','Priorität','','','','','','','','','','','','','','','','','','object_id,season_id,nightscount','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (60,'rex_buka_objects',45,'value','textarea','text',0,1,'ical_sync_link','Ical Synchronisationslinks','','','','','','','','','','','','','','','','','','','Mehrere Links durch <code>RETURN</code> eintragen','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (61,'rex_buka_objects',48,'value','choice','text',1,1,'status','Status','','','','','','','','','','','','','','online=1,offline=0','','','','','','','','','','0','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','0','','','',''),
+  (62,'rex_buka_season',49,'value','text','varchar(191)',0,1,'color','Farbe','','','','','','','','','','','','','','','','','','','Bitte den Farbwert als Hexwert <code>#aabbcc</code> oder Rgb(a) <code>rgba(0,255,255,.5)</code> eingeben.','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (63,'rex_buka_objects',52,'value','choice','text',0,1,'reservation','Reservierungseinstellung','','','','','','','','','','','','','','Reservierung=reservation,Buchen=book','book','','','','Der Eintrag bestimmt, ob im Frontend direkt gebucht oder nur reserviert werden kann.','','','','','0','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','0','','','',''),
+  (64,'rex_buka_bookings',72,'value','be_manager_relation','text',1,0,'participants','Teilnehmer','','','','','','rex_buka_participants','booking_id','5','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (65,'rex_buka_objects',55,'value','text','varchar(191)',0,0,'colorcode','Farbcode','','','','','','','','','','','','','{\"class\":\"minicolors\"}','','','','','','','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (66,'rex_buka_additionals',24,'value','text','varchar(191)',0,1,'name_1','Name','','','','','','','','','','','','','','','','','','','','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (67,'rex_buka_additionals',30,'value','checkbox','tinyint(1)',0,1,'multiselectable','Mehrfach wählbar','','','','','','','','','','','','','','','0','','','','Kann pro Buchung mehrfach gewählt werden. z.B. Saunatag','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (68,'rex_buka_additionals',36,'value','integer','int',0,1,'maxselectable','maximale Anzahl','','','','','','','','','','','','','','','','','','','Wenn die Leistung mehrfach gewählt werden kann, hier Maximalwert angeben.','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (69,'rex_buka_additionals',41,'value','checkbox','tinyint(1)',0,1,'perperson','pro Person','','','','','','','','','','','','','','','0','','','','Diese Leistung wird pro Person bereichnet. z.B. Bettwäsche','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (70,'rex_buka_additionals',46,'value','checkbox','tinyint(1)',0,1,'perday','Pro Tag','','','','','','','','','','','','','','','0','','','','Diese Leistung wird pro Tag berechnet (z.B. Verpflegung)','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (71,'rex_buka_additionals',50,'value','checkbox','tinyint(1)',0,1,'isstandard','Standard','','','','','','','','','','','','','','','0','','','','Diese Leistung ist Standard (z.B. Flughafentransfer, wenn die meisten Gäste per Flugzeug anreisen)','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (72,'rex_buka_additionals',53,'value','be_manager_relation','text',0,1,'objects','Objekte','','','','','','rex_buka_objects','name','1','0','','','','{\"class\":\"selectpicker form-control\"}','','','','','','Objekte, für die diese Leistung buchbar ist.','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (73,'rex_buka_additionals',56,'value','be_manager_relation','text',0,1,'saison','Saison','','','','','','rex_buka_season','name','1','1','','','','{\"class\":\"selectpicker form-control\"}','','','','','','Leistung nur für ausgewählten Zeitraum gültig','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (74,'rex_buka_additionals',58,'value','number','',0,1,'price','Preis','','','','','input:text','','','','','','','','','','','','','','','10','2','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (75,'rex_buka_additionals',60,'value','integer','int',0,1,'mindays','Mindestanzahl Übernachtungen','','','','','','','','','','','','','','','','','','','Die Leistung ist nur buchbar ab einer Mindestanzahl von Übernachtungen','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (76,'rex_buka_additionals',62,'value','integer','int',0,1,'maxdays','Maximale Anzahl Übernachtungen','','','','','','','','','','','','','','','','','','','Die Leistung ist nur buchbar bis zu einer maximalen Anzahl von Übernachtungen','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (77,'rex_buka_additionals',64,'value','integer','int',0,0,'pers_min','Teilnehmer min.','','','','','','','','','','','','','','','','','','','Die Leistung ist buchbar, wenn die Mindestteilnehmerzahl erreicht ist.','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (78,'rex_buka_additionals',66,'value','integer','int',0,0,'pers_max','Teilnehmer max.','','','','','','','','','','','','','','','','','','','Die Leistung ist buchbar für eine maximale Teilnehmeranzahl','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (79,'rex_buka_participants',1,'value','php','none',0,0,'php1','php1','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','<?php\r\n$params = $this->params;\r\n$out = [];\r\nif (isset($params[\'values\'])) {\r\n    foreach ((array) $params[\'values\'] as $val) {\r\n        if ($val->getName() == \'firstname\') {\r\n            $out[] = $val->getValue();\r\n        }\r\n        if ($val->getName() == \'lastname\') {\r\n            $out[] = $val->getValue();\r\n        }\r\n    }\r\n}\r\nif ($out) {\r\n    echo \'<p class=\"aufklapper\"><a href=\"#\" class=\"aufklappen\">\'.implode(\' \',$out).\'</a></p>\';\r\n}\r\n\r\n// dump($params[\'value_pool\'][\'email\']);\r\n// dump($params[\'values\'][3]->getName());\r\n// dump($params[\'values\'][3]->getValue());\r\n// dump($this->getId());\r\n// dump($params);\r\n\r\n\r\n?>'),
+  (80,'rex_buka_participants',2,'value','be_manager_relation','text',0,1,'booking_id','Buchung','','','','','','rex_buka_bookings','datestart,\" - \",dateend,\" - \",object_id,\" - \",vorname,\" \",nachname','0','1','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (81,'rex_buka_participants',3,'value','html','none',0,0,'html1','html1','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','<div class=\"zugeklappt\">\r\n<div class=\"row\"><div class=\"col-md-6\">','','','','','','','','','','','','','','','','','','','','',''),
+  (82,'rex_buka_participants',4,'value','text','varchar(191)',0,1,'firstname','Vorname','','','','','','','','','','','','','','','','','','','','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (83,'rex_buka_participants',5,'value','html','none',0,0,'html2','html2','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','</div><div class=\"col-md-6\">','','','','','','','','','','','','','','','','','','','','',''),
+  (84,'rex_buka_participants',6,'value','text','varchar(191)',0,1,'lastname','Nachname','','','','','','','','','','','','','','','','','','','','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (85,'rex_buka_participants',7,'value','html','none',0,0,'html3','html3','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','</div></div><div class=\"row\"><div class=\"col-md-6\">','','','','','','','','','','','','','','','','','','','','',''),
+  (86,'rex_buka_participants',8,'value','date','date',1,1,'birthdate','Geburtsdatum','','','','Y-m-d','input:text','','','','','','','','{\"data-yform-tools-datetimepicker\":\"YYYY-MM-DD\",\"placeholder\":\"YYYY-MM-DD\"}','','','','','','','','','','','','','','','','0','','','','','','','','','','','1','','','','','','','','','','','','','','','','','',''),
+  (87,'rex_buka_participants',9,'value','html','none',0,0,'html4','html4','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','</div><div class=\"col-md-6\">','','','','','','','','','','','','','','','','','','','','',''),
+  (88,'rex_buka_participants',10,'value','text','varchar(191)',1,1,'age','Alter','','','','','','','','','','','','','','','','','','','','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (89,'rex_buka_participants',11,'value','html','none',0,0,'html5','html5','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','</div></div><div class=\"row\"><div class=\"col-md-6\">','','','','','','','','','','','','','','','','','','','','',''),
+  (90,'rex_buka_participants',12,'value','datetime','datetime',1,0,'arrivaltime','Ankunftszeit','','2020','2050','Y-m-d H:i:s','select','','','','','','','','','','','','','','','','','','','','','','','','0','','','','','','','','','','','1','','','','','','','','','','','','','','','','','',''),
+  (91,'rex_buka_participants',13,'value','html','none',0,0,'html6','html6','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','</div><div class=\"col-md-6\">','','','','','','','','','','','','','','','','','','','','',''),
+  (92,'rex_buka_participants',14,'value','text','varchar(191)',1,1,'arrivalpoint','Ankunftsort','','','','','','','','','','','','','','','','','','','','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (93,'rex_buka_participants',15,'value','html','none',0,0,'html7','html7','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','</div></div><div class=\"row\"><div class=\"col-md-6\">','','','','','','','','','','','','','','','','','','','','',''),
+  (94,'rex_buka_participants',16,'value','datetime','datetime',1,0,'departuretime','Abfahrtszeit','','2020','2050','Y-m-d H:i:s','select','','','','','','','','','','','','','','','','','','','','','','','','0','','','','','','','','','','','0','','','','','','','','','','','','','','','','','',''),
+  (95,'rex_buka_participants',17,'value','html','none',0,0,'html8','html8','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','</div><div class=\"col-md-6\">','','','','','','','','','','','','','','','','','','','','',''),
+  (96,'rex_buka_participants',18,'value','text','varchar(191)',1,1,'departurepoint','Abreiseort','','','','','','','','','','','','','','','','','','','','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (97,'rex_buka_participants',19,'value','html','none',0,0,'html9','html9 - Ende','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','</div></div>','','','','','','','','','','','','','','','','','','','','',''),
+  (98,'rex_buka_participants',20,'value','textarea','text',1,0,'notice','Bemerkung','','','','','','','','','','','','','{\"style\":\"height: 50px;\"}','','','','','','','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (99,'rex_buka_participants',21,'value','choice','text',0,1,'part_status','Status','','','','','','','','','','','','','','SELECT id_status value, name_1 label FROM rex_buka_participants_status ORDER BY id_status','','','','','','','','','','0','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','0','','','',''),
+  (100,'rex_buka_participants',22,'value','html','none',0,0,'html10','html10','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','</div><!-- Ende von .zugeklappt -->','','','','','','','','','','','','','','','','','','','','',''),
+  (101,'rex_buka_participants_status',25,'value','text','varchar(191)',0,0,'name_1','Name','','','','','','','','','','','','','','','','','','','','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''),
+  (102,'rex_buka_participants_status',31,'value','integer','int',0,1,'id_status','Index','','','','','','','','','','','','','','','','','','','Einmal gesetzt, bitte nicht mehr verändern!','','','','','','','','','','0','','','','','','','','','','','','','','','','','','','','','','','','','','','','','');
 /*!40000 ALTER TABLE `rex_yform_field` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -810,7 +877,7 @@ CREATE TABLE `rex_yform_table` (
   `history` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `table_name` (`table_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 LOCK TABLES `rex_yform_table` WRITE;
 /*!40000 ALTER TABLE `rex_yform_table` DISABLE KEYS */;
@@ -818,7 +885,10 @@ INSERT INTO `rex_yform_table` VALUES
   (1,1,'rex_buka_bookings','Buchungskalender Buchungen','Buchungskalender Buchungen',50,'id','DESC',1,1,0,1,1,1,1,1,0),
   (2,1,'rex_buka_objects','Buchungskalender Objekte','',50,'id','ASC',2,1,0,0,0,0,0,1,0),
   (3,1,'rex_buka_season','Buchungskalender Saisons','',50,'prio','ASC',3,1,0,0,0,0,0,1,0),
-  (4,1,'rex_buka_price','Buchungskalender Preise','',50,'prio','ASC',4,1,0,0,0,0,0,1,0);
+  (4,1,'rex_buka_price','Buchungskalender Preise','',50,'prio','ASC',4,1,0,0,0,0,0,1,0),
+  (7,1,'rex_buka_additionals','Buchungskalender Zusatzleistungen','',50,'id','ASC',5,0,0,0,0,0,0,1,0),
+  (8,1,'rex_buka_participants','Buchungskalender Teilnehmer','Die Nutzung der Teilnehmertabelle ist optional. Eine Verbindung zur Buchung besteht über die Buchungs Id.',50,'id','ASC',6,1,0,0,0,0,0,1,0),
+  (9,1,'rex_buka_participants_status','Buchungskalender Teilnehmerstatus','',50,'id_status','ASC',7,1,0,0,0,0,0,1,0);
 /*!40000 ALTER TABLE `rex_yform_table` ENABLE KEYS */;
 UNLOCK TABLES;
 

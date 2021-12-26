@@ -44,6 +44,7 @@ class buka_barcal {
         if (!$this->months) {
             $this->set_start_date();
         }
+//        dump($this->months);
         return $this->months;
     }
 

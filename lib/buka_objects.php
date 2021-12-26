@@ -1,7 +1,11 @@
 <?php
 class buka_objects extends rex_yform_manager_dataset {
-    public static function get_query() {
-        return self::query()->where('status',1);
+    public static function get_query($online = true) {
+        $query = self::query();
+        if ($online) {
+            $query->where('status',1);
+        }
+        return $query;
     }
 
     public function find_related() {
@@ -13,7 +17,7 @@ class buka_objects extends rex_yform_manager_dataset {
     }
 
     public static function get_object_for_id ($id) {
-        return self::get_query()->where('id',$id)->findOne();
+        return self::get_query(false)->where('id',$id)->findOne();
     }
 
     public static function get_objects_with_prices ($object_id = 0) {
@@ -38,7 +42,14 @@ class buka_objects extends rex_yform_manager_dataset {
     public static function get_name_by_id ($params) {
         if (isset($params['value']) && $params['value']) {
             $object_id = $params['value'];
-            return self::get_object_for_id($object_id)->name;
+            if (!$object_id) {
+                return '-- kein Objekt gewählt --';
+            }
+            $object = self::get_object_for_id($object_id);
+            if (!$object) {
+                return '-- Objekt '.$object_id.' nicht gefunden --';
+            }
+            return $object->name;
         }
         return '--';        
 
