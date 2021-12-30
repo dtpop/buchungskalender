@@ -67,18 +67,20 @@ class buka_booking extends rex_yform_manager_dataset {
         }
         if (rex_config::get('buchungskalender','asked_offset')) {
             $query->whereRaw('((
-                status = "confirmed" AND ((dateend >= :anreise AND datestart <= :abreise)
-                 OR (dateend <= :anreise AND datestart >= :abreise)
-                 OR (datestart >= :anreise AND datestart <= :abreise))
+                (status = "confirmed" OR (status = "asked" AND bookingdate > :bookingdate))  
+                 AND ((datestart > :anreise AND dateend < :abreise)
+                 OR (dateend > :abreise AND datestart < :abreise)
+                 OR (datestart < :anreise AND dateend > :anreise))
              
-                ) OR (status = "asked" AND bookingdate > :bookingdate))',['anreise'=>$anreise,'abreise'=>$abreise,'bookingdate'=>date('Y-m-d H:i:s',strtotime('-'.rex_config::get('buchungskalender','asked_offset')))])
+                ))',['anreise'=>$anreise,'abreise'=>$abreise,'bookingdate'=>date('Y-m-d H:i:s',strtotime('-'.rex_config::get('buchungskalender','asked_offset')))])
             ;
         } else {
                 $query->where('status','confirmed')
-                ->whereRaw('((dateend > :anreise AND dateend < :abreise) '
-                . 'OR (datestart > :anreise AND datestart < :abreise) '
-                . 'OR (datestart <= :anreise AND dateend >= :abreise))',['anreise'=>$anreise,'abreise'=>$abreise]);
+                ->whereRaw('((datestart > :anreise AND dateend < :abreise)
+                OR (dateend > :abreise AND datestart < :abreise)
+                OR (datestart < :anreise AND dateend > :anreise))',['anreise'=>$anreise,'abreise'=>$abreise]);
         }
+        dump($query->getQuery());
         return $query->exists();
     }
 
