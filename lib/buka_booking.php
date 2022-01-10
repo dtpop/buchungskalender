@@ -61,6 +61,9 @@ class buka_booking extends rex_yform_manager_dataset {
      * 
      */
     public static function is_booked($anreise = '', $abreise = '', $object_id = 0, $data_id = 0) {
+        if ($anreise >= $abreise) {
+            return true;
+        }
         $query = self::get_query($object_id);
         if ($data_id) {
             $query->whereNot('id',$data_id);
@@ -68,7 +71,7 @@ class buka_booking extends rex_yform_manager_dataset {
         if (rex_config::get('buchungskalender','asked_offset')) {
             $query->whereRaw('((
                 (status = "confirmed" OR (status = "asked" AND bookingdate > :bookingdate))  
-                 AND ((datestart > :anreise AND dateend < :abreise)
+                 AND ((datestart >= :anreise AND dateend <= :abreise)
                  OR (dateend > :abreise AND datestart < :abreise)
                  OR (datestart < :anreise AND dateend > :anreise))
              
@@ -76,11 +79,11 @@ class buka_booking extends rex_yform_manager_dataset {
             ;
         } else {
                 $query->where('status','confirmed')
-                ->whereRaw('((datestart > :anreise AND dateend < :abreise)
+                ->whereRaw('((datestart >= :anreise AND dateend <= :abreise)
                 OR (dateend > :abreise AND datestart < :abreise)
                 OR (datestart < :anreise AND dateend > :anreise))',['anreise'=>$anreise,'abreise'=>$abreise]);
         }
-        dump($query->getQuery());
+//        dump($query->getQuery());
         return $query->exists();
     }
 
