@@ -27,7 +27,8 @@ $bar_cal->set_start_date($curr_dt->format('Y-m-d'));
 
 $months = $bar_cal->get_months();
 
-// dump($months[0]);
+// dump($months[0][30]->booking[1][0]->getData());
+// dump($months[0][24]->booking);
 
 ?>
 <style>
@@ -73,9 +74,18 @@ $months = $bar_cal->get_months();
                                 <?php foreach ($day->booking[$object->id] as $obj_booking) : ?>
                                     <div class="obj_booking <?= $obj_booking->is_start ? 'is_start' : '' ?> <?= $obj_booking->is_end ? 'is_end' : '' ?> status_<?= $obj_booking->status ?> <?= $obj_booking->object_id != $object->id ? 'buka_combi' : '' ?>" data-bookingid="<?= $obj_booking->id ?>">
                                         <?php if ($obj_booking->is_start || $day->date->wd == 1 || $day->date->format('j') == 1) : ?>
-                                            <div class="lbl">
-                                                <?= $obj_booking->vorname . ' ' . $obj_booking->nachname ?> [<?= $object->name ?>]
-                                            </div>
+                                            <?php if ($obj_booking->lbl_max_len > 0) : ?>
+                                                <div class="lbl max_len_<?= $obj_booking->lbl_max_len ?>">
+
+                                                <?php if ($obj_booking->object_id != $object->id) : // Bei Kombiobjekt Sperrung durch Einzelbuchung nur Objektname ausgeben ?>
+                                                        <?= $object->name ?>
+                                                    <?php else : ?>
+                                                        <?= $obj_booking->vorname . ' ' . $obj_booking->nachname ?> [<?= $object->name ?>]
+                                                    <?php endif ?>
+
+
+                                                </div>
+                                            <?php endif ?>
                                         <?php endif ?>
                                     </div>
                                 <?php endforeach ?>

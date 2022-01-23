@@ -113,21 +113,36 @@ class buka_barcal {
         $dt->setDate($year, $month, 1);
         $day = 1;
         while ($day <= $dt->format('t')) {
-            $date = new buka_date($year,$month,$day);
-            $date->booking = $this->get_bookings_for_date($date->date->format('Y-m-d'));    
-            $out[] = $date;
+            $buka_date = new buka_date($year,$month,$day);
+            $buka_date->booking = $this->get_bookings_for_date($buka_date);    
+            $out[] = $buka_date;
             $day++;
         }
         return $out;
     }
 
-    private function get_bookings_for_date($date) {
+    private function get_bookings_for_date($buka_date) {
+        $date = $buka_date->date->format('Y-m-d');
         $bookings = [];
         foreach (self::$objects as $object) {
             foreach ($object->bookings as $booking) {                
                 if (($date >= $booking->datestart) && ($date <= $booking->dateend)) {                    
                     $booking->is_start = $date == $booking->datestart;
                     $booking->is_end = $date == $booking->dateend;
+
+                    // Label Max. Länge errechnen
+                    // Ende der Woche
+                    // verbleibende Tage der Buchung
+                    $endDate = date_create_from_format('Y-m-d', $booking->dateend);
+                    $leftDays = (array) date_diff($endDate, $buka_date->date);
+                    $booking->leftdays = $leftDays['days'] ?? 0; // Tage bis zur Abreise
+
+                    $booking->lbl_max_len = min([
+                        $booking->leftdays,                                                       // bis zur Abreise
+                        8 - (int) $buka_date->date->wd,                                           // Ende der Woche
+                        (int) $buka_date->date->format('t') - (int) $buka_date->date->format('d') + 1 // Ende des Monats
+                    ]);
+
                     if (!isset($bookings[$object->id])) {
                         $bookings[$object->id] = [];    
                     }

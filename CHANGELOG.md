@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 1.1.2 - 23.01.2022
+--------------------------
+
+* Verbesserung Labeldarstellung im Streifenkalender
+* Labeldarstellung bei Blockierung von Kombinationsobjekten durch Einzelbuchungen
 
 
 Version 1.1.1 - 26.12.2021
