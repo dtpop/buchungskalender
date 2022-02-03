@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.1.3
+--------------------------
+
+* Storno Datensatz immer ermöglichen, auch bei überschneidenden Terminen
+
+
 Version 1.1.2 - 23.01.2022
 --------------------------
 

@@ -88,6 +88,10 @@ class buka_booking extends rex_yform_manager_dataset {
      */
     public static function unique_booking ($fields,$values) {
         $data_id = rex_request('data_id','int');
+        // Storno ist immer ok
+        if (isset($values['status']) && $values['status'] == 'storno')  {
+            return false;
+        }
         if (buka_booking::is_booked($values['datestart'],$values['dateend'],$values['object_id'],$data_id)) {
             return true;
         }
