@@ -4,6 +4,7 @@ Changelog
 Version 1.1.3
 --------------------------
 
+* Fix Klick auf Kalendereintrag öffnet Detailansicht
 * Storno Datensatz immer ermöglichen, auch bei überschneidenden Terminen
 
 

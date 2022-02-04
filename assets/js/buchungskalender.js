@@ -22,13 +22,13 @@ $(function () {
     $(document).on('click','.buka_bar_cal .obj_booking', function(e) {
         var DateClicked = $(this);
         if (DateClicked.data('bookingid')) {
-            window.location.href = 'index.php?page=buchungskalender/bookings&func=edit&id='+DateClicked.data('bookingid');
+            window.location.href = 'index.php?page=buchungskalender/bookings&func=edit&data_id='+DateClicked.data('bookingid');
         }
     });
 
     // Backend
     function editBooking (bookingid) {
-        window.location.href = 'index.php?src=calendar&page=buchungskalender/bookings&func=edit&id='+bookingid;
+        window.location.href = 'index.php?src=calendar&page=buchungskalender/bookings&func=edit&data_id='+bookingid;
     }
 
     $(document).on("click", ".buka-cal-wrapper .bookable", function () {
