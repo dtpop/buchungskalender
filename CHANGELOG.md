@@ -6,6 +6,8 @@ Version 1.1.3
 
 * Fix Klick auf Kalendereintrag öffnet Detailansicht
 * Storno Datensatz immer ermöglichen, auch bei überschneidenden Terminen
+* Kalender Blätterfunktion verbessert
+* Objekttabelle mit Reihenfolge prio versehen
 
 
 Version 1.1.2 - 23.01.2022

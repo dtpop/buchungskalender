@@ -29,24 +29,24 @@ class buka_cal
 
     function __construct($object_id = null, $date = null, $year = null, $month = null)
     {
-//        dump('huhu buka_cal');
+        //        dump('huhu buka_cal');
         $this->year = $year ?: date('Y');
         $this->month = $month ?: date('m');
-        $this->datestart = rex_request('datestart','string');
-        $this->dateend = rex_request('dateend','string');
+        $this->datestart = rex_request('datestart', 'string');
+        $this->dateend = rex_request('dateend', 'string');
         if (!$this->datestart && !$this->dateend) {
-            $booking = rex_session('buka_booking','array');
+            $booking = rex_session('buka_booking', 'array');
             if (isset($booking['datestart']) && isset($booking['dateend'])) {
                 $this->datestart = $booking['datestart'];
                 $this->dateend = $booking['dateend'];
             }
         }
-//        dump($booking);
+        //        dump($booking);
 
 
         $this->set_date_period();
 
-//        dump($this->period);
+        //        dump($this->period);
 
 
         $this->baselink = rex_url::currentBackendPage();
@@ -59,25 +59,38 @@ class buka_cal
         $this->seasons = buka_season::get_seasons();
         if ($object_id) {
             $this->objectId = $object_id;
-        } elseif (rex_request('object_id','int')) {
-            $this->objectId = rex_request('object_id','int');
+        } elseif (rex_request('object_id', 'int')) {
+            $this->objectId = rex_request('object_id', 'int');
         }
         $this->object = buka_objects::get_object_for_id($this->objectId);
 
         $this->prices = self::get_prices($this->objectId);
 
-        if (rex_config::get('buchungskalender','max_booking_time')) {
+        if (rex_config::get('buchungskalender', 'max_booking_time')) {
             $this->maxBookingTime = 1;
-            foreach (explode('*', rex_config::get('buchungskalender','max_booking_time')) as $v) {
+            foreach (explode('*', rex_config::get('buchungskalender', 'max_booking_time')) as $v) {
                 $this->maxBookingTime = $this->maxBookingTime * trim($v);
             }
         }
+
+        $this->curr_dt = new DateTime();
+        $this->curr_dt->setDate($this->year, $this->month, 1);
+        $this->next_dt = clone $this->curr_dt;
+        $this->prev_dt = clone $this->curr_dt;
+        $this->next_month = clone $this->curr_dt;
+        $this->prev_month = clone $this->curr_dt;
+
+        $this->next_dt->modify('+ ' . $this->monthcount . ' months');
+        $this->prev_dt->modify('- ' . $this->monthcount . ' months');
+        $this->next_month->modify('+ 1 month');
+        $this->prev_month->modify('- 1 month');
     }
 
 
 
 
-    public function set_start_date () {
+    public function set_start_date()
+    {
         $this->month = rex_request('month', 'int', date('m'));
         $this->year = rex_request('year', 'int', date('Y'));
         // Im Frontend Blick zurück verhindern
@@ -87,54 +100,69 @@ class buka_cal
                 $this->year = date('Y');
             }
         }
+
+        $this->curr_dt = new DateTime();
+        $this->curr_dt->setDate($this->year, $this->month, 1);
+        $this->next_dt = clone $this->curr_dt;
+        $this->prev_dt = clone $this->curr_dt;
+        $this->next_month = clone $this->curr_dt;
+        $this->prev_month = clone $this->curr_dt;
+        
+        $this->next_dt->modify('+ '.$this->monthcount.' months');
+        $this->prev_dt->modify('- '.$this->monthcount.' months');
+        $this->next_month->modify('+ 1 month');
+        $this->prev_month->modify('- 1 month');
+
     }
 
 
-    public function set_bookings() {
+    public function set_bookings()
+    {
         $dt1 = new DateTime();
         $dt1->setDate($this->year, $this->month, 1);
 
         $dt2 = new DateTime();
         $dt2->setDate($this->year, $this->month, 1);
-        $dt2->modify('+ '.($this->monthcount - 1).' months');
+        $dt2->modify('+ ' . ($this->monthcount - 1) . ' months');
 
         $start = $dt1->format('Y-m-d');
         $end = $dt2->format('Y-m-t');
         $query = buka_booking::get_query($this->objectId, $this->with_related);
 
-        if (rex_config::get('buchungskalender','asked_offset')) {
+        if (rex_config::get('buchungskalender', 'asked_offset')) {
             $query->whereRaw('((
                 status = "confirmed" AND ((dateend >= :start AND datestart <= :end)
                  OR (dateend <= :start AND datestart >= :end)
                  OR (datestart >= :start AND datestart <= :end))
              
-                ) OR (status = "asked" AND bookingdate > :bookingdate))',['start'=>$start,'end'=>$end,'bookingdate'=>date('Y-m-d H:i:s',strtotime('-'.rex_config::get('buchungskalender','asked_offset')))])
-            ;
+                ) OR (status = "asked" AND bookingdate > :bookingdate))', ['start' => $start, 'end' => $end, 'bookingdate' => date('Y-m-d H:i:s', strtotime('-' . rex_config::get('buchungskalender', 'asked_offset')))]);
         } else {
             $query->whereRaw('((
                 status = "confirmed" AND ((dateend >= :start AND datestart <= :end)
                  OR (dateend <= :start AND datestart >= :end)
                  OR (datestart >= :start AND datestart <= :end))
              
-                ))',['start'=>$start,'end'=>$end])
-            ;
+                ))', ['start' => $start, 'end' => $end]);
         }
         $this->bookings = $query->find();
     }
 
 
-    public function set_month_count ($monthcount) {
+    public function set_month_count($monthcount)
+    {
         $this->monthcount = $monthcount;
     }
 
 
-    public function set_show_form ($switch = true) {
+    public function set_show_form($switch = true)
+    {
         $this->show_form = $switch;
     }
 
 
 
-    public function getMonth($year = 0, $month = 0, $nth_month = 0) {
+    public function getMonth($year = 0, $month = 0, $nth_month = 0)
+    {
         if (!$year) {
             $year = date('Y');
         }
@@ -147,13 +175,13 @@ class buka_cal
 
         $class = '';
 
-        foreach ($this->mobile_month_count as $k=>$mclass) {
+        foreach ($this->mobile_month_count as $k => $mclass) {
             if ($nth_month > $k) {
                 $class = $mclass;
             }
         }
 
-        $out = '<ul class="y-wrapper '.$class.'">';
+        $out = '<ul class="y-wrapper ' . $class . '">';
         $out .= '<li class="bk_month_title">' . $this->months[$month - 1] . ' ' . $year . '</li>';
         foreach ($this->weekdays as $wd) {
             $out .= '<li class="bk-weekday">' . $wd . '</li>';
@@ -164,7 +192,7 @@ class buka_cal
             $date = $year . '-' . $dt->format('m') . '-' . str_pad($day, 2, '0', STR_PAD_LEFT);
             $bookingData = $this->get_booking_data_for_date($date);
             $season = $this->get_season($date);
-            $out .= '<li class="bk-day bk-cal-day '.implode(' ',$bookingData['class']).'" data-date="' . $date . '" data-priceclass="'. $season->id .'" data-fullweek="'. $season->full_week .'" data-minbookingdays="'.$season->minddays.'" data-bookingid="'.$bookingData['booking_id'].'">' . $day . '</li>';
+            $out .= '<li class="bk-day bk-cal-day ' . implode(' ', $bookingData['class']) . '" data-date="' . $date . '" data-priceclass="' . $season->id . '" data-fullweek="' . $season->full_week . '" data-minbookingdays="' . $season->minddays . '" data-bookingid="' . $bookingData['booking_id'] . '">' . $day . '</li>';
             $day++;
         }
         $out .= '</ul>';
@@ -172,16 +200,18 @@ class buka_cal
     }
 
 
-    public static function get_prices ($objectId = 0, $order = 'DESC') {
-        $query = rex_yform_manager_table::get(rex::getTable('buka_price'))->query()        
-        ->orderBy('nightscount',$order);
+    public static function get_prices($objectId = 0, $order = 'DESC')
+    {
+        $query = rex_yform_manager_table::get(rex::getTable('buka_price'))->query()
+            ->orderBy('nightscount', $order);
         if ($objectId) {
             $query->where('object_id', $objectId);
         }
         return $query->find();
     }
 
-    public function get_season($date) {
+    public function get_season($date)
+    {
         foreach ($this->seasons as $season) {
             foreach ($season->season_dates as $sd) {
                 if ($date >= $sd['from'] && $date <= $sd['to']) {
@@ -192,22 +222,23 @@ class buka_cal
         return $season;
     }
 
-    public function get_booking_data_for_date ($date) {
-        $season = $this->get_season($date);        
+    public function get_booking_data_for_date($date)
+    {
+        $season = $this->get_season($date);
         $bd = [
-            'class'=>[],
-            'bookable'=>false,
-            'booking_id'=>0,
-            'season'=>$season->id,
-            'is_start'=>false,
-            'is_end'=>false,
-            'date'=>$date
+            'class' => [],
+            'bookable' => false,
+            'booking_id' => 0,
+            'season' => $season->id,
+            'is_start' => false,
+            'is_end' => false,
+            'date' => $date
         ];
         $start = false;
         $end = false;
         $bookable = true;
-        if (rex_config::get('buchungskalender','min_booking_days_futur')) {
-            if (date('Y-m-d',strtotime('+ '.rex_config::get('buchungskalender','min_booking_days_futur').' days')) > $date) {
+        if (rex_config::get('buchungskalender', 'min_booking_days_futur')) {
+            if (date('Y-m-d', strtotime('+ ' . rex_config::get('buchungskalender', 'min_booking_days_futur') . ' days')) > $date) {
                 $bookable = false;
             }
         }
@@ -241,7 +272,7 @@ class buka_cal
             }
         }
         if ($bookable) {
-            if (in_array($date,$this->period)) {
+            if (in_array($date, $this->period)) {
                 $bd['class'][] = 'add-reserve';
             }
             if ($this->datestart == $date) {
@@ -252,7 +283,7 @@ class buka_cal
             }
         }
         if ($this->season_calendar) {
-            $bd['class'] = ['season_'.$season->id];
+            $bd['class'] = ['season_' . $season->id];
         }
 
 
@@ -261,7 +292,8 @@ class buka_cal
     }
 
 
-    public function getCalendar() {
+    public function getCalendar()
+    {
         $year = $this->year;
         $month = $this->month;
 
@@ -271,7 +303,7 @@ class buka_cal
         if ($this->season_calendar) {
             $out .= '<style>';
             foreach ($this->seasons as $season) {
-                $out .= '.season_'.$season->id.' { background-color: '.$season->color.' }';
+                $out .= '.season_' . $season->id . ' { background-color: ' . $season->color . ' }';
             }
             $out .= '</style>';
         }
@@ -282,7 +314,7 @@ class buka_cal
             $out .= $this->getNavigation('short');
         }
 
-        $out .= '<div class="'.$this->cal_wrapper_class.'">';
+        $out .= '<div class="' . $this->cal_wrapper_class . '">';
         if ($this->show_form) {
             $fragment = new rex_fragment();
             $out .= $fragment->parse('frag_buka_form.php');
@@ -291,10 +323,10 @@ class buka_cal
         $n = 1;
         while ($n <= $this->monthcount) {
             $out .= $this->getMonth($year, $month, $n);
-            $month ++;
+            $month++;
             if ($month > 12) {
                 $month = 1;
-                $year ++;
+                $year++;
             }
             $n++;
         }
@@ -304,70 +336,45 @@ class buka_cal
     }
 
 
-    public function get_season_legend () {
+    public function get_season_legend()
+    {
         $out = '';
         $out .= '<div class="season-legend" uk-grid>';
         foreach ($this->seasons as $season) {
-            $out .= '<div><span class="season_'.$season->id.'">&nbsp;12&nbsp;</span> '.$season->name.'</div>';
+            $out .= '<div><span class="season_' . $season->id . '">&nbsp;12&nbsp;</span> ' . $season->name . '</div>';
         }
         $out .= '</div>';
         return $out;
-
-
     }
 
 
-    public function getNavigation($navType = 'long') {
-
-        $nextShift = ($navType == 'long') ? 10 : 1;
-
-        if ($navType == 'short' && (int) $this->month < 10) {
-            $yearShift = 0;
-        } else {
-            $yearShift = 1;
-        }
-
-        $yearShift2 = ((int) $this->month == 1) ? 1 : 2;
-
-
-        $deli = (strpos($this->baselink, '?')) ? '&' : '?';
-
-        if ($this->month == 1) {
-            $prevMonth = 12;
-            $prevYear = $this->year - 1;
-        } else {
-            $prevMonth = $this->month - 1;
-            $prevYear = $this->year;
-        }
-        if ($this->month == 12) {
-            $nextMonth = 1;
-            $nextYear = $this->year + 1;
-        } else {
-            $nextMonth = $this->month + 1;
-            $nextYear = $this->year;
-        }
-
-
-        $backlink = '';
-        if ($navType == 'long') {
-            $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . ($this->year - 1) . '&month=' . $this->month . '&object_id=' . $this->objectId . '">&lt;&lt; ' . $this->months[$this->month - 1] . ' ' . ($this->year - 1) . '</a>&nbsp;|&nbsp;';
-        }
-        $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $prevYear . '&month=' . $prevMonth . '&object_id=' . $this->objectId . '">&lt; ' . $this->months[$prevMonth - 1] . ' ' . $prevYear . '</a>';
-
-        if (rex::isFrontend() && ($this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT)) <= date('Y-m')) {
-            $backlink = '';
-        }
-
+    public function getNavigation($navType = 'long')
+    {
 
         $nextlink = '';
-        $nextlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $nextYear . '&month=' . $nextMonth . '&object_id=' . $this->objectId . '">' . $this->months[$nextMonth - 1] . ' ' . $nextYear . ' &gt;</a>';
+        $backlink = '';
+        $deli = (strpos($this->baselink, '?')) ? '&' : '?';
+
+
+        $nextlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->next_month->format('Y') . '&month=' . $this->next_month->format('m') . '&object_id=' . $this->objectId . '">1 Monat &gt;</a>';
         if ($navType == 'long') {
-            $nextlink .= '&nbsp;|&nbsp;<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . ($this->year + 1) . '&month=' . $this->month . '&object_id=' . $this->objectId . '">' . $this->months[($this->month + 10) % 12] . ' ' . ($this->year + 1) . ' &gt;&gt;</a>';
+            $nextlink .= '&nbsp;|&nbsp;<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->next_dt->format('Y') . '&month=' . $this->next_dt->format('m') . '&object_id=' . $this->objectId . '">'.$this->monthcount.' Monate &gt;&gt;</a>';
         }
 
         if (rex::isFrontend() && ($this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT)) >= ($this->maxBookingYear . '-' . $this->maxBookingMonth)) {
             $nextlink = '';
         }
+
+
+        if ($navType == 'long') {
+            $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->prev_dt->format('Y') . '&month=' . $this->prev_dt->format('m') . '&object_id=' . $this->objectId . '">&lt;&lt; '.$this->monthcount.' Monate</a>&nbsp;|&nbsp;';
+        }
+        $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->prev_month->format('Y') . '&month=' . $this->prev_month->format('m') . '&object_id=' . $this->objectId . '">&lt; 1 Monat</a>';
+
+        if (rex::isFrontend() && ($this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT)) <= date('Y-m')) {
+            $backlink = '';
+        }
+
 
 
         $out = '<nav class="buka_pager_nav">';
@@ -384,12 +391,12 @@ class buka_cal
         return $out;
     }
 
-
-   /**
-    * 
-    * @return array
-    */
-    public function get_booking_price () {
+    /**
+     * 
+     * @return array
+     */
+    public function get_booking_price()
+    {
 
 
         $bookingVars = rex_session('buka_booking');
@@ -397,32 +404,34 @@ class buka_cal
         if (!isset($bookingVars['datestart']) || !isset($bookingVars['dateend']) || !$bookingVars['datestart'] || !$bookingVars['dateend']) {
             return false;
         }
-        
+
         $dateFrom = new DateTime($bookingVars['datestart']);
         $dateTo = new DateTime($bookingVars['dateend']);
-        
+
         $period = $this->getDatePeriod($dateFrom, $dateTo);
-        
-        $price = $this->getPriceForDays($period,$bookingVars['object_id']);
-        
-        return array('price'=>$price, 'period'=>$period);
-     }
+
+        $price = $this->getPriceForDays($period, $bookingVars['object_id']);
+
+        return array('price' => $price, 'period' => $period);
+    }
 
 
-     private function set_date_period () {
+    private function set_date_period()
+    {
         if (strlen($this->datestart) == 10 && strlen($this->dateend) == 10) {
             $dateFrom = new DateTime($this->datestart);
             $dateTo = new DateTime($this->dateend);
             $dateTo->add(new DateInterval('P1D'));
-            $this->period = self::getDatePeriod($dateFrom,$dateTo);
+            $this->period = self::getDatePeriod($dateFrom, $dateTo);
         }
-     }
-     
-     /**
-      * summiert die einzelnen Tagespreise für das Objekt
-      *  für jeden Tag wird die passende Saison ermittelt.
-      */
-     private function getPriceForDays ($period) {
+    }
+
+    /**
+     * summiert die einzelnen Tagespreise für das Objekt
+     *  für jeden Tag wird die passende Saison ermittelt.
+     */
+    private function getPriceForDays($period)
+    {
 
         $pricesum = $this->object->grundpreis;
         $numDays = count($period);
@@ -440,52 +449,47 @@ class buka_cal
             $pricesum += $dayprice;
         }
         return $pricesum;
+    }
 
-     }
-     
-     public static function getDatePeriod ($dateFrom, $dateTo) {
+    public static function getDatePeriod($dateFrom, $dateTo)
+    {
         $out = array();
         $period = new DatePeriod(
-           $dateFrom,
-           new DateInterval('P1D'),
-           $dateTo
+            $dateFrom,
+            new DateInterval('P1D'),
+            $dateTo
         );
         $period = iterator_to_array($period);
         foreach ($period as $oDate) {
-           $out[] = $oDate->format('Y-m-d');
+            $out[] = $oDate->format('Y-m-d');
         }
-        return $out;      
-     }    
+        return $out;
+    }
 
 
-     public static function get_mini_calendar ($object_id, $months = 6) {
+    public static function get_mini_calendar($object_id, $months = 6)
+    {
         $object = buka_objects::get_object_for_id($object_id);
 
         $start_year = min([buka_booking::get_min_year(), date('Y') - 2]);
         $end_year = max([buka_booking::get_max_year(), date('Y') + 2]);
         // dump($start_year);
         // dump($end_year);
-        
+
         $cal = new buka_cal();
+        $cal->monthcount = $months;
         $cal->maxBookingYear = date('Y', buka_booking::get_end_time());
         $cal->maxBookingMonth = date('m', buka_booking::get_end_time());
         $cal->objectId = $object_id;
-        
+
         $cal->set_start_date();
         $cal->set_bookings();
         $cal->cal_wrapper_class = 'minikalender';
-        $cal->monthcount = $months;
         return $cal->getCalendar();
+    }
 
-        
-     }
-
-     public static function reformat_date ($date_string) {
-         return date('d.m.Y',strtotime($date_string));
-     }
-
-
-
-
+    public static function reformat_date($date_string)
+    {
+        return date('d.m.Y', strtotime($date_string));
+    }
 }
-
