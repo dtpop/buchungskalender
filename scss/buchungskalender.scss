@@ -26,6 +26,90 @@ $color_booked: #bf0000;
     z-index: -1;
 }
 
+
+
+@mixin cal-object {
+    .obj {
+        color: #ffffff;
+        height: 22px;
+        white-space: nowrap;
+        margin: 4px 0;
+        position: relative;
+        //        border-bottom: 1px solid #eee;
+        .is_start {
+            width: calc(50% - 1px);
+            margin-left: calc(50% + 2px);
+            &:before {
+                border-radius: 6px 0 0 6px;
+            }
+        }
+        .is_end {
+            width: calc(50% - 2px);
+            &:before {
+                border-radius: 0 6px 6px 0;
+            }
+        }
+        .obj_booking {
+            cursor: pointer;
+            position: relative;
+            &:before {
+                content: "";
+                left: 0;
+                position: absolute;
+                width: 100%;
+                height: 22px;
+            }
+            &.status_asked {
+                color: black;
+                &:before {
+                    opacity: 0.5;
+                }
+            }
+            &.buka_combi {
+                &:before {
+                    background-color: #aaa;
+                }
+                .lbl {
+                    color: #000;
+                    display: none;
+                }
+                &:first-child {
+                    .lbl {
+                        display: block;
+                    }
+                }
+            }
+            
+        }
+        .lbl {
+            left: 4px;
+            position: absolute;
+            z-index: 1;
+            overflow: hidden;
+            text-align: left;
+            &.max_len_1 { width: calc(100% - 8px); }
+            &.max_len_2 { width: calc(200% - 8px); }
+            &.max_len_3 { width: calc(300% - 8px); }
+            &.max_len_4 { width: calc(400% - 8px); }
+            &.max_len_5 { width: calc(500% - 8px); }
+            &.max_len_6 { width: calc(600% - 8px); }
+            &.max_len_7 { width: calc(700% - 8px); }
+        }
+        .is_start {
+            .max_len_1 { width: calc(200% - 8px); }
+            .max_len_2 { width: calc(400% - 8px); }
+            .max_len_3 { width: calc(600% - 8px); }
+            .max_len_4 { width: calc(800% - 8px); }
+            .max_len_5 { width: calc(1000% - 8px); }
+            .max_len_6 { width: calc(1200% - 8px); }
+            .max_len_7 { width: calc(1400% - 8px); }
+        }
+
+    }
+
+}
+
+
 .buka-cal-wrapper {
     display: flex;
     flex-flow: wrap;
@@ -191,84 +275,70 @@ button#to-step-1 {
         margin-left: 2px;
         width: calc(100% - 4px);
     }
-    .obj {
-        color: #ffffff;
-        height: 22px;
-        white-space: nowrap;
-        margin: 4px 0;
-        position: relative;
-        //        border-bottom: 1px solid #eee;
-        .is_start {
-            width: calc(50% - 1px);
-            margin-left: calc(50% + 2px);
-            &:before {
-                border-radius: 6px 0 0 6px;
-            }
-        }
-        .is_end {
-            width: calc(50% - 2px);
-            &:before {
-                border-radius: 0 6px 6px 0;
-            }
-        }
-        .obj_booking {
-            cursor: pointer;
-            position: relative;
-            &:before {
-                content: "";
-                left: 0;
-                position: absolute;
-                width: 100%;
-                height: 22px;
-            }
-            &.status_asked {
-                color: black;
-                &:before {
-                    opacity: 0.5;
-                }
-            }
-            &.buka_combi {
-                &:before {
-                    background-color: #aaa;
-                }
-                .lbl {
-                    color: #000;
-                    display: none;
-                }
-                &:first-child {
-                    .lbl {
-                        display: block;
-                    }
-                }
-            }
-            
-        }
-        .lbl {
-            left: 4px;
-            position: absolute;
-            z-index: 1;
-            overflow: hidden;
-            text-align: left;
-            &.max_len_1 { width: calc(100% - 8px); }
-            &.max_len_2 { width: calc(200% - 8px); }
-            &.max_len_3 { width: calc(300% - 8px); }
-            &.max_len_4 { width: calc(400% - 8px); }
-            &.max_len_5 { width: calc(500% - 8px); }
-            &.max_len_6 { width: calc(600% - 8px); }
-            &.max_len_7 { width: calc(700% - 8px); }
-        }
-        .is_start {
-            .max_len_1 { width: calc(200% - 8px); }
-            .max_len_2 { width: calc(400% - 8px); }
-            .max_len_3 { width: calc(600% - 8px); }
-            .max_len_4 { width: calc(800% - 8px); }
-            .max_len_5 { width: calc(1000% - 8px); }
-            .max_len_6 { width: calc(1200% - 8px); }
-            .max_len_7 { width: calc(1400% - 8px); }
-        }
+    @include cal-object();
 
+}
+
+// Gant Kalender
+
+.buka_gant_cal {
+
+    @include cal-object();
+
+    border: 1px solid #555;
+    width: 100%;
+    overflow-x: scroll;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    text-align: center;
+    .gant_header_wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+        .cal_date {
+            text-align: center;
+            width: 30px;
+        }
+    }
+
+    .gant_cal_month_title {
+        background-color: #888;
+        border-right: 2px solid white;
+        border-left: 2px solid white;
+        color: #fff;
+        font-weight: bold;
+        padding: 4px;
+        width: 100%;
+    }
+
+    .wd6 {
+        background-color: #dddddd;
+    }
+    .wd7 {
+        background-color: #cccccc;
+    }
+
+    .wd7 .cal_date {
+        font-weight: bold;
+    }
+
+    .obj {
+        height: 44px;
+        margin: 10px 0;
+        .obj_booking::before {
+            height: 44px;
+        }
+        .obj_booking.buka_combi .lbl {
+            display: block;
+        }
+    }
+
+
+    .bar_cal_day {
+        border-left: 1px solid #999;
     }
 }
+
 
 @media screen and (max-width: 991px), (min-width: 1440px) {
     #table-rex_buka_bookings {

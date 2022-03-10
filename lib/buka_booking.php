@@ -67,9 +67,9 @@ class buka_booking extends rex_yform_manager_dataset {
         }
         if (rex_config::get('buchungskalender','asked_offset')) {
             $query->whereRaw('((
-                status = "confirmed" AND ((dateend >= :anreise AND datestart <= :abreise)
-                 OR (dateend <= :anreise AND datestart >= :abreise)
-                 OR (datestart >= :anreise AND datestart <= :abreise))
+                status = "confirmed" AND ((dateend > :anreise AND datestart < :abreise)
+                 OR (dateend < :anreise AND datestart > :abreise)
+                 OR (datestart <= :anreise AND dateend >= :abreise))
              
                 ) OR (status = "asked" AND bookingdate > :bookingdate))',['anreise'=>$anreise,'abreise'=>$abreise,'bookingdate'=>date('Y-m-d H:i:s',strtotime('-'.rex_config::get('buchungskalender','asked_offset')))])
             ;

@@ -56,6 +56,7 @@ class buka_barcal {
         $objects = buka_objects::get_query()->find();
         foreach ($objects as $object) {
             $qry = buka_booking::get_query($object->id,true);
+            $qry->orderBy('datestart');
             if (rex_config::get('buchungskalender','asked_offset')) {
                 $qry->whereRaw('((
                     status = "confirmed" AND ((dateend >= :start AND datestart <= :end)
@@ -74,11 +75,17 @@ class buka_barcal {
                 ;
 
             }
-            $object->bookings = $qry->find();
+            $result = $qry->find();            
+            if ($object->combination) {
+                // Kombinationsobjekte kompaktieren
+                $result = self::combine_result($result);
+            }
+            $object->bookings = $result;
+
         }
 
         self::$objects = $objects;
-//        dump(self::$objects);
+//        dump(self::$objects[6]);
 
         while ($n < $this->num_of_months) {
             $this->months[] = $this->get_month($this->current_month,$this->current_year);
@@ -125,7 +132,10 @@ class buka_barcal {
         $date = $buka_date->date->format('Y-m-d');
         $bookings = [];
         foreach (self::$objects as $object) {
-            foreach ($object->bookings as $booking) {                
+            foreach ($object->bookings as $booking) {
+                if (!$booking) {
+                    continue;
+                }
                 if (($date >= $booking->datestart) && ($date <= $booking->dateend)) {                    
                     $booking->is_start = $date == $booking->datestart;
                     $booking->is_end = $date == $booking->dateend;
@@ -137,11 +147,15 @@ class buka_barcal {
                     $leftDays = (array) date_diff($endDate, $buka_date->date);
                     $booking->leftdays = $leftDays['days'] ?? 0; // Tage bis zur Abreise
 
-                    $booking->lbl_max_len = min([
-                        $booking->leftdays,                                                       // bis zur Abreise
-                        8 - (int) $buka_date->date->wd,                                           // Ende der Woche
-                        (int) $buka_date->date->format('t') - (int) $buka_date->date->format('d') + 1 // Ende des Monats
-                    ]);
+                    if (rex_config::get("buchungskalender", "calendar_view") == 'gant') {
+                        $booking->lbl_max_len = $booking->leftdays;
+                    } else {
+                        $booking->lbl_max_len = min([
+                            $booking->leftdays,                                                       // bis zur Abreise
+                            8 - (int) $buka_date->date->wd,                                           // Ende der Woche
+                            (int) $buka_date->date->format('t') - (int) $buka_date->date->format('d') + 1 // Ende des Monats
+                        ]);
+                    }
 
                     if (!isset($bookings[$object->id])) {
                         $bookings[$object->id] = [];    
@@ -164,5 +178,28 @@ class buka_barcal {
 
         self::$end_date = $dt2->format('Y-m-t');
 
+    }
+
+
+    // kompaktiert die Ergebnisse für Kombinationsobjekte
+
+    private static function combine_result ($result) {
+        $current = $result[0];
+        $current_i = 0;
+        foreach ($result as $i=>$booking) {
+            if ($i <= $current_i) {
+                continue;
+            }
+            if ($booking->datestart < $current->dateend) {
+                if ($booking->dateend > $result[$current_i]->dateend) {
+                    $result[$current_i]->dateend = $booking->dateend;
+                }
+                unset($result[$i]);
+            } else {
+                $current = $booking;
+                $current_i = $i;                
+            }
+        }
+        return $result;
     }
 }

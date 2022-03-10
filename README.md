@@ -76,9 +76,14 @@ Für die Buchungsverwaltung gibt es zwei Ansichten. Den Streifenkalender in der 
 
 In der Übersicht kann man die Belegung jedes einzelnen Objektes sehen. Ein Klick auf ein belegtes Datum öffnet die Buchung in der Detailansicht. Hier kann die Buchung auch direkt bearbeitet werden.
 
-*Hinweis* Bei der Bearbeitung im Backend findet keine Plausibilitätsprüfung statt. Es wird also nicht geprüft, ob ein Termin bereits belegt ist oder nicht. Hierfür ist der Bearbeiter komplett selbst verantwortlich!
+*Hinweis* Bei der Bearbeitung im Backend findet ebenso eine Prüfung auf Doppelbelegung statt. Eine Doppelbelegung sollte durch diese Prüfung ausgeschlossen sein. Dennoch ist der Anwender dafür verantwortlich, dass keine Doppelbelegungen gemacht werden.
 
 Durch Kombinationsobjekte lässt sich der Buchungskalender sehr schön erweitern. Die Streifenansicht zeigt die Kombinationsobjekte sehr schön an. "Ferien mit Freunden" ist ein Kombinationsobjekt aus kleiner Wohnung und großer Wohnung. Die nicht zur Verfügung stehenden Objekte werden zusätzlich durch einen grauen Streifen gekennzeichnet. So ist beispielsweise "Ferien mit Freunden" nicht mehr verfügbar, sobald eine einzelne Wohnung gebucht ist.
+
+### Streifenkalender, lineare Ansicht
+
+In den Settings kann die Übersicht auch auf "GANT" gestellt werden. Es wird dann ein linearer Streifenkalender dargestellt, der insbesondere bei vielen Objekten eine bessere Übersicht bietet.
+
 
 ### Buchen / Kalenderansicht
 

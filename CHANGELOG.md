@@ -8,6 +8,7 @@ Version 1.1.3
 * Storno Datensatz immer ermöglichen, auch bei überschneidenden Terminen
 * Kalender Blätterfunktion verbessert
 * Objekttabelle mit Reihenfolge prio versehen
+* Weiterer Streifenkalender in linearer Ansicht
 
 
 Version 1.1.2 - 23.01.2022

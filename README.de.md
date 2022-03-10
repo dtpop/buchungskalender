@@ -58,7 +58,7 @@ Die Objektverwaltung ist recht schlicht gehalten. Für die Bearbeitung ist kein 
 
 Hier kann der Name des Objektes festgelegt werden und der Grundpreis. Außerdem kann man festlegen, ob es sich um ein Kombinationsangebot handelt - das wurde ja oben bereits ausführlich beschrieben. Als Ergänzung sei hier beschrieben, dass für Kombinationsobjekte durchaus eigene Buchungsdatensätze angelegt werden. Es werden also keine doppelten Buchungsdatensätze für die kleine und die große Wohnung angelegt. Daher ist zum Beispiel eine Umbuchung sehr einfach möglich. Es soll hier alles so intuitiv und einfach wie möglich sein.
 
-In der Objektverwaltung kann auch die Farbe des Objektes für die Darstellung im Streifenkalender eingestellt werden. Wenn von den ui-tools noch minicolor installiert ist, kann man im Objekt die Farbe aus einem Farbwähler wählen. Ansonsten kann man die Farbe auch per Hexwert, rgb oder Farbname angeben.
+In der Objektverwaltung kann auch die Farbe des Objektes für die Darstellung im Streifenkalender eingestellt werden.
 
 ## Saisonverwaltung
 
@@ -76,9 +76,14 @@ Für die Buchungsverwaltung gibt es zwei Ansichten. Den Streifenkalender in der 
 
 In der Übersicht kann man die Belegung jedes einzelnen Objektes sehen. Ein Klick auf ein belegtes Datum öffnet die Buchung in der Detailansicht. Hier kann die Buchung auch direkt bearbeitet werden.
 
-*Hinweis* Bei der Bearbeitung im Backend findet keine Plausibilitätsprüfung statt. Es wird also nicht geprüft, ob ein Termin bereits belegt ist oder nicht. Hierfür ist der Bearbeiter komplett selbst verantwortlich!
+*Hinweis* Bei der Bearbeitung im Backend findet ebenso eine Prüfung auf Doppelbelegung statt. Eine Doppelbelegung sollte durch diese Prüfung ausgeschlossen sein. Dennoch ist der Anwender dafür verantwortlich, dass keine Doppelbelegungen gemacht werden.
 
 Durch Kombinationsobjekte lässt sich der Buchungskalender sehr schön erweitern. Die Streifenansicht zeigt die Kombinationsobjekte sehr schön an. "Ferien mit Freunden" ist ein Kombinationsobjekt aus kleiner Wohnung und großer Wohnung. Die nicht zur Verfügung stehenden Objekte werden zusätzlich durch einen grauen Streifen gekennzeichnet. So ist beispielsweise "Ferien mit Freunden" nicht mehr verfügbar, sobald eine einzelne Wohnung gebucht ist.
+
+### Streifenkalender, lineare Ansicht
+
+In den Settings kann die Übersicht auch auf "GANT" gestellt werden. Es wird dann ein linearer Streifenkalender dargestellt, der insbesondere bei vielen Objekten eine bessere Übersicht bietet.
+
 
 ### Buchen / Kalenderansicht
 
@@ -100,13 +105,11 @@ Hier ein Hinweis für Anwender von booking.com. Booking.com ist etwas speziell b
 
 Dieses AddOn bringt eine komplette Demo mit. Diese Demo ist dazu gedacht, die Funktionen des AddOns zu zeigen. Man muss eine Ferienwohnungsseite nicht auf der Demo aufbauen. Man kann das AddOn auch verwenden ohne die Demo zu installieren. Da die Dokumentation aber auch nicht zu 100% perfekt ist, empfiehlt es sich durchaus mal in die Demo rein zu schauen. Die Demo kann aber auch als Grundlage für eine komplette Seite verwendet werden. Die Module in der Demo sind für TinyMCE 4 als Editor ausgelegt. Wenn ein anderer Editor verwendet wird, müssen nur die Klassen an der entsprechenden Stelle umbenannt werden. Wir gehen Schritt für Schritt vor.
 
-Basis für die Demo ist eine Grundinstallation eines aktuellen REDAXO. Im Moment ist dies 5.13.1.
+Basis für die Demo ist eine Grundinstallation eines aktuellen REDAXO. Im Moment ist dies 5.12.0.
 
-Dann müssen nur noch die AddOn yform (>= 4beta) und mform installiert werden.
+Dann müssen nur noch die AddOn yform und mform installiert werden.
 
-Optional, aber empfehlenswert sind: yrewrite, theme, tinymce4 und natürlich eure anderen Lieblingsaddons.
-
-Wenn von den ui-tools noch minicolor installiert ist, kann man im Objekt die Farbe aus einem Farbwähler wählen. Ansonsten kann man die Farbe auch per Hexwert, rgb oder Farbname angeben.
+Optional, aber empfehlenswert sind: yrewrite, theme, tinymce, tinymce4 und natürlich eure anderen Lieblingsaddons.
 
 Dann wird das AddOn Buchungskalender installiert und aktiviert.
 

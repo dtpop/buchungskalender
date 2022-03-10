@@ -78,6 +78,14 @@ $field->setLabel('Reservierungsdauer');
 $field->setNotice('<code>rex_config::get(\'buchungskalender\',\'asked_offset\')</code>. Wenn das Feld ausgefüllt wird, werden reservierte Termine im Kalender als belegt gekennzeichnet.
 Leer lassen für keine Reservierungsdauer. Mögliche Werte (Beispiele): <code>10 minutes</code>, <code>2 hours</code>, <code>7 days</code>.');
 
+$field = $form->addSelectField('calendar_view');
+$field->setLabel('Kalender Darstellung');
+$select = $field->getSelect();
+$select->addOptions([
+    'month'=>'Monatskalender',
+    'gant'=>'Gant Ansicht'
+]);
+$field->setNotice('<code>rex_config::get("buchungskalender","calendar_view")</code>');
 
 
 /*

@@ -18,8 +18,16 @@ $(function () {
         } 
     });
 
-
+    // Streifenkalender
     $(document).on('click','.buka_bar_cal .obj_booking', function(e) {
+        var DateClicked = $(this);
+        if (DateClicked.data('bookingid')) {
+            window.location.href = 'index.php?page=buchungskalender/bookings&func=edit&data_id='+DateClicked.data('bookingid');
+        }
+    });
+
+    // Gantkalender
+    $(document).on('click','.buka_gant_cal .obj_booking', function(e) {
         var DateClicked = $(this);
         if (DateClicked.data('bookingid')) {
             window.location.href = 'index.php?page=buchungskalender/bookings&func=edit&data_id='+DateClicked.data('bookingid');
