@@ -87,6 +87,38 @@ $select->addOptions([
 ]);
 $field->setNotice('<code>rex_config::get("buchungskalender","calendar_view")</code>');
 
+$form->addFieldset('Währungseinstellungen');
+
+$field = $form->addTextField('currency_default');
+$field->setLabel('Standardwährung');
+$field->setNotice('<code>rex_config::get(\'buchungskalender\',\'currency_default\')</code>. Beispiel: <code>EUR</code>.');
+
+$field = $form->addTextField('currency_formula');
+$field->setLabel('Währungsformel');
+$field->setNotice('<code>rex_config::get(\'buchungskalender\',\'currency_formula\')</code>. Beispiel: <code>{"10":0,"100":1,"1000":2}</code>. Bis zu einem Wert von 10 wird auf ganze Stellen gerundet (9.6 => 10, 3.3 => 3) Bis zu einem Wert von 100 wird auf 10er gerundet (123 => 120, 178 => 180), ab 1000 wird auf 100er gerundet. Als Rundungswert sind auch negative Angaben möglich. -2 rundet z.B. auf die zweite Nachkommastelle. Wichtig: die Angaben müssen vom kleinsten Rundungsbetrag zum größten gesetzt werden. Die Rundung bezieht sich immer auf den Einzelpreis. Summen werden nicht gerundet.');
+
+$field = $form->addTextField('currency_factor');
+$field->setLabel('Umrechnungskurs');
+$field->setNotice('<code>rex_config::get(\'buchungskalender\',\'currency_factor\')</code>. Beispiel: <code>9.9</code>.');
+
+$field = $form->addTextField('currency_name');
+$field->setLabel('Währung');
+$field->setNotice('<code>rex_config::get(\'buchungskalender\',\'currency_name\')</code>. Beispiel: <code>CHF</code>.');
+
+$field = $form->addSelectField('currency_langs');
+$field->setLabel('Sprachen');
+$field->setAttribute('class','form-control selectpicker');
+// $field->setStyle('class="form-control selectpicker"');
+
+
+
+$select = $field->getSelect();
+$select->setAttribute('multiple',1);
+$select->addSqlOptions('SELECT name, id FROM rex_clang ORDER BY priority');
+$field->setNotice('<code>rex_config::get("buchungskalender","currency_langs")</code>');
+
+
+
 
 /*
 $form->addFieldset('Terminbuchung - Einstellungen');

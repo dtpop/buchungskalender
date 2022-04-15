@@ -18,8 +18,18 @@ if (rex_request('filter','string') == 'next_arrival') {
     $qry->orderBy('datestart');
 }
 
-// dump(rex_session('returnto'));
-// dump($qry->getQuery());
+// Achtung! Indexwerte des Arrays sind abhängig von der Feldposition
+
+$next_arrival = [
+    'FORM' => [
+        'rex_yform_searchvars-rex_buka_bookings' => [
+            2 => '>'.date('Y-m-d'),
+            9 => [0 => 'confirmed']
+        ],
+    ],
+    'sort'=>'datestart',
+    'sorttype'=>'asc'
+];
 
 if ($func == 'edit' && $id) {
 
@@ -36,61 +46,43 @@ if ($func == 'edit' && $id) {
     $yform->setObjectparams('main_id', $id);
     $yform->setObjectparams('main_table', rex::getTable('buka_bookings'));
     $yform->setObjectparams('main_where', 'id='.$id);
+    $yform->setObjectparams('submit_btn_label', rex_i18n::msg('buka_send_button'));
     
-    $yform->setValueField('html',['',$row_start_1_2]);
-    $yform->setValueField('date', ['datestart','Startdatum','2019','2050','DD.MM.YYYY','','','select']);
-    $yform->setValueField('html',['',$next_col_1_2]);
-    $yform->setValueField('date', ['dateend','Enddatum','2019','2050','DD.MM.YYYY','','','select']);
-    $yform->setValueField('html',['',$row_end]);
-
-    $yform->setValueField('be_manager_relation', ['object_id','Objekt','rex_buka_objects','name','0','1','-- bitte Objekt auswählen --']);
-
-
-    $yform->setValueField('html',['',$row_start_1_2]);
-    $yform->setValueField('text', ['vorname','Vorname']);
-    $yform->setValueField('html',['',$next_col_1_2]);
-    $yform->setValueField('text', ['nachname','Nachname']);
-    $yform->setValueField('html',['',$row_end]);
-
-    $yform->setValueField('html',['',$row_start_1_2]);
-    $yform->setValueField('text', ['land','Land']);
-    $yform->setValueField('html',['',$next_col_1_2]);
-    $yform->setValueField('text', ['anschrift','Anschrift']);
-    $yform->setValueField('html',['',$row_end]);
-
-    $yform->setValueField('html',['',$row_start_1_4]);
-    $yform->setValueField('text', ['plz','PLZ']);
-    $yform->setValueField('html',['',$next_col_3_4]);
-    $yform->setValueField('text', ['ort','Ort']);
-    $yform->setValueField('html',['',$row_end]);
-
-    $yform->setValueField('html',['',$row_start_1_2]);
-    $yform->setValueField('text', ['telefon','Telefon']);
-    $yform->setValueField('html',['',$next_col_1_2]);
+    $yform->setValueField('html', ['html1','HTML','<div class="buka-be-datefields buka-three-cols">']);
+    $yform->setValueField('date', ['datestart','translate:buka_startdate','2019','2050','d.m.Y','0','0','input:date']);
+    $yform->setValueField('date', ['dateend','translate:buka_enddate','2019','2050','d.m.Y','0','0','input:date']);
+    $yform->setValueField('text', ['anreisezeit','translate:buka_arrivaltime','','0']);
+    $yform->setValueField('html', ['html2','html2','</div><div class="buka-two-cols">']);
+    $yform->setValueField('be_manager_relation', ['object_id','translate:buka_object','rex_buka_objects','name','0','1','translate:buka_please_select_object']);
+    $yform->setValueField('be_manager_relation', ['bookingtype_id','translate:booking_type','rex_buka_bookingtype','name','0','1']);
+    $yform->setValueField('html', ['html3','html3','</div><div class="buka-two-cols">']);
+    $yform->setValueField('text', ['vorname','translate:buka_firstname','','0']);
+    $yform->setValueField('text', ['nachname','translate:buka_lastname','','0']);
+    $yform->setValueField('html', ['html4','html4','</div><div class="buka-three-cols">']);
+    $yform->setValueField('text', ['personen','translate:buka_participants','','0']);
+    $yform->setValueField('choice', ['status','translate:buka_state','translate:buka_asked=asked,translate:buka_confirmed=confirmed,translate:buka_canceled=storno,translate:buka_pre_booking=pre_booking','0','0','asked','','','-- bitte auswählen --','','','','','0']);
+    $yform->setValueField('text', ['price','translate:buka_price','','0']);
+    $yform->setValueField('html', ['html5','html5','</div>']);
+    $yform->setValueField('textarea', ['nachricht','translate:buka_message','','0']);
+    $yform->setValueField('html', ['html6','html6','<div class="buka-two-cols">']);
+    $yform->setValueField('text', ['telefon','translate:buka_phone','','0']);
     $yform->setValueField('text', ['email','E-Mail']);
-    $yform->setValueField('html',['',$row_end]);
-
-    $yform->setValueField('html',['',$row_start_1_2]);
-    $yform->setValueField('text', ['personen','Personen']);
-    $yform->setValueField('html',['',$next_col_1_2]);
-    $yform->setValueField('text', ['anreisezeit','Anreisezeit']);
-    $yform->setValueField('html',['',$row_end]);
-
-    $yform->setValueField('textarea', ['nachricht','Nachricht']);
-    $yform->setValueField('datestamp', ['bookingdate','Buchungsdatum','Y-m-d H:i:s','','1','1']);
+    $yform->setValueField('html', ['html7','html7','</div><div class="buka-three-cols">']);
+    $yform->setValueField('text', ['anschrift','translate:buka_address','','0']);
+    $yform->setValueField('text', ['plz','translate:buka_zip','','0']);
+    $yform->setValueField('text', ['ort','translate:buka_city','','0']);
+    $yform->setValueField('html', ['html8','html8','</div>']);
+    $yform->setValueField('text', ['land','translate:buka_country','','0']);
+    $yform->setValueField('choice', ['bookingstate_id','Buchungsstatus','SELECT id value, name label FROM rex_buka_bookingstate ORDER BY prio','1','1','','','','','','','','','0']);
+    $yform->setValueField('be_manager_relation', ['participants','translate:buka_participants','rex_buka_participants','booking_id','5','0']);
     $yform->setValueField('text', ['hashval','','','','{"type":"hidden"}']);
+    $yform->setValueField('datestamp', ['bookingdate','translate:buka_bookingdate','Y-m-d H:i:s','0','1']);
 
-    $yform->setValueField('html',['',$row_start_1_2]);
-    $yform->setValueField('choice', ['status','Status','Angefragt=asked,Bestätigt=confirmed,Storniert=storno','','','asked','','','-- bitte auswählen --']);
-    $yform->setValueField('html',['',$next_col_1_2]);
-    $yform->setValueField('text', ['price','Preis']);
-    $yform->setValueField('html',['',$row_end]);
+//    $yform->setValidateField('customfunction', ['datestart,dateend,object_id,status','buka_booking::unique_booking','','Dieses Buchungsdatum ist ungültig. Es gibt bereits eine Buchung für dieses Datum.','0']);
+    
+    $yform->setValidateField('customfunction', ['datestart,dateend,object_id,status','buka_booking::unique_booking','',rex_i18n::msg('buka_booking_uncorrect'),'0']);
 
-    $yform->setValidateField('customfunction', ['datestart,dateend,object_id','buka_booking::unique_booking','','Dieses Buchungsdatum ist ungültig. Es gibt bereits eine Buchung für dieses Datum.','0']);
-
-    $yform->setValueField('be_manager_relation', ['participants','Teilnehmer','rex_buka_participants','booking_id','5','0']);
-
-    $yform->setActionField('db',[rex::getTable('buka_bookings'),'main_where']);
+    $yform->setActionField('db',['rex_buka_bookings','main_where']);
 
     if (rex_request('src','string') == 'calendar') {
         $yform->setActionField('redirect',['index.php?page=buchungskalender/calendar']);
@@ -102,42 +94,23 @@ if ($func == 'edit' && $id) {
 
     $fragment = new rex_fragment();
     $fragment->setVar('class', 'edit', false);
-    $fragment->setVar('title', 'Buchung bearbeiten', false);
+    $fragment->setVar('title', rex_i18n::msg('buka_edit_booking'), false);
     $fragment->setVar('body', $yform->getForm(), false);
     echo $fragment->parse('core/page/section.php');
    
 
 } else {
 
-/*
-    <nav class="navbar navbar-default"><ul class="nav navbar-nav"><li class="active "><a href="index.php?page=install/packages/update">Vorhandene aktualisieren</a></li><li><a href="index.php?page=install/packages/add">Neue herunterladen</a></li><li><a href="index.php?page=install/packages/upload">Eigene hochladen</a></li></ul></nav>
-    $navbar = rex_n
-    */
-
     echo '<nav class="navbar navbar-default"><ul class="nav navbar-nav">
-        <li><a href="/redaxo'.rex_getUrl('','',['page'=>$params['page']]).'">Alle</a></li>
-        <li><a href="/redaxo'.rex_getUrl('','',array_merge($params,['filter'=>'next_arrival'])).'">Nächste Anreisen</a></li>
-        <li><a href="/redaxo'.rex_getUrl('','',array_merge($params,['page'=>'bukabookingsprint','filter'=>'next_arrival'])).'" target="_blank">Nächste Anreisen (Druckansicht)</a></li>
+        <li><a href="/redaxo'.rex_getUrl('','',['page'=>$params['page']]).'">'.rex_i18n::msg('buka_all').'</a></li>
+        <li><a href="/redaxo'.rex_getUrl('','',array_merge($params,$next_arrival)).'">'.rex_i18n::msg('buka_next_arrival').'</a></li>
+        <li><a href="/redaxo'.rex_getUrl('','',array_merge($params,['page'=>'bukabookingsprint','filter'=>'next_arrival'])).'" target="_blank">'.rex_i18n::msg('buka_next_arrival_print').'</a></li>
     </ul></nav>';
 
-    $list = rex_list::factory($qry);
-    $list->removeColumn('hashval');
-    $list->removeColumn('startyear');
-    $list->removeColumn('endyear');
-    $list->setColumnLabel('datestart','Anreise');
-    $list->setColumnLabel('dateend','Abreise');
-    $list->setColumnLabel('object_id','Objekt');
 
-    $list->setColumnFormat('object_id', 'custom','buka_objects::get_name_by_id');
+    $_REQUEST['table_name'] = 'rex_buka_bookings';
+    include \rex_path::plugin('yform','manager','pages/data_edit.php');
 
-    $td_icon = '<i class="rex-icon fa-pencil"></i>';
-    // $th_icon = '<a href="'.$list->getUrl(['func' => 'add']).'" title="'.rex_i18n::msg('add').'"><i class="rex-icon rex-icon-add-action"></i></a>';
-    $th_icon = '';
-    $list->addColumn($th_icon, $td_icon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
-    $list->setColumnParams($th_icon, ['func' => 'edit', 'data_id' => '###id###', 'start' => rex_request('start', 'int', NULL)]);
-
-
-    echo $list->get();
 }
 
 ?>

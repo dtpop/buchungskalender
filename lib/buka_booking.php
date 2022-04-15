@@ -1,6 +1,20 @@
 <?php
 class buka_booking extends rex_yform_manager_dataset {
 
+    static $booking_fields = [
+        'email'=>'',
+        'vorname'=>'',
+        'nachname'=>'',
+        'anschrift'=>'',
+        'plz'=>'',
+        'ort'=>'',
+        'land'=>'',
+        'telefon'=>'',
+        'email'=>'',
+        'personen'=>'',
+        'anreisezeit'=>'',
+    ];
+
     public static function get_query ($object_id = 0, $with_related = true) {
         $query = self::query()
         ->selectRaw("YEAR(datestart)",'startyear')
@@ -65,6 +79,10 @@ class buka_booking extends rex_yform_manager_dataset {
         if ($data_id) {
             $query->whereNot('id',$data_id);
         }
+        // Bei Confirm Datensatz selbst nicht berücksichtigen
+        if (rex_request('action') == 'booking_confirm' && rex_request('hash')) {
+            $query->whereNot('hashval',rex_request('hash'));
+        }
         if (rex_config::get('buchungskalender','asked_offset')) {
             $query->whereRaw('((
                 status = "confirmed" AND ((dateend > :anreise AND datestart < :abreise)
@@ -92,6 +110,10 @@ class buka_booking extends rex_yform_manager_dataset {
         if (isset($values['status']) && $values['status'] == 'storno')  {
             return false;
         }
+        // prebooking ist auch immer ok
+        if (isset($values['status']) && $values['status'] == 'pre_booking')  {
+            return false;
+        }
         if (buka_booking::is_booked($values['datestart'],$values['dateend'],$values['object_id'],$data_id)) {
             return true;
         }
@@ -109,8 +131,11 @@ class buka_booking extends rex_yform_manager_dataset {
 
     }
 
-    public static function save_in_session ($params) {        
-		$value_pool = $params->params['value_pool']['email'];
+    public static function save_in_session ($params) {
+		$value_pool = array_merge(
+            rex_session('buka_booking','array'),
+            $params->params['value_pool']['email']
+        );
 		rex_set_session('buka_booking', $value_pool);
     }
 
@@ -143,22 +168,40 @@ class buka_booking extends rex_yform_manager_dataset {
 
     public static function save_in_db ($params) {        
 		$value_pool = $params->params['value_pool']['email'];
+
         $booking = json_decode($value_pool['booking_json'],true);
+
         $error = false;
         $query = rex_yform_manager_table::get(rex::getTable('buka_bookings'));
         $fields = $query->getValueFields();
         foreach (['object_id','datestart','dateend','email'] as $fn) {
             if (!isset($booking[$fn]) || !$booking[$fn]) {
                 $error = true;
+                $line = __LINE__;
                 break;
             }
         }
-        if (self::is_booked($booking['datestart'],$booking['dateend'],$booking['object_id'])) {
-            $error = true;
+
+        if (!$error) {
+            if (isset($value_pool['combination_objects'])) {
+                $combination_objects = (array) json_decode($value_pool['combination_objects'],true);
+                $error = true;
+                $line = __LINE__;
+                foreach ($combination_objects as $object_id) {
+                    if (!self::is_booked($booking['datestart'],$booking['dateend'],$object_id)) {
+                        $error = false;
+                    }    
+                }
+            } else {
+                if (self::is_booked($booking['datestart'],$booking['dateend'],$booking['object_id'])) {
+                    $error = true;
+                    $line = __LINE__;
+                }
+            }
         }
 
         if ($error) {
-            echo '<p class="uk-form-danger">Es ist ein Fehler aufgetreten!</p>';
+            echo '<p class="uk-form-danger">Es ist Fehler Nr. '.$line.' aufgetreten!</p>';
             exit;
         }
         $record = rex_yform_manager_dataset::create(rex::getTable('buka_bookings'));
@@ -168,9 +211,10 @@ class buka_booking extends rex_yform_manager_dataset {
                 $record->{$fn} = $val;
             }
         }
-        $record->status = 'asked';
+        $record->status = $booking['status'] ?? 'asked';
         $record->save();
         rex_set_session('buka_booking',[]);
+        return;
     }
 
     public static function save_date_in_db ($params) {        

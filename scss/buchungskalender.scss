@@ -116,6 +116,19 @@ $color_booked: #bf0000;
     justify-content: space-between;
     margin-top: 10px;
     font-weight: bold;
+    &.booking-start {
+        .bk-day {
+            cursor: default;
+            pointer-events: none;
+        }
+        .booking-range {
+            &:hover {
+                background-color: $color_reserve;
+            }
+            cursor: pointer;
+            pointer-events: initial;
+        }
+    }
 }
 
 .buka_pager_nav {
@@ -134,7 +147,8 @@ $color_booked: #bf0000;
 
     li {
         text-align: center;
-        width: 14.2857%;
+        width: 14.2%;
+        z-index: 1;
     }
     .bk_month_title {
         width: 100%;
@@ -280,24 +294,76 @@ button#to-step-1 {
 }
 
 // Gant Kalender
+$elem_height: 36px;
+$day_height: 44px;
+$label_width: 100px;
+$cal_width: calc(100% - 100px);
+$top_offset: 100px;
+
+.buka-gant-cal-wrapper {
+//    border: 1px solid #555;    
+    @media screen and (max-width: 1280px) {
+        font-size: 12px;
+    }
+    margin-top: -$top_offset;
+    display: flex;
+    .buka-gant-cal-labels-wrapper {
+        border: 1px solid #555;
+        padding-top: 59px;
+    }
+    .buka-gant-cal-labels {
+        padding-top: $top_offset;
+        width: $label_width;
+        .obj {
+            height: $day_height;
+            border-top: 1px solid gray;
+            padding: 0 4px;
+            .obj_booking {
+                color: #ffffff;
+                height: $elem_height;
+                line-height: 1.1;
+                padding: 4px;
+                position: relative;
+                .lbl {
+                    padding-top: 2px;
+                }
+                &:before {
+                    content: "";
+                    border-radius: 6px;
+                    height: $elem_height;
+                    left: 0;
+                    position: absolute;
+                    width: 100%;
+                    z-index:-1;
+                }
+            }
+        }
+    }
+}
 
 .buka_gant_cal {
 
     @include cal-object();
 
-    border: 1px solid #555;
-    width: 100%;
+    width: $cal_width;
     overflow-x: scroll;
+    padding-top: $top_offset;
     display: flex;
     align-items: flex-start;
     flex-wrap: nowrap;
     text-align: center;
+
     .gant_header_wrapper {
         display: flex;
         flex-wrap: nowrap;
         .cal_date {
             text-align: center;
             width: 30px;
+            @media screen and (max-width: 1280px) {
+                width: 20px;
+            }
+        
+            padding-top: 8px;
         }
     }
 
@@ -323,13 +389,19 @@ button#to-step-1 {
     }
 
     .obj {
-        height: 44px;
-        margin: 10px 0;
+        height: $day_height;
+        margin: 0;
+        padding: 4px 0;
+        border-top: 1px solid gray;
         .obj_booking::before {
-            height: 44px;
+            height: $elem_height;
         }
         .obj_booking.buka_combi .lbl {
             display: block;
+        }
+        .lbl {
+            line-height: 1.1;
+            margin-top: 2px;
         }
     }
 
@@ -337,6 +409,28 @@ button#to-step-1 {
     .bar_cal_day {
         border-left: 1px solid #999;
     }
+
+    .lbl_tooltip {
+        background-color: #555;
+        bottom: 5px;
+        color: #ffffff;
+        display: none;
+        font-size: 12px;
+        line-height: 1.1;
+        max-width: 160px;
+        padding: 4px;
+        pointer-events: none;
+        position: absolute;
+        text-align: left;
+        white-space: normal;
+        z-index: 1000;
+    }
+    .lbl:hover + .lbl_tooltip {
+        display: block;
+    }
+
+
+
 }
 
 
@@ -377,3 +471,28 @@ button#to-step-1 {
         }
     }
 }
+
+.buka-be-datefields {
+    .form-inline {
+        align-items: center;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+}
+
+.buka-two-cols {
+    display: flex;
+    justify-content: space-between;
+    > div {
+        width: calc(50% - 10px);
+    }
+}
+.buka-three-cols {
+    display: flex;
+    justify-content: space-between;
+    > div {
+        width: calc(33% - 10px);
+    }
+}
+

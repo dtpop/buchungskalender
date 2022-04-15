@@ -5,6 +5,7 @@ $addon = rex_addon::get('buchungskalender');
 rex_yform_manager_dataset::setModelClass('rex_buka_bookings', buka_booking::class);
 rex_yform_manager_dataset::setModelClass('rex_buka_season', buka_season::class);
 rex_yform_manager_dataset::setModelClass('rex_buka_objects', buka_objects::class);
+rex_yform_manager_dataset::setModelClass('rex_buka_additionals', buka_additionals::class);
 
 rex_yform::addTemplatePath($addon->getPath('ytemplates'));
 
@@ -54,10 +55,31 @@ if (rex::isBackend() && rex::getUser()) {
             rex_file::copy($this->getPath('assets/frontend/js/buchungskalender.js'), $this->getAssetsPath('frontend/js/buchungskalender.js'));
         }
     }
+
+
+
+    rex_extension::register('PACKAGES_INCLUDED', function() {
+        if (rex_request('addon','string') == 'buka' && rex_request('action','string') == 'editrecord') {
+            $data_id = rex_get('data_id','int');
+            $_csrf_key = rex_yform_manager_table::get('rex_buka_bookings')->getCSRFKey();
+            $token = rex_csrf_token::factory($_csrf_key)->getUrlParams();
+            $params = [
+                'page'=>'yform/manager/data_edit',
+                'table_name'=>'rex_buka_bookings',
+                'data_id'=>$data_id,
+                'func'=>'edit',
+                '_csrf_token' => $token['_csrf_token']
+            ];
+            rex_response::sendRedirect(rex_url::backendPage('yform/manager/data_edit', $params,false));
+        }
+    });
 }
 
-if (rex::isFrontend()) {    
+if (rex::isFrontend()) {
     rex_extension::register('PACKAGES_INCLUDED', function() {
+
+//        rex_file::copy($this->getPath('assets/frontend/js/buchungskalender.js'), $this->getAssetsPath('frontend/js/buchungskalender.js'));
+        
         rex_login::startSession();
         if (rex_config::get('buchungskalender','ical_interval') && !rex_request::isXmlHttpRequest()) {
             buka_ical::check_ical_data();
@@ -78,11 +100,15 @@ if (rex::isFrontend()) {
         if (rex_request::isXmlHttpRequest() && rex_request('bukacal','int') == 1) {
             $art = new rex_article_content();
             $art->setArticleId(rex_article::getCurrentId());
+            $content = $art->getArticle();
+            if (rex_addon::get('sprog')->isAvailable()) {
+                $content = sprogdown($content);
+            }
             $dom = new DOMDocument('1.0', 'UTF-8');
             libxml_use_internal_errors(true);
             $dom->preserveWhiteSpace = false;
             $dom->formatOutput       = true;
-            $dom->loadHTML('<?xml encoding="UTF-8"><html><body>'.$art->getArticle().'</body></html>');
+            $dom->loadHTML('<?xml encoding="UTF-8"><html><body>'.$content.'</body></html>');
             libxml_clear_errors();
             $node = $dom->getElementById('bookingform-step1');
             echo $dom->saveHTML($node);

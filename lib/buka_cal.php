@@ -7,9 +7,11 @@ class buka_cal
     var $maxBookingTime = 365 * 1.25 * 24 * 60 * 60;
     var $baselink;
     var $objectId = 0;
+    var $combination_objects = []; // es kann über mehrere Objekte nach freien Terminen gesucht werden.
     var $monthcount = 12;
     var $navType = 'long';
     var $bookings = [];
+    var $combination_bookings = []; // wird mit den zu prüfenden Buchungen gefüllt.
     var $show_form = false;
     var $seasons = [];
     var $objects;
@@ -116,7 +118,7 @@ class buka_cal
     }
 
 
-    public function set_bookings()
+    public function set_bookings($return = false, $with_offset = true)
     {
         $dt1 = new DateTime();
         $dt1->setDate($this->year, $this->month, 1);
@@ -129,7 +131,7 @@ class buka_cal
         $end = $dt2->format('Y-m-t');
         $query = buka_booking::get_query($this->objectId, $this->with_related);
 
-        if (rex_config::get('buchungskalender', 'asked_offset')) {
+        if (rex_config::get('buchungskalender', 'asked_offset') && $with_offset) {
             $query->whereRaw('((
                 status = "confirmed" AND ((dateend >= :start AND datestart <= :end)
                  OR (dateend <= :start AND datestart >= :end)
@@ -144,7 +146,25 @@ class buka_cal
              
                 ))', ['start' => $start, 'end' => $end]);
         }
+        if ($return) {
+            return $query->find();
+        }
         $this->bookings = $query->find();
+    }
+
+    /**
+     * Wenn es mehrere gleichartige Quartiere gibt, kann man über die Kombinations Funktion herausfinden, ob es noch ein freies Quartier in dieser Kategorie gibt.
+     */
+    public function set_combination_bookings() {
+        $backup_id = $this->objectId;
+        foreach ($this->combination_objects as $object_id) {
+            $this->objectId = $object_id;
+            if ($object_id == $backup_id) {
+                continue;
+            }
+            $this->combination_bookings[$object_id] = $this->set_bookings($return = true, $with_offset = false);
+        }
+        $this->objectId = $backup_id;
     }
 
 
@@ -207,7 +227,46 @@ class buka_cal
         if ($objectId) {
             $query->where('object_id', $objectId);
         }
-        return $query->find();
+        $items = $query->find();
+        if (self::is_change_lang()) {
+            foreach ($items as $item) {
+                $item->price = self::change_price($item->price);
+            }
+        }
+        return $items;
+    }
+
+    public static function is_change_lang () {
+        $change_langs = explode('|',trim(rex_config::get("buchungskalender","currency_langs"),'|'));
+        return in_array(rex_clang::getCurrentId(),$change_langs);
+    }
+
+    /**
+     * change_price
+     */
+    public static function change_price ($price) {
+        $change_params = json_decode(rex_config::get('buchungskalender','currency_formula'),true);
+        $exchange_rate = rex_config::get('buchungskalender','currency_factor');
+        $new_price = $price * $exchange_rate;
+        $round = 0;
+        foreach ($change_params as $k=>$v) {
+            $round = $v;
+            if ($new_price < $k) {                
+                break;
+            }
+        }
+        $new_price = round($new_price,-($round));
+        return $new_price;
+    }
+
+    /**
+     * get_currency
+     */
+    public static function get_currency () {
+        if (self::is_change_lang()) {
+            return rex_config::get('buchungskalender','currency_name');
+        }
+        return rex_config::get('buchungskalender','currency_default');
     }
 
     public function get_season($date)
@@ -285,11 +344,79 @@ class buka_cal
         if ($this->season_calendar) {
             $bd['class'] = ['season_' . $season->id];
         }
-
-
-
+        if ($this->combination_bookings && !in_array('free',$bd['class'])) {
+            $bd = $this->check_combination_bookings_for_date($date, $bd);
+        }
         return $bd;
     }
+
+
+    /**
+     * Übernimmt ein einzelnes Datum für den Kalender mit allen Klassen und prüft,
+     * ob ein kombiniertes Objekt für dieses Datum noch frei ist.
+     */
+    private function check_combination_bookings_for_date ($date, $bd) {
+//        $bd['class'] = ['xxxx'];
+//        return $bd;
+        /*
+        if (rex_config::get('buchungskalender', 'min_booking_days_futur')) {
+            if (date('Y-m-d', strtotime('+ ' . rex_config::get('buchungskalender', 'min_booking_days_futur') . ' days')) > $date) {
+                return $bd;
+            }
+        }
+        */
+
+        $start = false;
+        $end = false;
+        $bookable = true;
+        $new_class = [];
+
+        if (date('Y-m-d', strtotime('+ ' . rex_config::get('buchungskalender', 'min_booking_days_futur') . ' days')) < $date) {
+            $new_class[] = 'bookable';
+        }
+
+        foreach ($this->combination_bookings as $object) {
+    
+    
+            foreach ($object as $b) {
+                $b->datestart = $b->datestart ?? '';
+                $b->dateend = $b->dateend ?? '';
+                if ($b->datestart < $date && $b->dateend > $date) {
+                    $bookable = false;
+                } elseif ($b->datestart == $date) {
+                    $start = true;
+                } elseif ($b->dateend == $date) {
+                    $end = true;
+                }
+            }
+            if ($start && $bd['is_end']) {
+                $bookable = true;
+                $start = false;
+            }
+            if ($end && $bd['is_start']) {
+                $bookable = true;
+                $end = false;
+            }
+            if ($bookable || $end || $start) {
+                $bd['bookable'] = $bookable;
+                if ($start) {
+                    $bd['is_start'] = $start;
+                    $new_class[] = 'fix-booked-start';
+                } elseif ($end) {
+                    $bd['is_end'] = $end;
+                    $new_class[] = 'fix-booked-end';
+                } else {
+                    $new_class[] = 'free';
+                }
+                $bd['class'] = $new_class;
+            }
+            
+        }
+        return $bd;
+
+    }
+
+
 
 
     public function getCalendar()
@@ -312,9 +439,12 @@ class buka_cal
             $out .= $this->getNavigation();
         } elseif ($this->navType == 'short') {
             $out .= $this->getNavigation('short');
+        } elseif ($this->navType == 'select') {
+            $out .= $this->getSelectNavigation();
+            $out .= $this->getNavigation('short');
         }
 
-        $out .= '<div class="' . $this->cal_wrapper_class . '">';
+        $out .= '<div class="outer-wrapper"><div class="' . $this->cal_wrapper_class . '">';
         if ($this->show_form) {
             $fragment = new rex_fragment();
             $out .= $fragment->parse('frag_buka_form.php');
@@ -330,7 +460,7 @@ class buka_cal
             }
             $n++;
         }
-        $out .= '</div>';
+        $out .= '</div></div>';
 
         return $out;
     }
@@ -344,6 +474,34 @@ class buka_cal
             $out .= '<div><span class="season_' . $season->id . '">&nbsp;12&nbsp;</span> ' . $season->name . '</div>';
         }
         $out .= '</div>';
+        return $out;
+    }
+
+    /**
+     * getSelectNavigation
+     */
+    public function getSelectNavigation () {
+        $begin = new DateTime( 'NOW' );
+        $end = new DateTime($this->maxBookingYear.'-'.$this->maxBookingMonth.'-01');
+
+        $period = new DatePeriod(
+            $begin,
+            new DateInterval('P1M'),
+            $end
+        );
+        $ym = rex_request('ym','string');
+        if (!$ym) {
+            if (rex_request('year') && rex_request('month')) {
+                $ym = rex_request('year').'-'.rex_request('month');
+            }
+        }
+
+        $out = '<select name="buka_ym" id="buka_daterange_select">';
+        foreach ($period as $oDate) {
+            $curr_ym = $oDate->format('Y-m');
+            $out .= '<option value="'.$curr_ym.'"'.($curr_ym == $ym ? ' selected="selected"' : '').'>'.$this->months[$oDate->format('m') - 1].' '.$oDate->format('Y').'</option>';
+        }
+        $out .= '</select>';
         return $out;
     }
 
@@ -408,7 +566,7 @@ class buka_cal
         $dateFrom = new DateTime($bookingVars['datestart']);
         $dateTo = new DateTime($bookingVars['dateend']);
 
-        $period = $this->getDatePeriod($dateFrom, $dateTo);
+        $period = self::getDatePeriod($dateFrom, $dateTo);
 
         $price = $this->getPriceForDays($period, $bookingVars['object_id']);
 

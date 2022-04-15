@@ -1,10 +1,10 @@
 package: buchungskalender
-version: 1.1.2
+version: "1.2.beta"
 author: Wolfgang Bund
 supportpage: https://github.com/redaxo/redaxo
 
 page:
-    title: 'Buchungskalender'
+    title: 'translate:buka_booking_calendar'
     perm: buchungskalender
     pjax: true
     icon: rex-icon fa-calendar
@@ -12,12 +12,12 @@ page:
         overview:
             title: 'translate:buchungskalender_overview'
         calendar:
-            title: 'translate:buchungskalender_calendar'
+            title: translate:buchungskalender_calendar
         bookings:
             title: 'translate:buchungskalender_bookings'
         settings:
             title: 'translate:buchungskalender_subpage_config'
-            perm: admin[]
+            perm: buchungskalender[settings]
         setup:
             title: 'translate:buchungskalender_subpage_setup'
             perm: admin[]

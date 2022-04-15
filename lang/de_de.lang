@@ -1,3 +1,81 @@
+buka_booking_calendar = Buchungskalender
+
+buka_startdate = Anreisedatum
+buka_enddate = Abreisedatum
+buka_object = Objekt
+buka_please_select_object = -- bitte Objekt wählen --
+
+buka_booking_uncorrect = Dieses Buchungsdatum ist ungültig. Es gibt bereits eine Buchung für dieses Datum.
+
+buka_please_select = bitte auswählen
+buka_confirmed = bestätigt
+buka_firstname = Vorname
+buka_lastname = Nachname
+buka_country = Land
+buka_address = Adresse
+buka_zip = PLZ
+buka_city = Ort
+buka_phone = Telefon
+buka_participants = Teilnehmer
+buka_message = Nachricht
+buka_bookingdate = Buchungsdatum
+buka_state = Status
+buka_asked = Angefragt
+buka_confirmed = Bestätigt
+buka_canceled = Storniert
+buka_pre_booking = Voranfrage
+buka_price = Preis
+buka_edit_booking = Buchung bearbeiten
+buka_all = Alle
+buka_next_arrival = Nächste Anreisen
+buka_next_arrival_print = Nächste Anreisen (Print)
+buka_notice = Bemerkung
+
+buka_buka_objects = Buchungskalender Objekte
+buka_buka_bookings = Buchungskalender Buchungen
+buka_buka_seasons = Buchungskalender Saisons
+buka_buka_prices = Buchungskalender Preise
+buka_buka_additionals = Buchungskalender Zusatzleistungen
+buka_buka_participants = Buchungskalender Teilnehmer
+buka_buka_participants_state = Buchungskalender Teilnehmerstatus
+
+buka_booking = Buchung
+buka_birthdate = Geburtsdatum
+buka_age = Alter
+buka_arrivaltime = Ankunftszeit
+buka_arrivalpoint = Ankunftsort
+buka_departuretime = Abfahrtszeit
+buka_departurepoint = Abreiseort
+booking_type = Buchungstype
+buka_bookingstate = Buchungsstatus
+
+buka_name_of_object = Name des Objekts
+buka_combination_object = Kombinationsobjekt
+buka_objects = Objekte
+buka_base_price = Grundpreis
+buka_ical_sync_link = Ical Synchronisationslinks
+buka_reservation_settings = Reservierungseinstellung
+buka_season_name = Saison
+buka_prio = Priorität
+buka_mindays = Mindestbuchungsdauer
+buka_dates = Termine
+buka_whole_weeks = Ganze Wochen
+buka_color = Farbe
+buka_season = Saison
+buka_multiselectable = Mehrfach wählbar
+buka_additionals_max_count = Max. Anzahl
+buka_perperson = pro Person
+buka_perday = pro Tag
+buka_is_standard = Standard
+buka_min_num_of_nights = Mindest Anzahl Nächste
+buka_max_num_of_nights = Maximal Anzahl Nächte
+buka_participants_min = Mindestanzahl Teilnehmer
+buka_participants_max = Maximalanzahl Teilnehmer
+buka_preferred_season = Bevorzugte Saison
+buka_additionals_name = Name
+buka_key = Schlüssel
+buka_send_button = Absenden
+
 buchungskalender_calendar = Kalender
 buchungskalender_subpage_config = Einstellungen
 buchungskalender = Buchungskalender
@@ -6,3 +84,8 @@ buchungskalender_subpage_setup = Setup
 buchungskalender_bookings = Buchungen
 buchungskalender_setup = Module und E-Mail Templates installieren
 buchungskalender_overview = Übersicht
+
+buka_startdate = Startdatum
+buka_enddate = Enddatum
+buka_object = Objekt
+buka_please_select_object = -- bitte Objekt auswählen --

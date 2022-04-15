@@ -53,13 +53,20 @@ class buka_barcal {
         $this->current_year = $this->start_year;
         $this->current_month = $this->start_month;
 
+        $with_reservation = '';
+        // nur im Backend Reservierte Datensätze im Kalender anzeigen.
+        if (rex::isBackend()) {
+            $with_reservation = ' OR status = "asked"';
+        }
+
+
         $objects = buka_objects::get_query()->find();
         foreach ($objects as $object) {
             $qry = buka_booking::get_query($object->id,true);
             $qry->orderBy('datestart');
             if (rex_config::get('buchungskalender','asked_offset')) {
                 $qry->whereRaw('((
-                    status = "confirmed" AND ((dateend >= :start AND datestart <= :end)
+                    (status = "confirmed"'.$with_reservation.') AND ((dateend >= :start AND datestart <= :end)
                      OR (dateend <= :start AND datestart >= :end)
                      OR (datestart >= :start AND datestart <= :end))
                  
@@ -67,7 +74,7 @@ class buka_barcal {
                 ;
             } else {
                 $qry->whereRaw('((
-                    status = "confirmed" AND ((dateend >= :start AND datestart <= :end)
+                    (status = "confirmed"'.$with_reservation.') AND ((dateend >= :start AND datestart <= :end)
                      OR (dateend <= :start AND datestart >= :end)
                      OR (datestart >= :start AND datestart <= :end))
                  
@@ -75,7 +82,15 @@ class buka_barcal {
                 ;
 
             }
-            $result = $qry->find();            
+            $result = $qry->find();
+            $result->populateRelation('bookingtype_id');
+            foreach ($result as $res) {
+                $bt_name = $res->getRelatedDataset('bookingtype_id');
+                $res->bookingtype_name = '';
+                if ($bt_name) {
+                    $res->bookingtype_name = $bt_name->name;
+                }
+            }
             if ($object->combination) {
                 // Kombinationsobjekte kompaktieren
                 $result = self::combine_result($result);
@@ -184,6 +199,9 @@ class buka_barcal {
     // kompaktiert die Ergebnisse für Kombinationsobjekte
 
     private static function combine_result ($result) {
+        if (!isset($result[0])) {
+            return $result;
+        }
         $current = $result[0];
         $current_i = 0;
         foreach ($result as $i=>$booking) {

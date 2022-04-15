@@ -1,0 +1,91 @@
+buka_booking_calendar = Booking Calendar
+
+buka_startdate = Start Date
+buka_enddate = End Date
+buka_object = Object
+buka_please_select_object = -- please select object --
+
+buka_booking_uncorrect = This booking is uncorrect. There is allready a booking for this date.
+
+buka_please_select = please select
+buka_confirmed = confirmed
+buka_firstname = Firstname
+buka_lastname = Lastname
+buka_country = Country
+buka_address = Address
+buka_zip = ZIP
+buka_city = City
+buka_phone = Phone
+buka_participants = Participants
+buka_arrivaltime = Arrival time
+buka_message = Message
+buka_bookingdate = Booking Date
+buka_state = State
+buka_asked = Reservation
+buka_confirmed = Booking
+buka_canceled = Canceled
+buka_pre_booking = Request
+buka_price = Price
+buka_edit_booking = Edit Booking
+buka_all = All
+buka_next_arrival = Next Arrival
+buka_next_arrival_print = Next Arrival (Print)
+buka_notice = More Info
+
+buka_buka_objects = Booking Calendar Objects
+buka_buka_bookings = Booking Calendar Bookings
+buka_buka_seasons = Booking Calendar Seasons
+buka_buka_prices = Booking Calendar Prices
+buka_buka_additionals = Booking Calendar Additionals
+buka_buka_participants = Booking Calendar Participants
+buka_buka_participants_state = Booking Calendar Participants State
+buka_buka_bookingtype = Booking Booking Type
+buka_buka_bookingstate = Booking Booking State
+buka_bookingstate = Booking state
+
+buka_booking = Booking
+buka_birthdate = Birthdate
+buka_age = Age
+buka_arrivaltime = Arrival Time
+buka_arrivalpoint = Arrival Point
+buka_departuretime = Departure Time
+buka_departurepoint = Departure Point
+booking_type = Booking Type
+
+buka_name_of_object = Name of object
+buka_combination_object = Combined Object
+buka_objects = Objects
+buka_base_price = Base Price
+buka_ical_sync_link = Ical Synchronizsation Link
+buka_reservation_settings = Reservation settings
+buka_season_name = Season
+buka_prio = Priority
+buka_mindays = Minimum Stay
+buka_dates = Dates
+buka_whole_weeks = Whole Weeks
+buka_color = Farbe
+buka_season = Season
+buka_multiselectable = multiple selectable
+buka_additionals_max_count = Max. Count
+buka_perperson = per person
+buka_perday = per day
+buka_is_standard = Standard
+buka_min_num_of_nights = Min. num. of nights
+buka_max_num_of_nights = Max. num. of nights
+buka_participants_min = Min. num. of participants
+buka_participants_max = Max. num. of participants
+buka_preferred_season = Preferred Season
+buka_additionals_name = Name
+buka_key = Key
+buka_send_button = Send
+
+buchungskalender_calendar = Calendar
+buchungskalender_subpage_config = Settings
+buchungskalender = Booking Calendar
+buchungskalender_help = Help/Info
+buchungskalender_subpage_setup = Setup
+buchungskalender_bookings = Bookings
+buchungskalender_setup = Install modules and e-mail templates
+buchungskalender_overview = Overview
+
+perm_general_buchungskalender[settings] = Booking Calender: Settings

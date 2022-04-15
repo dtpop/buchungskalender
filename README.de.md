@@ -2,6 +2,10 @@
 
 Backend- und Frontend-Buchungskalender für REDAXO CMS
 
+## Wichtiger Hinweis vorab
+
+Der Buchungskalender ist ein Geschenk. Ich schenke Dir diesen Code mit allen Funktionen zur freien Verwendung. Das heißt aber nicht, dass dieser Programmcode perfekt, fehlerfrei, ohne Vorkenntnisse von dir zu verwenden, am Ende der Entwicklung ist oder unter allen Umständen zu allen Zeiten das macht, was du von diesem Code erwartest. Der Code ist in ständiger Entwicklung. Das heißt, es kann vorkommen, dass in der Dokumentation etwas anderes steht als im Programmcode. Tja. Das ist vielleicht manchmal ärgerlich für dich. Kann ich verstehen. Das geht mir selber manchmal so, wenn ich geschenkten oder gekauften Programmcode verwende. Das Problem ist aber nur miteinander zu lösen. Das heißt: wenn du mir eine Nachricht schickst, dass dies oder jenes bei dir nicht funktioniert, ist diese Nachricht wertlos. Für Dich und für mich. Eine konstruktive Nachricht wäre z.B.: dies und jenes geschieht, dies und jenes müsste geschehen (exakte Beschreibung, je genauer, desto besser!), hier sind die Zugangsdaten, ich bezahle XXX Euro, wenn du danach schaust, du kannst mich auf diesem und auf jenem Wege am besten erreichen.
+
 ![Screenshot](https://raw.githubusercontent.com/dtpop/buchungskalender/main/assets/img/buchungskalender-screenshot-streifenkalender.png)
 
 Der Buchungskalender wurde entwickelt für die Entwicklung von Ferienobjekten (Ferienwohnungen, Ferienhäusern, Wohnmobilen usw.), die "über Nacht" vermietet werden. Daher wird bei diesem Buchungskalender das Startdatum und das Enddatum auch entsprechend gekennzeichnet, z.B. als Anreisetag und Abreisetag. Entsprechende Tools für die Anzeige im Backend werden vom AddOn mitgeliefert und können auch für das Frontend verwendet werden.
@@ -167,4 +171,4 @@ Ein großer Dank geht an alle AddOn Entwickler, die zu diesem großartigen Syste
 
 Das AddOn steht unter der MIT Lizenz und kann sowohl für private als auch für gewerbliche Zwecke frei verwendet werden.
 
-(c) 2021 - Wolfgang Bund - wb@dtp-net.de - https://agile-websites.de
+(c) 2022 - Wolfgang Bund - wb@dtp-net.de - https://agile-websites.de

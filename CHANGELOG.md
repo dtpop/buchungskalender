@@ -1,15 +1,20 @@
 Changelog
 =========
 
-Version 1.1.3
---------------------------
+Version 1.2 - 15.04.2022
+------------------------
 
 * Fix Klick auf Kalendereintrag öffnet Detailansicht
 * Storno Datensatz immer ermöglichen, auch bei überschneidenden Terminen
 * Kalender Blätterfunktion verbessert
 * Objekttabelle mit Reihenfolge prio versehen
 * Weiterer Streifenkalender in linearer Ansicht
-
+* Datenbankerweiterung um Teilnehmer und Zusatzleistungen, zusätzliche Felder
+* Datenbankerweiterung um Buchungstyp
+* Buchungsliste im AddOn als yform Liste mit Suchfeldern
+* Fix: FE Auswahl Anreise und Abreise nicht mehr über gebuchte Termine möglich
+* Englisches Backend
+* Grundkonfiguration für zweite Währung
 
 Version 1.1.2 - 23.01.2022
 --------------------------
