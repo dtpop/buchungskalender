@@ -64,9 +64,9 @@ class buka_booking extends rex_yform_manager_dataset {
         $offset = explode('*',rex_config::get('buchungskalender','max_booking_time'));
         $sek = 1;
         foreach ($offset as $num) {
-            $sek = $sek * intval($num);
+            $sek = $sek * (float) $num;
         }
-        return time()+$sek;
+        return intval(time()+$sek);
     }
 
     /**

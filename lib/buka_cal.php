@@ -26,6 +26,12 @@ class buka_cal
     var $season_calendar = false; // bei true wird nur der Saisonkalender zurückgegeben - keine Buchungsdaten.
     var $with_related = true;
     var $mobile_month_count = [];
+    var $raw_navigation = [
+        'back'=>'',
+        'select'=>'',
+        'next'=>''
+    ];
+    var $raw_navigation_template = '';
 
 
 
@@ -223,7 +229,8 @@ class buka_cal
     public static function get_prices($objectId = 0, $order = 'DESC')
     {
         $query = rex_yform_manager_table::get(rex::getTable('buka_price'))->query()
-            ->orderBy('nightscount', $order);
+            ->orderBy('nightscount', $order)
+            ->orderBy('mind_persons','DESC');
         if ($objectId) {
             $query->where('object_id', $objectId);
         }
@@ -442,6 +449,14 @@ class buka_cal
         } elseif ($this->navType == 'select') {
             $out .= $this->getSelectNavigation();
             $out .= $this->getNavigation('short');
+        } elseif ($this->navType == 'raw') {
+            $this->getSelectNavigation();
+            $this->getNavigation('short');
+            $out .= str_replace(
+                ['###nav_back###','###nav_select###','###nav_next###'],
+                [$this->raw_navigation['back'],$this->raw_navigation['select'],$this->raw_navigation['next']],
+                $this->raw_navigation_template
+            );
         }
 
         $out .= '<div class="outer-wrapper"><div class="' . $this->cal_wrapper_class . '">';
@@ -502,6 +517,7 @@ class buka_cal
             $out .= '<option value="'.$curr_ym.'"'.($curr_ym == $ym ? ' selected="selected"' : '').'>'.$this->months[$oDate->format('m') - 1].' '.$oDate->format('Y').'</option>';
         }
         $out .= '</select>';
+        $this->raw_navigation['select'] = $out;
         return $out;
     }
 
@@ -546,6 +562,10 @@ class buka_cal
         $out .= '</div>';
 
         $out .= '</nav>';
+
+        $this->raw_navigation['back'] = $backlink;
+        $this->raw_navigation['next'] = $nextlink;
+
         return $out;
     }
 

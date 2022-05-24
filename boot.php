@@ -133,7 +133,6 @@ if (rex::isFrontend()) {
         }
 
 
-
         // Buchungsbestätigungslink aktiviert
         if (rex_request('action') == 'booking_confirm' && rex_request('email') && rex_request('hash')) {
             if (buka_booking::confirm_booking()) {

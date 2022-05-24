@@ -89,3 +89,6 @@ buka_startdate = Startdatum
 buka_enddate = Enddatum
 buka_object = Objekt
 buka_please_select_object = -- bitte Objekt auswählen --
+
+buka_mandatory_field = Pflichtfeld
+buka_notice_mandatoryfield_additional = Wenn die Checkbox angewählt ist, ist die Leistung nicht optional und kann nicht abgewählt werden.

@@ -1,5 +1,5 @@
 $(function () {
-
+    console.log('asdf buka 6');
     var StartDate;
 
     $(document).on("click", '.buka-cal-wrapper .bk-day.fix-booked', function(e) { 
@@ -42,8 +42,9 @@ $(function () {
     // Kalender blättern
     $(document).on('click','#bookingform-step1 .buka_pager_nav a',function(e) {
         e.preventDefault();
-        let href = $(this).attr('href')+"&bukacal=1";
-        $("#bookingform-step1").parent().load(href);
+        let rooms = $('#buka_accomodation_select option:selected').val();
+        let href = $(this).attr('href');
+        $("#bookingform-step1").parent().load(href,{bukacal:1,count_accomodations:rooms});
         return false;
     });
     $(document).on('change','#bookingform-step1 #buka_daterange_select',function(e) {
@@ -51,10 +52,21 @@ $(function () {
 //        console.log($(this).val());
         let param = $(this).val();
         let ym = param.split('-');
+        let rooms = $('#buka_accomodation_select option:selected').val();
         let href = location.href;
-        $("#bookingform-step1").parent().load(href,{year:ym[0],month:ym[1],bukacal:1,ym:param});
+        $("#bookingform-step1").parent().load(href,{year:ym[0],month:ym[1],bukacal:1,ym:param,count_accomodations:rooms});
         return false;
     });
+    // Select in .ajax_element (Anzahl Räume)
+    $(document).on('change','#buka_accomodation_select select',function(e) {
+        let href = location.href;
+        let rooms = $(this).val();
+        let ym = $('#buka_daterange_select option:selected').val().split('-');
+        $('input[name="count_accomodations"]').val(rooms);
+        $("#bookingform-step1").parent().load(href,{bukacal:1,count_accomodations:rooms,year:ym[0],month:ym[1]});
+        return false;
+    });
+
 
 
 
@@ -70,7 +82,6 @@ $(function () {
     if ($('.uk-form-danger').length) {
         $("#bookingform-step1").hide();
         $("#bookingform-step2").show();
-
     }
 
     function clear_booking() {

@@ -21,4 +21,17 @@ class buka_date {
         return $this->date;
     }
 
+
+
+    /**
+     * get_date_period
+     * 
+     * Liefert ein Period Array aus Datestrings
+     */
+    public static function get_date_period ($start,$end) {
+        $startDate = new DateTime($start);
+        $endDate = new DateTime($end);
+        return buka_cal::getDatePeriod($startDate,$endDate);
+    }
+
 }

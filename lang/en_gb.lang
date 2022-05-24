@@ -89,3 +89,6 @@ buchungskalender_setup = Install modules and e-mail templates
 buchungskalender_overview = Overview
 
 perm_general_buchungskalender[settings] = Booking Calender: Settings
+
+buka_mandatory_field = Mandatory Field
+buka_notice_mandatoryfield_additional = If the checkbox is checked, the additional is not optional and can not be deactivated.

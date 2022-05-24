@@ -310,6 +310,9 @@ $top_offset: 100px;
     .buka-gant-cal-labels-wrapper {
         border: 1px solid #555;
         padding-top: 59px;
+        @media screen and (max-width: 1280px) {
+            padding-top: 50px;
+        }
     }
     .buka-gant-cal-labels {
         padding-top: $top_offset;
