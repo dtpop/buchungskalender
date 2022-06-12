@@ -10,7 +10,15 @@ if (!count($objects)) {
 $start_year = min([buka_booking::get_min_year(), date('Y') - 2]);
 $end_year = max([buka_booking::get_max_year(), date('Y') + 2]);
 
-$object_id = rex_request("object_id", 'int',$objects[0]->id);
+// $object_id = rex_request("object_id", 'int',$objects[0]->id);
+
+if (rex_request('object_id','int',0)) {
+    rex_set_session('buka_object_id',rex_request('object_id','int',0));
+    $object_id = rex_request('object_id','int');
+} else {
+    $object_id = rex_session('buka_object_id','int',$objects[0]->id);
+}
+
 
 if (!$object_id) {
     echo rex_view::info('Es muss ein Objekt ausgewählt werden.');
@@ -122,7 +130,7 @@ $yform->setActionField('redirect', [rex_url::currentBackendPage()]);
                 <input type="hidden" name="page" value="buchungskalender/calendar">
                 <select name="object_id" class="form-control selectpicker" onchange="this.form.submit()">
                     <?php foreach ($objects as $obj) : ?>
-                        <option value="<?= $obj->id ?>" <?= $obj->id == rex_request("object_id", 'int') ? ' selected="selected"' : '' ?>><?= $obj->name ?></option>
+                        <option value="<?= $obj->id ?>" <?= $obj->id == $object_id ? ' selected="selected"' : '' ?>><?= $obj->name ?></option>
                     <?php endforeach ?>
                 </select>
             </form>
