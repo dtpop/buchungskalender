@@ -24,6 +24,7 @@ buka_asked = Angefragt
 buka_confirmed = Bestätigt
 buka_canceled = Storniert
 buka_pre_booking = Voranfrage
+buka_blocked = blockiert
 buka_price = Preis
 buka_edit_booking = Buchung bearbeiten
 buka_all = Alle
@@ -92,3 +93,4 @@ buka_please_select_object = -- bitte Objekt auswählen --
 
 buka_mandatory_field = Pflichtfeld
 buka_notice_mandatoryfield_additional = Wenn die Checkbox angewählt ist, ist die Leistung nicht optional und kann nicht abgewählt werden.
+

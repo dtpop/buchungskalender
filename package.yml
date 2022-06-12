@@ -1,5 +1,5 @@
 package: buchungskalender
-version: "1.2.beta.2"
+version: "1.2.1.beta"
 author: Wolfgang Bund
 supportpage: https://github.com/redaxo/redaxo
 
@@ -40,7 +40,7 @@ pages:
 
 requires:
     php:
-        version: '>=7.3'
+        version: '>=7.4'
     redaxo: ">=5.8.0"
     packages:
-        yform: '>=3.2'
+        yform: '>=4.0'

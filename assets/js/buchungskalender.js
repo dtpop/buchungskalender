@@ -141,7 +141,7 @@ $(function () {
         mark_start($elem);
     }
 
-    function mark_start($elem) {
+    function mark_start_old($elem) {
         $(".buka-cal-wrapper").addClass("booking-start");
         $elem.addClass("reserve-start");
         $("input#date_start").val(
@@ -149,6 +149,33 @@ $(function () {
         );
         $("input#datestart").val($elem.data("date"));
     }
+
+
+    function mark_start($elem) {
+        let addthis = 0;
+        $(".buka-cal-wrapper").addClass("booking-start");
+        $elem.addClass("reserve-start");
+        $elem.addClass("bookable");
+        $("input#date_start").val(
+            $elem.data("date").split("-").reverse().join(".")
+        );
+        $("input#datestart").val($elem.data("date"));
+        $(".bk-cal-day").removeClass("booking-range");
+
+        $(".bk-cal-day").each(function () {
+            if ($(this).hasClass("reserve-start")) {                    
+                addthis = 1;
+            }
+            if (addthis && $(this).hasClass("bookable")) {
+                $(this).addClass("booking-range");
+            }
+            if (!$(this).hasClass("bookable")) {
+                addthis = 0;
+            }
+        });
+        
+    }
+
 
     function date_to_string(jsDate) {
         return (

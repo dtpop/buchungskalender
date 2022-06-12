@@ -15,6 +15,10 @@ class buka_booking extends rex_yform_manager_dataset {
         'anreisezeit'=>'',
     ];
 
+    static $date_where = '((datestart < :abreise AND dateend > :abreise)
+    OR (datestart < :anreise AND dateend > :anreise)
+    OR (datestart >= :anreise AND dateend <= :abreise))';
+
     public static function get_query ($object_id = 0, $with_related = true) {
         $query = self::query()
         ->selectRaw("YEAR(datestart)",'startyear')
@@ -73,6 +77,8 @@ class buka_booking extends rex_yform_manager_dataset {
      * 
      * $data_id kann verwendet werden, um den aktuellen Datensatz von der Prüfung auszunehmen
      * 
+     * Backend Prüfung!
+     * 
      */
     public static function is_booked($anreise = '', $abreise = '', $object_id = 0, $data_id = 0) {
         $query = self::get_query($object_id);
@@ -80,22 +86,20 @@ class buka_booking extends rex_yform_manager_dataset {
             $query->whereNot('id',$data_id);
         }
         // Bei Confirm Datensatz selbst nicht berücksichtigen
+        // Stand: 12.6.22
         if (rex_request('action') == 'booking_confirm' && rex_request('hash')) {
             $query->whereNot('hashval',rex_request('hash'));
         }
         if (rex_config::get('buchungskalender','asked_offset')) {
             $query->whereRaw('((
-                status = "confirmed" AND ((dateend > :anreise AND datestart < :abreise)
-                 OR (dateend < :anreise AND datestart > :abreise)
-                 OR (datestart <= :anreise AND dateend >= :abreise))
+                (status = "confirmed" OR (status = "asked" AND bookingdate > :bookingdate))
+                 AND '.self::$date_where.'
              
-                ) OR (status = "asked" AND bookingdate > :bookingdate))',['anreise'=>$anreise,'abreise'=>$abreise,'bookingdate'=>date('Y-m-d H:i:s',strtotime('-'.rex_config::get('buchungskalender','asked_offset')))])
+                ))',['anreise'=>$anreise,'abreise'=>$abreise,'bookingdate'=>date('Y-m-d H:i:s',strtotime('-'.rex_config::get('buchungskalender','asked_offset')))])
             ;
         } else {
                 $query->where('status','confirmed')
-                ->whereRaw('((dateend > :anreise AND dateend < :abreise) '
-                . 'OR (datestart > :anreise AND datestart < :abreise) '
-                . 'OR (datestart <= :anreise AND dateend >= :abreise))',['anreise'=>$anreise,'abreise'=>$abreise]);
+                ->whereRaw(self::$date_where,['anreise'=>$anreise,'abreise'=>$abreise]);
         }
         return $query->exists();
     }
@@ -108,6 +112,10 @@ class buka_booking extends rex_yform_manager_dataset {
         $data_id = rex_request('data_id','int');
         // Storno ist immer ok
         if (isset($values['status']) && $values['status'] == 'storno')  {
+            return false;
+        }
+        // Blockiert ist immer ok
+        if (isset($values['status']) && $values['status'] == 'blocked')  {
             return false;
         }
         // prebooking ist auch immer ok

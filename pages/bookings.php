@@ -60,7 +60,7 @@ if ($func == 'edit' && $id) {
     $yform->setValueField('text', ['nachname','translate:buka_lastname','','0']);
     $yform->setValueField('html', ['html4','html4','</div><div class="buka-three-cols">']);
     $yform->setValueField('text', ['personen','translate:buka_participants','','0']);
-    $yform->setValueField('choice', ['status','translate:buka_state','translate:buka_asked=asked,translate:buka_confirmed=confirmed,translate:buka_canceled=storno,translate:buka_pre_booking=pre_booking','0','0','asked','','','-- bitte auswählen --','','','','','0']);
+    $yform->setValueField('choice', ['status','translate:buka_state','translate:buka_asked=asked,translate:buka_confirmed=confirmed,translate:buka_canceled=storno,translate:buka_pre_booking=pre_booking,translate:buka_blocked=blocked','0','0','asked','','','-- bitte auswählen --','','','','','0']);
     $yform->setValueField('text', ['price','translate:buka_price','','0']);
     $yform->setValueField('html', ['html5','html5','</div>']);
     $yform->setValueField('textarea', ['nachricht','translate:buka_message','','0']);

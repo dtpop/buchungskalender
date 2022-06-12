@@ -137,20 +137,27 @@ class buka_cal
         $end = $dt2->format('Y-m-t');
         $query = buka_booking::get_query($this->objectId, $this->with_related);
 
+        // Frontend Prüfung
+
         if (rex_config::get('buchungskalender', 'asked_offset') && $with_offset) {
+                $query->whereRaw('(
+                    (status = "confirmed" OR status = "blocked" OR (status = "asked" AND bookingdate > :bookingdate))
+                    AND '.buka_booking::$date_where.'                 
+                    )', ['anreise' => $start, 'abreise' => $end, 'bookingdate' => date('Y-m-d H:i:s', strtotime('-' . rex_config::get('buchungskalender', 'asked_offset')))]);
+    
+            /*
             $query->whereRaw('((
-                status = "confirmed" AND ((dateend >= :start AND datestart <= :end)
+                (status = "confirmed") AND ((dateend >= :start AND datestart <= :end)
                  OR (dateend <= :start AND datestart >= :end)
                  OR (datestart >= :start AND datestart <= :end))
              
-                ) OR (status = "asked" AND bookingdate > :bookingdate))', ['start' => $start, 'end' => $end, 'bookingdate' => date('Y-m-d H:i:s', strtotime('-' . rex_config::get('buchungskalender', 'asked_offset')))]);
+                ) OR (status = "asked" AND bookingdate > :bookingdate))',['start' => $start, 'end' => $end, 'bookingdate' => date('Y-m-d H:i:s', strtotime('-' . rex_config::get('buchungskalender', 'asked_offset')))]);
+
+                */
         } else {
             $query->whereRaw('((
-                status = "confirmed" AND ((dateend >= :start AND datestart <= :end)
-                 OR (dateend <= :start AND datestart >= :end)
-                 OR (datestart >= :start AND datestart <= :end))
-             
-                ))', ['start' => $start, 'end' => $end]);
+                status = "confirmed" AND '.buka_booking::$date_where.'             
+                ))', ['anreise' => $start, 'abreise' => $end]);
         }
         if ($return) {
             return $query->find();
@@ -168,7 +175,7 @@ class buka_cal
             if ($object_id == $backup_id) {
                 continue;
             }
-            $this->combination_bookings[$object_id] = $this->set_bookings($return = true, $with_offset = false);
+            $this->combination_bookings[$object_id] = $this->set_bookings($return = true);
         }
         $this->objectId = $backup_id;
     }

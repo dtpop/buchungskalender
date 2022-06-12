@@ -25,6 +25,7 @@ buka_asked = Reservation
 buka_confirmed = Booking
 buka_canceled = Canceled
 buka_pre_booking = Request
+buka_blocked = blocked
 buka_price = Price
 buka_edit_booking = Edit Booking
 buka_all = All
