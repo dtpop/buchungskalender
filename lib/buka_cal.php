@@ -13,6 +13,7 @@ class buka_cal
     var $bookings = [];
     var $combination_bookings = []; // wird mit den zu prüfenden Buchungen gefüllt.
     var $show_form = false;
+    var $is_minicalendar = false;
     var $seasons = [];
     var $objects;
     var $maxBookingYear; // nur für Frontend
@@ -344,7 +345,7 @@ class buka_cal
                 $bd['bookable'] = true;
             }
         }
-        if ($bookable) {
+        if ($bookable && !$this->is_minicalendar) {
             if (in_array($date, $this->period)) {
                 $bd['class'][] = 'add-reserve';
             }
@@ -663,6 +664,7 @@ class buka_cal
 
         $cal = new buka_cal();
         $cal->monthcount = $months;
+        $cal->is_minicalendar = true;
         $cal->maxBookingYear = date('Y', buka_booking::get_end_time());
         $cal->maxBookingMonth = date('m', buka_booking::get_end_time());
         $cal->objectId = $object_id;
