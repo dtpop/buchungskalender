@@ -52,6 +52,12 @@ buka_arrivalpoint = Arrival Point
 buka_departuretime = Departure Time
 buka_departurepoint = Departure Point
 booking_type = Booking Type
+buka_beds_quantity = Beds quantity
+buka_price_per_night = Price per night
+buka_nightscount = Number of nights
+buka_booking_type = Booking Type
+buka_person_min_count = Minimum number of guests
+
 
 buka_name_of_object = Name of object
 buka_combination_object = Combined Object

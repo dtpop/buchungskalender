@@ -14,6 +14,15 @@ if (rex::isBackend() && isset($_REQUEST['page'])) {
     rex_view::addJsFile(rex_addon::get('buchungskalender')->getAssetsUrl('js/buchungskalender.js'));
 }
 
+if (rex::isBackend() && rex_request('table_name') == 'rex_buka_objects') {
+    rex_extension::register('YFORM_DATA_LIST', function( $ep ) {
+        $list = $ep->getSubject();
+        $list->setColumnFormat('colorcode', 'custom', function ($params ) {
+            return '<div style="background-color:'.$params['list']->getValue('colorcode').'" title="'.$params['list']->getValue('colorcode').'">&emsp;</div>';
+        });
+    });
+}
+
 if (rex::isBackend() && rex::getUser()) {
     if (rex::isDebugMode() && rex_request_method() == 'get') {
         $run_compiler = false;

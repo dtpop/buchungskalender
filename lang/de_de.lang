@@ -49,6 +49,11 @@ buka_departuretime = Abfahrtszeit
 buka_departurepoint = Abreiseort
 booking_type = Buchungstype
 buka_bookingstate = Buchungsstatus
+buka_beds_quantity = Betten Anzahl
+buka_price_per_night = Preis pro Übernachtung
+buka_nightscount = Anzahl Übernachtungen
+buka_booking_type = Buchungstype
+buka_person_min_count = Mindestanzahl Personen
 
 buka_name_of_object = Name des Objekts
 buka_combination_object = Kombinationsobjekt
