@@ -260,9 +260,9 @@ class buka_cal
      * change_price
      */
     public static function change_price ($price) {
-        $change_params = json_decode(rex_config::get('buchungskalender','currency_formula'),true);
+        $change_params = (array) json_decode(rex_config::get('buchungskalender','currency_formula'),true);
         $exchange_rate = rex_config::get('buchungskalender','currency_factor');
-        $new_price = $price * $exchange_rate;
+        $new_price = (float) $price * (float) $exchange_rate;
         $round = 0;
         foreach ($change_params as $k=>$v) {
             $round = $v;
@@ -537,10 +537,18 @@ class buka_cal
         $backlink = '';
         $deli = (strpos($this->baselink, '?')) ? '&' : '?';
 
+        $str_monat = 'Monat';
+        $str_monate = 'Monate';
 
-        $nextlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->next_month->format('Y') . '&month=' . $this->next_month->format('m') . '&object_id=' . $this->objectId . '">1 Monat &gt;</a>';
+        if (rex_addon::get('sprog')->isAvailable()) {
+            $str_monat = sprogcard('buka_month') ?: $str_monat;
+            $str_monate = sprogcard('buka_months') ?: $str_monate;
+        }
+
+
+        $nextlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->next_month->format('Y') . '&month=' . $this->next_month->format('m') . '&object_id=' . $this->objectId . '">1 '.$str_monat.' &gt;</a>';
         if ($navType == 'long') {
-            $nextlink .= '&nbsp;|&nbsp;<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->next_dt->format('Y') . '&month=' . $this->next_dt->format('m') . '&object_id=' . $this->objectId . '">'.$this->monthcount.' Monate &gt;&gt;</a>';
+            $nextlink .= '&nbsp;|&nbsp;<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->next_dt->format('Y') . '&month=' . $this->next_dt->format('m') . '&object_id=' . $this->objectId . '">'.$this->monthcount.' '.$str_monate.' &gt;&gt;</a>';
         }
 
         if (rex::isFrontend() && ($this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT)) >= ($this->maxBookingYear . '-' . $this->maxBookingMonth)) {
@@ -549,9 +557,9 @@ class buka_cal
 
 
         if ($navType == 'long') {
-            $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->prev_dt->format('Y') . '&month=' . $this->prev_dt->format('m') . '&object_id=' . $this->objectId . '">&lt;&lt; '.$this->monthcount.' Monate</a>&nbsp;|&nbsp;';
+            $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->prev_dt->format('Y') . '&month=' . $this->prev_dt->format('m') . '&object_id=' . $this->objectId . '">&lt;&lt; '.$this->monthcount.' '.$str_monate.'</a>&nbsp;|&nbsp;';
         }
-        $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->prev_month->format('Y') . '&month=' . $this->prev_month->format('m') . '&object_id=' . $this->objectId . '">&lt; 1 Monat</a>';
+        $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->prev_month->format('Y') . '&month=' . $this->prev_month->format('m') . '&object_id=' . $this->objectId . '">&lt; 1 '.$str_monat.'</a>';
 
         if (rex::isFrontend() && ($this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT)) <= date('Y-m')) {
             $backlink = '';
