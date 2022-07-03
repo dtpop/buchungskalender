@@ -1,34 +1,49 @@
 $(function () {
-    console.log('asdf buka 6');
-    var StartDate;
+
+    let StartDate;
+
+    // Im yform Buchungsformular Teilnehmer auf- und zuklappen
+    $(document).on('click','.aufklappen',function(e) {
+        e.preventDefault();
+        $(this).closest('.yform').find('.zugeklappt').toggle();
+    });
 
     $(document).on("click", '.buka-cal-wrapper .bk-day.fix-booked', function(e) { 
-        var DateClicked = $(this);
-        
+        var DateClicked = $(this);        
         if (e.shiftKey) {
             if (DateClicked.data('bookingid')) {
-//                console.log('click clicked');
                 editBooking(DateClicked.data('bookingid'));
             }
             return;
         } 
     });
 
+    // Streifenkalender
+    $(document).on('click','.buka_bar_cal .obj_booking', function(e) {
+        var DateClicked = $(this);
+        if (DateClicked.data('bookingid')) {
+            window.location.href = 'index.php?page=buchungskalender/bookings&func=edit&data_id='+DateClicked.data('bookingid');
+        }
+    });
+
+    // Gantkalender
+    $(document).on('click','.buka_gant_cal .obj_booking', function(e) {
+        var DateClicked = $(this);
+        if (DateClicked.data('bookingid')) {
+            window.location.href = 'index.php?page=buchungskalender/bookings&func=edit&data_id='+DateClicked.data('bookingid');
+        }
+    });
+
     // Backend
     function editBooking (bookingid) {
-//        window.location.href = 'index.php?page=yform/manager/data_edit&table_name=rex_buka_bookings&rex_yform_manager_popup=0&func=edit&data_id='+bookingid;
-        window.location.href = 'index.php?src=calendar&page=buchungskalender/bookings&func=edit&id='+bookingid;
-
-//        http://buchungskalender.localhost/redaxo/index.php?page=buchungskalender/bookings&func=edit&id=434&start=&list=89b0b572
-
+        window.location.href = 'index.php?src=calendar&page=buchungskalender/bookings&func=edit&data_id='+bookingid;
     }
 
     $(document).on("click", ".buka-cal-wrapper .bookable", function () {
-        let $clicked_elem = $(this);
         if ($(".buka-cal-wrapper").hasClass("booking-complete")) {
             clear_booking();
         }
-        if ($clicked_elem.data("date") < $("input#datestart").val()) {
+        if ($(this).data("date") < $("input#datestart").val()) {
             clear_booking();
         }
 
@@ -42,33 +57,10 @@ $(function () {
     // Kalender blättern
     $(document).on('click','#bookingform-step1 .buka_pager_nav a',function(e) {
         e.preventDefault();
-        let rooms = $('#buka_accomodation_select option:selected').val();
-        let href = $(this).attr('href');
-        $("#bookingform-step1").parent().load(href,{bukacal:1,count_accomodations:rooms});
+        let href = $(this).attr('href')+"&bukacal=1";
+        $("#bookingform-step1").parent().load(href);
         return false;
     });
-    $(document).on('change','#bookingform-step1 #buka_daterange_select',function(e) {
-        e.preventDefault();
-//        console.log($(this).val());
-        let param = $(this).val();
-        let ym = param.split('-');
-        let rooms = $('#buka_accomodation_select option:selected').val();
-        let href = location.href;
-        $("#bookingform-step1").parent().load(href,{year:ym[0],month:ym[1],bukacal:1,ym:param,count_accomodations:rooms});
-        return false;
-    });
-    // Select in .ajax_element (Anzahl Räume)
-    $(document).on('change','#buka_accomodation_select select',function(e) {
-        let href = location.href;
-        let rooms = $(this).val();
-        let ym = $('#buka_daterange_select option:selected').val().split('-');
-        $('input[name="count_accomodations"]').val(rooms);
-        $("#bookingform-step1").parent().load(href,{bukacal:1,count_accomodations:rooms,year:ym[0],month:ym[1]});
-        return false;
-    });
-
-
-
 
     $(document).on("click", "#to-step-2", function () {
         $("#bookingform-step1").slideUp();
@@ -89,7 +81,6 @@ $(function () {
         $(".bk-cal-day").removeClass("reserve-start");
         $(".bk-cal-day").removeClass("reserve-end");
         $(".bk-cal-day").removeClass("add-reserve");
-        $(".bk-cal-day").removeClass("booking-range");
         $("input#date_start").val("");
         $("input#date_end").val("");
         $("input#datestart").val("");
@@ -99,7 +90,6 @@ $(function () {
 
     function mark_end($elem) {
         let min_booking_days = $elem.data('minbookingdays');
-        $(".bk-cal-day").removeClass("booking-range");
         $(".buka-cal-wrapper").removeClass("booking-start");
         $(".buka-cal-wrapper").addClass("booking-complete");
         $elem.addClass("reserve-end");
@@ -135,7 +125,7 @@ $(function () {
 
 
     function find_start($elem) {
-        StartDate = new Date($elem.data("date"));
+        let StartDate = new Date($elem.data("date"));
         if ($elem.data("fullweek") == 1 && StartDate.getDay() != 6 && !$elem.hasClass('fix-booked-end')) {
             while (StartDate.getDay() != 6) {
                 StartDate.setDate(StartDate.getDate() - 1);
@@ -150,6 +140,16 @@ $(function () {
 
         mark_start($elem);
     }
+
+    function mark_start_old($elem) {
+        $(".buka-cal-wrapper").addClass("booking-start");
+        $elem.addClass("reserve-start");
+        $("input#date_start").val(
+            $elem.data("date").split("-").reverse().join(".")
+        );
+        $("input#datestart").val($elem.data("date"));
+    }
+
 
     function mark_start($elem) {
         let addthis = 0;
@@ -173,10 +173,9 @@ $(function () {
                 addthis = 0;
             }
         });
-
-
         
     }
+
 
     function date_to_string(jsDate) {
         return (
@@ -214,7 +213,7 @@ $(function () {
         $(".bk-cal-day").removeClass("add-reserve");
         if ($current.data("date") >= $(".reserve-start").data("date")) {
             $(".bk-cal-day").each(function () {
-                if ($(this).hasClass("reserve-start")) {                    
+                if ($(this).hasClass("reserve-start")) {
                     addthis = 1;
                 }
                 if ($(this).data("date") > $current.data("date")) {
@@ -229,7 +228,10 @@ $(function () {
             });
         }
 
-    }    
+    }
+
+
+
 
 });
 

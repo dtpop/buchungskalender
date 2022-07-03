@@ -7,6 +7,9 @@ if (!$object) {
     return;
 }
 
+$booking_page = rex_config::get('buchungskalender','booking_page') ?: "REX_LINK[1]";
+
+
 ?>
 
 <section class="uk-section">
@@ -20,7 +23,7 @@ if (!$object) {
             <a class="uk-button uk-button-primary uk-margin-right" href="<?= rex_getUrl("REX_LINK[2]") ?>">Buchungsinformationen</a>
         <?php endif ?>
         <?php if ("REX_LINK[1]") : ?>
-            <a class="uk-button uk-button-primary" href="<?= rex_getUrl("REX_LINK[1]") ?>"><?= $object->reservation == 'book' ? 'Direkt buchen' : 'anfragen' ?></a>
+            <a class="uk-button uk-button-primary" href="<?= rex_getUrl($booking_page) ?>"><?= $object->reservation == 'book' ? 'Direkt buchen' : 'anfragen' ?></a>
         <?php endif ?>
 
     </div>

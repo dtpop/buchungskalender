@@ -1,6 +1,19 @@
 Changelog
 =========
 
+Version 1.2.1 beta - 03.07.2022
+-------------------------------
+
+* FE-Javascript erweitert, sodass keine überschneidenden Termine markiert werden können
+* Buchungsseite über Einstellungen definierbar.
+* Minikalender übernimmt Link zur Buchungsseite aus den Einstellungen
+* Kalendernavigation übersetzt "Monat/e" über sprog buka_month / buka_months Platzhalter, wenn sprog installiert ist
+* In der Demo das Ui-Kit JS vom allgemeinen JS getrennt
+* Demo aktualisiert
+* Zahlreiche Detailverbesserungen
+* Status "Blockiert" implementiert - damit lassen sich Termine im Frontend blockieren, im Backend ist dennoch eine Buchung auf diese Termine möglich
+
+
 Version 1.2 - 15.04.2022
 ------------------------
 
@@ -15,6 +28,7 @@ Version 1.2 - 15.04.2022
 * Fix: FE Auswahl Anreise und Abreise nicht mehr über gebuchte Termine möglich
 * Englisches Backend
 * Grundkonfiguration für zweite Währung
+
 
 Version 1.1.2 - 23.01.2022
 --------------------------

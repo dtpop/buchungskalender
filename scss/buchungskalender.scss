@@ -121,13 +121,15 @@ $color_booked: #bf0000;
             cursor: default;
             pointer-events: none;
         }
-        .booking-range {
+        .booking-range, .bookable {
             &:hover {
                 background-color: $color_reserve;
             }
             cursor: pointer;
             pointer-events: initial;
+
         }
+
     }
 }
 
@@ -504,4 +506,5 @@ $top_offset: 100px;
 .minikalender .y-wrapper {
     list-style: none;
 }
+
 
