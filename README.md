@@ -109,11 +109,11 @@ Hier ein Hinweis für Anwender von booking.com. Booking.com ist etwas speziell b
 
 Dieses AddOn bringt eine komplette Demo mit. Diese Demo ist dazu gedacht, die Funktionen des AddOns zu zeigen. Man muss eine Ferienwohnungsseite nicht auf der Demo aufbauen. Man kann das AddOn auch verwenden ohne die Demo zu installieren. Da die Dokumentation aber auch nicht zu 100% perfekt ist, empfiehlt es sich durchaus mal in die Demo rein zu schauen. Die Demo kann aber auch als Grundlage für eine komplette Seite verwendet werden. Die Module in der Demo sind für TinyMCE 4 als Editor ausgelegt. Wenn ein anderer Editor verwendet wird, müssen nur die Klassen an der entsprechenden Stelle umbenannt werden. Wir gehen Schritt für Schritt vor.
 
-Basis für die Demo ist eine Grundinstallation eines aktuellen REDAXO. Im Moment ist dies 5.12.0.
+Basis für die Demo ist eine Grundinstallation eines aktuellen REDAXO. Im Moment ist dies 5.13.3.
 
-Dann müssen nur noch die AddOn yform und mform installiert werden.
+Dann müssen nur noch die AddOn yform und mform 6 (Demo ist noch nicht auf mform 7 aktualisiert) installiert werden.
 
-Optional, aber empfehlenswert sind: yrewrite, theme, tinymce, tinymce4 und natürlich eure anderen Lieblingsaddons.
+Optional, aber empfehlenswert sind: yrewrite, theme, tinymce und natürlich eure anderen Lieblingsaddons.
 
 Dann wird das AddOn Buchungskalender installiert und aktiviert.
 
@@ -156,6 +156,8 @@ das Buchungsformular
 Auflistung der Preise
 
 die Ausgabe der ical Daten für die Synchronisation
+
+Wenn der Modulcode eigenen Vorstellungen angepasst werden soll, empfiehlt es sich auch den key des jeweiligen Modules zu ändern. Somit wird verhindert, dass nach einem Update des AddOns versehehntlich über das Setup der Modulcode wieder überschrieben wird.
  
 ## Anpassungen
 

@@ -12,6 +12,7 @@ Version 1.2.1 beta - 03.07.2022
 * Demo aktualisiert
 * Zahlreiche Detailverbesserungen
 * Status "Blockiert" implementiert - damit lassen sich Termine im Frontend blockieren, im Backend ist dennoch eine Buchung auf diese Termine möglich
+* Mehrsprachigkeit verbessert
 
 
 Version 1.2 - 15.04.2022
