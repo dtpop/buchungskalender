@@ -33,6 +33,7 @@ class buka_cal
         'next'=>''
     ];
     var $raw_navigation_template = '';
+    static $my_raw_navigation_template = '';
 
 
 
@@ -546,9 +547,9 @@ class buka_cal
         }
 
 
-        $nextlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->next_month->format('Y') . '&month=' . $this->next_month->format('m') . '&object_id=' . $this->objectId . '">1 '.$str_monat.' &gt;</a>';
+        $nextlink .= '<a rel="nofollow" class="bukanav_1m" href="' . $this->baselink . $deli . 'year=' . $this->next_month->format('Y') . '&month=' . $this->next_month->format('m') . '&object_id=' . $this->objectId . '"><span>1 '.$str_monat.' &gt;</span></a>';
         if ($navType == 'long') {
-            $nextlink .= '&nbsp;|&nbsp;<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->next_dt->format('Y') . '&month=' . $this->next_dt->format('m') . '&object_id=' . $this->objectId . '">'.$this->monthcount.' '.$str_monate.' &gt;&gt;</a>';
+            $nextlink .= '<span class="buka_month_divider">&nbsp;|&nbsp;</span><a rel="nofollow" class="bukanav_xm" href="' . $this->baselink . $deli . 'year=' . $this->next_dt->format('Y') . '&month=' . $this->next_dt->format('m') . '&object_id=' . $this->objectId . '"><span>'.$this->monthcount.'&nbsp;'.$str_monate.'&nbsp;&gt;&gt;</span></a>';
         }
 
         if (rex::isFrontend() && ($this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT)) >= ($this->maxBookingYear . '-' . $this->maxBookingMonth)) {
@@ -557,12 +558,12 @@ class buka_cal
 
 
         if ($navType == 'long') {
-            $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->prev_dt->format('Y') . '&month=' . $this->prev_dt->format('m') . '&object_id=' . $this->objectId . '">&lt;&lt; '.$this->monthcount.' '.$str_monate.'</a>&nbsp;|&nbsp;';
+            $backlink .= '<a rel="nofollow" class="bukanav_xm"  href="' . $this->baselink . $deli . 'year=' . $this->prev_dt->format('Y') . '&month=' . $this->prev_dt->format('m') . '&object_id=' . $this->objectId . '"><span>&lt;&lt; '.$this->monthcount.' '.$str_monate.'</span></a><span class="buka_month_divider">&nbsp;|&nbsp;</span>';
         }
-        $backlink .= '<a rel="nofollow" href="' . $this->baselink . $deli . 'year=' . $this->prev_month->format('Y') . '&month=' . $this->prev_month->format('m') . '&object_id=' . $this->objectId . '">&lt; 1 '.$str_monat.'</a>';
+        $backlink .= '<a rel="nofollow" class="bukanav_1m" href="' . $this->baselink . $deli . 'year=' . $this->prev_month->format('Y') . '&month=' . $this->prev_month->format('m') . '&object_id=' . $this->objectId . '"><span>&lt; 1 '.$str_monat.'</span></a>';
 
         if (rex::isFrontend() && ($this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT)) <= date('Y-m')) {
-            $backlink = '';
+            $backlink = '<div class="buka_dummy_backlink"><span></span></div>';
         }
 
 
@@ -661,7 +662,7 @@ class buka_cal
     }
 
 
-    public static function get_mini_calendar($object_id, $months = 6)
+    public static function get_mini_calendar($object_id, $navType = 'long')
     {
         $object = buka_objects::get_object_for_id($object_id);
 
@@ -671,11 +672,13 @@ class buka_cal
         // dump($end_year);
 
         $cal = new buka_cal();
-        $cal->monthcount = $months;
+        $cal->monthcount = rex_config::get('buchungskalender','minicalendar_count_month') ?: 6;
+        $cal->navType = $navType;
         $cal->is_minicalendar = true;
         $cal->maxBookingYear = date('Y', buka_booking::get_end_time());
         $cal->maxBookingMonth = date('m', buka_booking::get_end_time());
         $cal->objectId = $object_id;
+        $cal->raw_navigation_template = self::$my_raw_navigation_template;
 
         $cal->set_start_date();
         $cal->set_bookings();

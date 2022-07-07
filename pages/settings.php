@@ -91,6 +91,11 @@ $select->addOptions([
 ]);
 $field->setNotice('<code>rex_config::get("buchungskalender","calendar_view")</code>');
 
+$field = $form->addTextField('minicalendar_count_month');
+$field->setLabel('Anzahl Monate im Minikalender');
+$field->setNotice('Hier kann eine abweichende Anzahl von Monaten eingestellt werden, die im Minikalender dargestellt werden sollen: <code>rex_config::get(\'buchungskalender\',\'minicalendar_count_month\')</code>.');
+
+
 $form->addFieldset('Währungseinstellungen');
 
 $field = $form->addTextField('currency_default');
