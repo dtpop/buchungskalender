@@ -553,7 +553,7 @@ class buka_cal
         }
 
         if (rex::isFrontend() && ($this->year . '-' . str_pad($this->month, 2, '0', STR_PAD_LEFT)) >= ($this->maxBookingYear . '-' . $this->maxBookingMonth)) {
-            $nextlink = '';
+            $nextlink = '<div class="buka_dummy_nextlink"><span></span></div>';
         }
 
 
