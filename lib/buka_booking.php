@@ -101,9 +101,41 @@ class buka_booking extends rex_yform_manager_dataset {
                 $query->where('status','confirmed')
                 ->whereRaw(self::$date_where,['anreise'=>$anreise,'abreise'=>$abreise]);
         }
-        return $query->exists();
+        $exists = $query->exists();
+        if ($exists && rex::isBackend()) {
+            $doubles = $query->find();
+            $dquery = self::query();
+            $where_ids = [];
+            foreach ($doubles as $double) {
+                $where_ids[] = $double->id;
+            }
+            $dquery->whereRaw('id IN ('.implode(',',$where_ids).')');
+            $list = rex_list::factory($dquery);
+            foreach ($list->getColumnNames() as $col) {
+                if (in_array($col,['id','datestart','dateend','status','vorname','nachname'])) {
+                    continue;
+                }
+                $list->removeColumn($col);
+            }
+            $_csrf_key = 'buchungskalender/bookings';
+            $csrf = rex_csrf_token::factory($_csrf_key);
+
+            $list->setColumnParams(
+                'id', array_merge(['func' => 'edit', 'data_id' => '###id###'],$csrf->getUrlParams())
+            );
+    
+
+            $fragment = new rex_fragment();
+            $fragment->setVar('class', 'edit', false);
+            $fragment->setVar('title', rex_i18n::msg('buka_double_bookings'), false);
+            $fragment->setVar('body', $list->get(), false);
+            echo $fragment->parse('core/page/section.php');        
+        }
+        return $exists;
     }
 
+
+    
 
     /**
      * Kann im yform als Validate Funktion verwendet werden.

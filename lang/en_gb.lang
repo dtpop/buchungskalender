@@ -6,6 +6,8 @@ buka_object = Object
 buka_please_select_object = -- please select object --
 
 buka_booking_uncorrect = This booking is uncorrect. There is allready a booking for this date.
+datefrom_dateto_booking = The departure date must be later than the arrival date
+buka_double_bookings = Existing bookings for this date
 
 buka_please_select = please select
 buka_confirmed = confirmed
@@ -52,12 +54,6 @@ buka_arrivalpoint = Arrival Point
 buka_departuretime = Departure Time
 buka_departurepoint = Departure Point
 booking_type = Booking Type
-buka_beds_quantity = Beds quantity
-buka_price_per_night = Price per night
-buka_nightscount = Number of nights
-buka_booking_type = Booking Type
-buka_person_min_count = Minimum number of guests
-
 
 buka_name_of_object = Name of object
 buka_combination_object = Combined Object

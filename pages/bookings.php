@@ -81,6 +81,7 @@ if ($func == 'edit' && $id) {
 //    $yform->setValidateField('customfunction', ['datestart,dateend,object_id,status','buka_booking::unique_booking','','Dieses Buchungsdatum ist ungültig. Es gibt bereits eine Buchung für dieses Datum.','0']);
     
     $yform->setValidateField('customfunction', ['datestart,dateend,object_id,status','buka_booking::unique_booking','',rex_i18n::msg('buka_booking_uncorrect'),'0']);
+    $yform->setValidateField('compare', ['datestart','dateend','>=',rex_i18n::msg('datefrom_dateto_booking')]);
 
     $yform->setActionField('db',['rex_buka_bookings','main_where']);
 

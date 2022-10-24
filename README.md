@@ -163,6 +163,16 @@ Wenn der Modulcode eigenen Vorstellungen angepasst werden soll, empfiehlt es sic
 
 Eine Besonderheit ist im Buchungskalender AddOn eingebaut. Wenn die scss Datei im AddOn geändert wird, so wird bei aktivem Debug Mode eine neue css Datei erstellt und gleich ins Assets Verzeichnis kopiert. Das gleiche gilt für eine Anpassung der js Datei. Diese wird auch direkt im Assets Verzeichnis aktualisiert, wenn der Debug Mode eingeschaltet ist.
 
+## Validierung im Backend
+
+Es gibt verschiedene Methoden zur Validierung im Backend. Über Compare kann man in der Buchungstabelle sicherstellen, dass das Abreisedatum später als das Anreisedatum liegt:
+
+$yform->setValidateField('compare', ['datestart','dateend','>=',rex_i18n::msg('datefrom_dateto_booking')]);
+
+Über die Customfunction kann überprüft werden, ob das Datum für das betreffende Objekt bereits belegt ist:
+
+$yform->setValidateField('customfunction', ['datestart,dateend,object_id,status','buka_booking::unique_booking','',rex_i18n::msg('buka_booking_uncorrect'),'0']);
+
 
 ## Danke
 

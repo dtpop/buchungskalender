@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Version 1.2.1 beta - 03.07.2022
+Version 1.2.1 beta - 24.10.2022
 -------------------------------
 
 * FE-Javascript erweitert, sodass keine überschneidenden Termine markiert werden können
@@ -13,7 +13,8 @@ Version 1.2.1 beta - 03.07.2022
 * Zahlreiche Detailverbesserungen
 * Status "Blockiert" implementiert - damit lassen sich Termine im Frontend blockieren, im Backend ist dennoch eine Buchung auf diese Termine möglich
 * Mehrsprachigkeit verbessert
-
+* Erweiterte Darstellung bei Versuch einer Doppelbuchung im Backend. Die überschneidenden Datensätze werden angezeigt
+* Validierung, sodass im Backend bei der Eingabe eines neuen Buchungsdatensatzes geprüft werden kann, ob das Abreisedatum nach dem Anreisedatum liegt.
 
 Version 1.2 - 15.04.2022
 ------------------------
@@ -29,7 +30,6 @@ Version 1.2 - 15.04.2022
 * Fix: FE Auswahl Anreise und Abreise nicht mehr über gebuchte Termine möglich
 * Englisches Backend
 * Grundkonfiguration für zweite Währung
-
 
 Version 1.1.2 - 23.01.2022
 --------------------------
