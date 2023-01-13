@@ -66,9 +66,10 @@ class buka_cal
         //        dump($this->period);
 
 
-        $this->baselink = rex_url::currentBackendPage();
         if (rex::isFrontend()) {
-            $this->baselink = rex_getUrl();
+            $this->baselink = rex_article::getSiteStartArticle()->getUrl();
+        } else {
+            $this->baselink = rex_url::currentBackendPage();
         }
 
         $this->weekdays = explode(',', rex_config::get('buchungskalender', 'weekdays_' . rex_clang::getCurrentId()));
@@ -673,10 +674,10 @@ class buka_cal
 
     public static function get_mini_calendar($object_id, $navType = 'long')
     {
-        $object = buka_objects::get_object_for_id($object_id);
+//        $object = buka_objects::get_object_for_id($object_id);
 
-        $start_year = min([buka_booking::get_min_year(), date('Y') - 2]);
-        $end_year = max([buka_booking::get_max_year(), date('Y') + 2]);
+//        $start_year = min([buka_booking::get_min_year(), date('Y') - 2]);
+//        $end_year = max([buka_booking::get_max_year(), date('Y') + 2]);
         // dump($start_year);
         // dump($end_year);
 
