@@ -260,7 +260,9 @@ class buka_cal
     }
 
     public static function is_change_lang () {
-        $change_langs = explode('|',trim(rex_config::get("buchungskalender","currency_langs"),'|'));
+        $currency_langs = rex_config::get("buchungskalender","currency_langs");
+        if (is_null($currency_langs)) $currency_langs = '';
+        $change_langs = explode('|',trim($currency_langs,'|'));
         return in_array(rex_clang::getCurrentId(),$change_langs);
     }
 
