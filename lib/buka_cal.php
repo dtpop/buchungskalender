@@ -35,6 +35,13 @@ class buka_cal
     var $raw_navigation_template = '';
     static $my_raw_navigation_template = '';
 
+    public $curr_dt;
+    public $next_dt;
+    public $prev_month;
+    public $next_month;
+    public $year;
+    public $month;
+    public $prev_dt;
 
 
     function __construct($object_id = null, $date = null, $year = null, $month = null)
