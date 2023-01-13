@@ -35,6 +35,13 @@ class buka_cal
     var $raw_navigation_template = '';
     static $my_raw_navigation_template = '';
 
+    public $curr_dt;
+    public $next_dt;
+    public $prev_month;
+    public $next_month;
+    public $year;
+    public $month;
+    public $prev_dt;
 
 
     function __construct($object_id = null, $date = null, $year = null, $month = null)
@@ -59,9 +66,10 @@ class buka_cal
         //        dump($this->period);
 
 
-        $this->baselink = rex_url::currentBackendPage();
         if (rex::isFrontend()) {
-            $this->baselink = rex_getUrl();
+            $this->baselink = rex_article::getSiteStartArticle()->getUrl();
+        } else {
+            $this->baselink = rex_url::currentBackendPage();
         }
 
         $this->weekdays = explode(',', rex_config::get('buchungskalender', 'weekdays_' . rex_clang::getCurrentId()));
@@ -253,7 +261,9 @@ class buka_cal
     }
 
     public static function is_change_lang () {
-        $change_langs = explode('|',trim(rex_config::get("buchungskalender","currency_langs"),'|'));
+        $currency_langs = rex_config::get("buchungskalender","currency_langs");
+        if (is_null($currency_langs)) $currency_langs = '';
+        $change_langs = explode('|',trim($currency_langs,'|'));
         return in_array(rex_clang::getCurrentId(),$change_langs);
     }
 
@@ -664,10 +674,10 @@ class buka_cal
 
     public static function get_mini_calendar($object_id, $navType = 'long')
     {
-        $object = buka_objects::get_object_for_id($object_id);
+//        $object = buka_objects::get_object_for_id($object_id);
 
-        $start_year = min([buka_booking::get_min_year(), date('Y') - 2]);
-        $end_year = max([buka_booking::get_max_year(), date('Y') + 2]);
+//        $start_year = min([buka_booking::get_min_year(), date('Y') - 2]);
+//        $end_year = max([buka_booking::get_max_year(), date('Y') + 2]);
         // dump($start_year);
         // dump($end_year);
 

@@ -7,6 +7,7 @@
 class buka_date {
 
     public $date;
+    public $booking;
     private static $test = false;
     private static $objects;
 
@@ -14,10 +15,10 @@ class buka_date {
         if (!self::$test) {
             self::$test = true;
         }
-        $this->date = new DateTime();
+        $this->date = new buka_datetime();
         $this->date->setDate($y, $m, $d);
         $this->date->wd = $this->date->format('N');
-        
+
         return $this->date;
     }
 
