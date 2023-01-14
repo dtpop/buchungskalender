@@ -230,6 +230,22 @@ $(function () {
 
     }
 
+    $('#yform-data_edit-rex_buka_bookings-datestart input').on('change',function() {
+        let fromdatum = $(this).val();
+        let bisdatum = $('#yform-data_edit-rex_buka_bookings-dateend input').val();
+        if (bisdatum < fromdatum) {
+            $('#yform-data_edit-rex_buka_bookings-dateend input').val(fromdatum);
+        }
+    });
+
+    $('#yform-data_edit-rex_buka_bookings-dateend input').on('change',function() {
+        let bisdatum = $(this).val();
+        let fromdatum = $('#yform-data_edit-rex_buka_bookings-datestart input').val();
+        if (bisdatum < fromdatum) {
+            $('#yform-data_edit-rex_buka_bookings-datestart input').val(bisdatum);
+        }
+    });
+
 
 
 
