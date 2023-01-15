@@ -1,11 +1,11 @@
 Changelog
 =========
 
-Version 1.4.0 - 14.01.2023
+Version 1.4.1 - 15.01.2023
 --------------------------
 
 * PHP 8.2 Kompatibilität - Danke an den unvergleichlichen Joachim Dörr!
-* Installation und Update geprüft. Da Choice im Multiple/Query-Modus keine leere Auswahl mag, wird ein Standard Buchungsstatus angelegt, wenn in der Tabelle kein Datensatz vorhanden ist.
+* Installation und Update, Datenbankanpassungen
 
 
 Version 1.2.1 beta - 24.10.2022

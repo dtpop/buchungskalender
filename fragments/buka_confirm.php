@@ -81,7 +81,7 @@ if (rex_addon::get('sprog')->isAvailable()) {
 		<p><?= $str_arrival_time.': '.$booking['anreisezeit'] ?></p>
 	<?php endif ?>
 	<p><?= $str_price.': '.number_format($price['price'], 2, ',', ".") ?> EUR</p>
-	<p><?= $str_price_warn ?></p>
+	<p><?= $str_price_warn ?? '' ?></p>
 	<p><?= $str_agree_1.' '.($object->reservation == 'book' ? $str_booking : $str_request).' '.$str_agree_2 ?> </p>
 
 </div>
