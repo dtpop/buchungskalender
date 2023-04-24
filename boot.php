@@ -108,7 +108,11 @@ if (rex::isFrontend()) {
 
         if (rex_request::isXmlHttpRequest() && rex_request('bukacal','int') == 1) {
             $art = new rex_article_content();
-            $art->setArticleId(rex_article::getCurrentId());
+            if (rex_config::get('buchungskalender','booking_page')) {
+                $art->setArticleId(rex_config::get('buchungskalender','booking_page'));
+            } else {
+                $art->setArticleId(rex_article::getCurrentId());
+            }
             $content = $art->getArticle();
             if (rex_addon::get('sprog')->isAvailable()) {
                 $content = sprogdown($content);
