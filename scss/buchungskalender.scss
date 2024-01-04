@@ -94,6 +94,13 @@ $color_booked: #bf0000;
             &.max_len_5 { width: calc(500% - 8px); }
             &.max_len_6 { width: calc(600% - 8px); }
             &.max_len_7 { width: calc(700% - 8px); }
+            &.max_len_8 { width: calc(800% - 8px); }
+            &.max_len_9 { width: calc(900% - 8px); }
+            &.max_len_10 { width: calc(1000% - 8px); }
+            &.max_len_11 { width: calc(1100% - 8px); }
+            &.max_len_12 { width: calc(1200% - 8px); }
+            &.max_len_13 { width: calc(1300% - 8px); }
+            &.max_len_14 { width: calc(1400% - 8px); }
         }
         .is_start {
             .max_len_1 { width: calc(200% - 8px); }
@@ -103,6 +110,13 @@ $color_booked: #bf0000;
             .max_len_5 { width: calc(1000% - 8px); }
             .max_len_6 { width: calc(1200% - 8px); }
             .max_len_7 { width: calc(1400% - 8px); }
+            .max_len_8 { width: calc(1600% - 8px); }
+            .max_len_9 { width: calc(1800% - 8px); }
+            .max_len_10 { width: calc(2000% - 8px); }
+            .max_len_11 { width: calc(2200% - 8px); }
+            .max_len_12 { width: calc(2400% - 8px); }
+            .max_len_13 { width: calc(2600% - 8px); }
+            .max_len_14 { width: calc(2800% - 8px); }
         }
 
     }
@@ -121,15 +135,13 @@ $color_booked: #bf0000;
             cursor: default;
             pointer-events: none;
         }
-        .booking-range, .bookable {
+        .booking-range {
             &:hover {
                 background-color: $color_reserve;
             }
             cursor: pointer;
             pointer-events: initial;
-
         }
-
     }
 }
 
@@ -500,11 +512,4 @@ $top_offset: 100px;
         width: calc(33% - 10px);
     }
 }
-
-
-.buka-cal-wrapper .y-wrapper,
-.minikalender .y-wrapper {
-    list-style: none;
-}
-
 

@@ -50,7 +50,7 @@ $token = rex_csrf_token::factory($_csrf_key)->getUrlParams();
     <ul class="pagination pagination-lg">
         <li class="page-item"><a class="page-link" href="<?= rex_url::currentBackendPage(['year' => $prev_dt->format('Y'), 'month' => $prev_dt->format('n')]) ?>">&laquo; 1Y</a></li>
         <li class="page-item"><a class="page-link" href="<?= rex_url::currentBackendPage(['year' => $prev_month->format('Y'), 'month' => $prev_month->format('n')]) ?>">&laquo; 1M</a></li>
-        <li class="page-item"><a class="page-link" href="<?= rex_url::currentBackendPage(['year' => date('Y'), 'month' => date('n')]) ?>">NOW</a></li>
+        <li class="page-item"><a class="page-link" href="<?= rex_url::currentBackendPage() ?>">NOW</a></li>
         <li class="page-item"><a class="page-link" href="<?= rex_url::currentBackendPage(['year' => $next_month->format('Y'), 'month' => $next_month->format('n')]) ?>">1M &raquo;</a></li>
         <li class="page-item"><a class="page-link" href="<?= rex_url::currentBackendPage(['year' => $next_dt->format('Y'), 'month' => $next_dt->format('n')]) ?>">1Y &raquo;</a></li>
     </ul>
@@ -88,6 +88,7 @@ $token = rex_csrf_token::factory($_csrf_key)->getUrlParams();
                     </div>
                     <div class="gant_header_wrapper">
                         <?php foreach ($month as $day) : ?>
+                            <?php if ($day->date->format('Y-m-d') < date('Y-m-d') && !rex_get('month','string')) { continue; } ?>
                             <div class="bar_cal_day wd<?= $day->date->wd ?>">
                                 <div class="cal_date"><?= $day->date->format('j') ?></div>
 
@@ -97,8 +98,8 @@ $token = rex_csrf_token::factory($_csrf_key)->getUrlParams();
                                                 <?php foreach ($day->booking[$object->id] as $obj_booking) : ?>                                                    
                                                     <div class="obj_booking <?= $obj_booking->is_start ? 'is_start' : '' ?> <?= $obj_booking->is_end ? 'is_end' : '' ?> status_<?= $obj_booking->status ?> <?= $obj_booking->object_id != $object->id ? 'buka_combi' : '' ?>" data-bookingid="<?= $obj_booking->id ?>">
                                                         <?php if ($obj_booking->is_start || $real_first) : ?>
-                                                            <?php if ($obj_booking->lbl_max_len > 0) : ?>
-                                                                <div class="lbl max_len_<?= $obj_booking->lbl_max_len ?>">
+                                                            <?php if ($obj_booking->lbl_max_len > -1) : ?>
+                                                                <div class="lbl max_len_<?= $obj_booking->lbl_max_len + 1 ?>">
                                                                     <?php if ($obj_booking->object_id != $object->id) : // Bei Kombiobjekt Sperrung durch Einzelbuchung nur Objektname ausgeben 
                                                                     ?>
                                                                         <?= $object->name ?>
@@ -131,9 +132,6 @@ $token = rex_csrf_token::factory($_csrf_key)->getUrlParams();
                             <?php $real_first = false; ?>
                         <?php endforeach ?>
                     </div>
-
-
-
                 </div>
             <?php endforeach ?>
         </div>
@@ -171,7 +169,6 @@ $token = rex_csrf_token::factory($_csrf_key)->getUrlParams();
                                             <?php if ($obj_booking->is_start || $day->date->wd == 1 || $day->date->format('j') == 1) : ?>
                                                 <?php if ($obj_booking->lbl_max_len > 0) : ?>
                                                     <div class="lbl max_len_<?= $obj_booking->lbl_max_len ?>">
-
                                                         <?php if ($obj_booking->object_id != $object->id) : // Bei Kombiobjekt Sperrung durch Einzelbuchung nur Objektname ausgeben 
                                                         ?>
                                                             <?= $object->name ?>
