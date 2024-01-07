@@ -6,12 +6,12 @@ $content = rex_file::get(rex_path::addon('buchungskalender', 'install/tablesets/
 rex_yform_manager_table_api::importTablesets($content);
 
 $sql = rex_sql::factory();
-$sql->setTable(rex::getTable('buka_bookings'));
+$sql->setTable(rex::getTable('rex_buka_bookingtype'));
 $sql->select();
 $rows = $sql->getRows();
 
 if (!$rows) {
-    $sql->setTable(rex::getTable('buka_bookings'));
+    $sql->setTable(rex::getTable('rex_buka_bookingtype'));
     $sql->setValue('name','Normale Buchung');
     $sql->insert();
 }
